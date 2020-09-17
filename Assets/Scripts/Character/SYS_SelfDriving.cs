@@ -18,7 +18,6 @@ public class SYS_SelfDriving : MonoBehaviour {
 
 			if (Vector2.Distance(tgt.GetPos(),(Vector2)SYS_ShipController.Direct.transform.position) < stopDis) {
 				Reset();
-				Stop();
 			}
 		}
 	}
@@ -34,11 +33,12 @@ public class SYS_SelfDriving : MonoBehaviour {
 	}
 
 	public void Reset() {
-		tgt = null;
+		ClearTGT();
+		SYS_ShipController.Direct.OnEndMove();
 	}
 
-	public void Stop() {
-		SYS_ShipController.Direct.OnEndMove();
+	public void ClearTGT() {
+		tgt = null;
 	}
 }
 

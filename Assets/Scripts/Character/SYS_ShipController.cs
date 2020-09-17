@@ -12,12 +12,14 @@ public class SYS_ShipController : MonoBehaviour {
 	public float accelerate = 2;
 	public float smoothing = 0.5f;
 
+	public Rigidbody2D ridgid;
 	public Vector2 direction = Vector2.up;
 	private Coroutine cououtine;
 	private float fuelTimer;
 
 	void Awake() {
 		Direct = this;
+		ridgid = GetComponent<Rigidbody2D>();
 	}
 
 	public void Reset() {
@@ -49,9 +51,9 @@ public class SYS_ShipController : MonoBehaviour {
 
 		while (true) {
 			if (!reverse) {
-				this.GetComponent<Rigidbody2D>().velocity = this.direction * speed;
+				ridgid.velocity = this.direction * speed;
 			} else {
-				this.GetComponent<Rigidbody2D>().velocity = this.direction * -speed;
+				ridgid.velocity = this.direction * -speed;
 			}
 			yield return null;
 		}
@@ -71,12 +73,12 @@ public class SYS_ShipController : MonoBehaviour {
 	
 
 	public void EndMove() {
-		SYS_SelfDriving.Direct.Reset();
+		SYS_SelfDriving.Direct.ClearTGT ();
 		OnEndMove();
 	}
 
 	public void OnEndMove() {
-		this.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+		ridgid.velocity = Vector2.zero;
 		StopCoroutine(this.cououtine);
 		this.speed = 0;
 		handling = false;
