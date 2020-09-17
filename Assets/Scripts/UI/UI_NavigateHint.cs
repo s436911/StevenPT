@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class UI_NavigateHint : MonoBehaviour {
 	public RectTransform rect;
 	public Image board;
-	public Text text;
+	public Text textType;
+	public Text textDis;
 	public Image star;
 	public PlanetEntity entity;
 	public bool navigating = false;
@@ -55,13 +56,15 @@ public class UI_NavigateHint : MonoBehaviour {
 	public void ShowHint() {
 		board.gameObject.SetActive(true);
 		star.gameObject.SetActive(true);
-		text.gameObject.SetActive(true);
+		textType.gameObject.SetActive(true);
+		textDis.gameObject.SetActive(true);
 	}
 
 	public void CloseHint() {
 		board.gameObject.SetActive(false);
 		star.gameObject.SetActive(false);
-		text.gameObject.SetActive(false);
+		textType.gameObject.SetActive(false);
+		textDis.gameObject.SetActive(false);
 	}
 
 	private void UpdateHint() {
@@ -69,23 +72,35 @@ public class UI_NavigateHint : MonoBehaviour {
 
 		if (entity.info.sType == StarType.Check) {
 			if (UI_Navigator.Direct.nextPlanet != entity) {
-				hintColor = new Color(0.85F, 0.85F, 0.85F);
-				star.GetComponent<RectTransform>().sizeDelta = new Vector2(40, 40);
-				text.text = "???";
+				if (!entity.exploded) {
+					hintColor = new Color(0.85F, 0.85F, 0.85F);
+					star.GetComponent<RectTransform>().sizeDelta = new Vector2(40, 40);
+					textType.text = "???";
+					textDis.text = "";
+
+				} else {
+					hintColor = new Color(0.45F, 0.8F, 0.85F);
+					star.GetComponent<RectTransform>().sizeDelta = new Vector2(40, 40);
+					textType.text = "SUP";
+					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+				}
 
 			} else {
 				hintColor = new Color(0.4F, 0.7F, 0.25F);
 				star.GetComponent<RectTransform>().sizeDelta = new Vector2(50, 50);
-				text.text = "REC";
+				textType.text = "REC";
+				textDis.text = "";
 			}
 
 		} else if (entity.info.sType == StarType.End) {
 			hintColor = new Color(0.9F, 0.7F, 0.15F);
 			star.GetComponent<RectTransform>().sizeDelta = new Vector2(75, 75);
-			text.text = "TGT";
+			textType.text = "TGT";
+			textDis.text = "";
 		}
 
-		text.color = hintColor;
+		textDis.color = hintColor;
+		textType.color = hintColor;
 		star.color = hintColor;
 		board.color = hintColor;
 	}

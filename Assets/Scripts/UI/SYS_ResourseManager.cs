@@ -14,6 +14,7 @@ public class SYS_ResourseManager : MonoBehaviour
 	public int startFuel = 50;
 	public int startArmor = 5;
 	public int startTrade = 5;
+	
 	public int[] cargo = new int[2]; 
 
 	private int fuel;
@@ -31,7 +32,7 @@ public class SYS_ResourseManager : MonoBehaviour
 	public void Reset() {
 		SetFuel(startFuel);
 		SetArmor(startArmor);
-		SetTrade(startArmor);
+		SetTrade(startTrade);
 
 		cargo[0] = 0;
 		cargo[1] = 0;
@@ -68,6 +69,9 @@ public class SYS_ResourseManager : MonoBehaviour
 		if (fuel <= 0) {
 			fuel = 0;
 			SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
+
+		} else if (fuel > startFuel) {
+			fuel = startFuel;
 		}
 
 		fuelText.text = fuel.ToString();
@@ -75,11 +79,24 @@ public class SYS_ResourseManager : MonoBehaviour
 
 	public void SetArmor(int value) {
 		armor = value;
+		if (armor <= 0) {
+			armor = 0;
+
+		} else if (armor > startArmor) {
+			armor = startArmor;
+		}
+
 		armorText.text = armor.ToString();
 	}
 
 	public void SetTrade(int value) {
 		trade = value;
+		if (trade <= 0) {
+			trade = 0;
+
+		} else if (trade > startTrade) {
+			trade = startTrade;
+		}
 		tradeText.text = trade.ToString();
 	}
 }

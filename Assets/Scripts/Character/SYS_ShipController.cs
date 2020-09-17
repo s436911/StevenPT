@@ -12,6 +12,7 @@ public class SYS_ShipController : MonoBehaviour {
 	public float accelerate = 2;
 	public float smoothing = 0.5f;
 
+	public Collider2D colli;
 	public Rigidbody2D ridgid;
 	public Vector2 direction = Vector2.up;
 	private Coroutine cououtine;

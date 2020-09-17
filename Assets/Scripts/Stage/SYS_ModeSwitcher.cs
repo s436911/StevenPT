@@ -81,8 +81,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 	}
 
 	public void SetMode(GameMode gameMode) {
-		this.gameMode = gameMode;
-		animing = Time.timeSinceLevelLoad;
+		SetMode((int)gameMode);
 	}
 
 	
