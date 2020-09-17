@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class SYS_Interactive : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+	public static SYS_Interactive Direct;
+
+	void Awake() {
+		Direct = this;
+	}
+
+	// Start is called before the first frame update
+	void Start()
     {
         
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class SYS_SelfDriving : MonoBehaviour {
 	public static SYS_SelfDriving Direct;
 	public SelfDriveTGT tgt;
-	public float driveDis = 5;
+	public float stopDis = 2;
 
 	void Awake() {
 		Direct = this;
@@ -16,7 +16,7 @@ public class SYS_SelfDriving : MonoBehaviour {
 		if (tgt != null) {
 			SYS_ShipController.Direct.OnUpdateDirection((tgt.GetPos() - (Vector2)SYS_ShipController.Direct.transform.position));
 
-			if (Vector2.Distance(tgt.GetPos(),(Vector2)SYS_ShipController.Direct.transform.position) < driveDis) {
+			if (Vector2.Distance(tgt.GetPos(),(Vector2)SYS_ShipController.Direct.transform.position) < stopDis) {
 				Reset();
 				Stop();
 			}

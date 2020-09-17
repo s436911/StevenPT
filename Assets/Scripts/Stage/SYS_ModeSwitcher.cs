@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SYS_ModeSwitcher : MonoBehaviour {
+	public static SYS_ModeSwitcher Direct;
+
 	public List<RectTransform> switcherRect = new List<RectTransform>();
 	public List<Transform> switcherTrans = new List<Transform>();
 
@@ -15,9 +17,8 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 	
 	public GameMode gameMode;
 
-	// Start is called before the first frame update
-	void Start() {
-
+	void Awake() {
+		Direct = this;
 	}
 
 	// Update is called once per frame
@@ -73,6 +74,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 
 			} else if (this.gameMode == GameMode.Space) {
 				SYS_SpaceManager.Direct.Init();
+				SYS_ResourseManager.Direct.Reset();
 			}
 		}
 	}

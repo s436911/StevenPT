@@ -14,6 +14,7 @@ public class SYS_ShipController : MonoBehaviour {
 
 	public Vector2 direction = Vector2.up;
 	private Coroutine cououtine;
+	private float fuelTimer;
 
 	void Awake() {
 		Direct = this;
@@ -35,6 +36,11 @@ public class SYS_ShipController : MonoBehaviour {
 				if (speed > maxSpeed) {
 					speed = maxSpeed;
 				}
+			}
+
+			if (Time.timeSinceLevelLoad - fuelTimer > 1) {
+				fuelTimer = Time.timeSinceLevelLoad;
+				SYS_ResourseManager.Direct.ModifyFuel(-1);
 			}
 		}
 	}
