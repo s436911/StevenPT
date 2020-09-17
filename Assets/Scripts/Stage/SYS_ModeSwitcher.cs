@@ -69,6 +69,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				UI_Navigator.Direct.Reset();
 				SYS_StarmapManager.Direct.Reset();
 				SYS_ShipController.Direct.Reset();
+				SYS_SelfDriving.Direct.Reset();
 
 				SYS_StarmapManager.Direct.Init();
 
