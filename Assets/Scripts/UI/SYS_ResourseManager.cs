@@ -51,20 +51,25 @@ public class SYS_ResourseManager : MonoBehaviour
 
 
 	public void ModifyFuel(int value) {
-		fuel += value;
+		SetFuel(fuel + value);
 	}
 
 	public void ModifyArmor(int value) {
-		armor += value;
+		SetArmor(armor + value);
 	}
 
 	public void ModifyTrade(int value) {
-		trade += value;
+		SetTrade(trade + value);
 	}
 
 
 	public void SetFuel(int value) {
 		fuel = value;
+		if (fuel <= 0) {
+			fuel = 0;
+			SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
+		}
+
 		fuelText.text = fuel.ToString();
 	}
 

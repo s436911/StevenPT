@@ -84,8 +84,10 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 		animing = Time.timeSinceLevelLoad;
 	}
 
-	public enum GameMode {
-		Home,
-		Space
-	}
+	
+}
+
+public enum GameMode {
+	Home,
+	Space
 }
