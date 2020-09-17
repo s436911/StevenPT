@@ -61,7 +61,7 @@ public class SYS_ShipController : MonoBehaviour {
 		
 
 	public void BeginMove() {
-		SYS_SelfDriving.Direct.Reset();
+		SYS_SelfDriving.Direct.ClearTGT();
 		OnBeginMove();
 	}
 
@@ -73,7 +73,7 @@ public class SYS_ShipController : MonoBehaviour {
 	
 
 	public void EndMove() {
-		SYS_SelfDriving.Direct.ClearTGT ();
+		SYS_SelfDriving.Direct.ClearTGT();
 		OnEndMove();
 	}
 
@@ -84,19 +84,17 @@ public class SYS_ShipController : MonoBehaviour {
 		handling = false;
 	}
 
-
-
 	public void OnUpdateDirection(Vector2 direction) {
 		this.direction = direction.normalized;
 	}
 
 	public void UpdateDirection(Vector2 direction) {
-		SYS_SelfDriving.Direct.Reset();
+		SYS_SelfDriving.Direct.ClearTGT();
 		OnUpdateDirection(direction);
 	}
 
 	public void UpdateDirection(Vector3 direction) {
-		SYS_SelfDriving.Direct.Reset();
+		SYS_SelfDriving.Direct.ClearTGT();
 		OnUpdateDirection(direction);
 	}
 }
