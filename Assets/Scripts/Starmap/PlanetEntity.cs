@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlanetEntity : SpaceEntity {
 	public GameObject halo;
 	public Collider2D colli;
-	public bool exploded = false;
+	public bool explored = false;
 
 	// Start is called before the first frame update
 	void Awake() {
@@ -24,8 +24,8 @@ public class PlanetEntity : SpaceEntity {
 	}
 
 	void OnTriggerEnter2D(Collider2D colli) {
-		SYS_ResourseManager.Direct.ModifyFuel(40);
-		exploded = true;
+		SYS_Interactive.Direct.Regist(SYS_Interactive.Direct.templateEvent);
+		explored = true;
 	}
 
 	void OnTriggerExit2D(Collider2D colli) {

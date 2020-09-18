@@ -72,7 +72,7 @@ public class UI_NavigateHint : MonoBehaviour {
 
 		if (entity.info.sType == StarType.Check) {
 			if (UI_Navigator.Direct.nextPlanet != entity) {
-				if (!entity.exploded) {
+				if (!entity.explored) {
 					hintColor = new Color(0.85F, 0.85F, 0.85F);
 					star.GetComponent<RectTransform>().sizeDelta = new Vector2(40, 40);
 					textType.text = "???";
