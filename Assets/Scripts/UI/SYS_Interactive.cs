@@ -85,8 +85,8 @@ public class SYS_Interactive : MonoBehaviour
 	}
 
 	public void Answer(int value) {
-		SYS_ResourseManager.Direct.ModifyMineral(-1);
-		SYS_ResourseManager.Direct.ModifyFuel(40);
+		SYS_ResourseManager.Direct.ModifyResource(3,-1);
+		SYS_ResourseManager.Direct.ModifyResource(0,40);
 		Clear();
 	}
 }
@@ -114,6 +114,14 @@ public class InteractOption {
 	public InteractOption(Affinity affinity, string text) {
 		this.affinity = affinity;
 		this.text = text;
+	}
+
+	public bool UseAble() {
+		return true;
+	}
+
+	public string ToString() {
+		return "40 Fuel";
 	}
 }
 

@@ -2812,14 +2812,15 @@ MonoBehaviour:
   armorText: {fileID: 1154600364}
   foodText: {fileID: 2122788679}
   mineralText: {fileID: 1481739695}
-  maxFuel: 50
+  maxFuel: 40
   maxArmor: 5
-  maxFood: 5
-  maxMineral: 5
+  maxFood: 30
+  maxMineral: 10
   startFuel: 40
   startArmor: 5
   startFood: 30
   startMineral: 5
+  resources: 00000000000000000000000000000000
   cargo: 0000000000000000
 --- !u!1 &1071235753
 GameObject:

@@ -47,13 +47,13 @@ public class SYS_ShipController : MonoBehaviour {
 
 				if (Time.timeSinceLevelLoad - fuelTimer > 1) {
 					fuelTimer = Time.timeSinceLevelLoad;
-					SYS_ResourseManager.Direct.ModifyFuel(-1);
+					SYS_ResourseManager.Direct.ModifyResource(0,-1);
 				}
 			}
 
 			if (Time.timeSinceLevelLoad - foodTimer > 10) {
 				foodTimer = Time.timeSinceLevelLoad;
-				SYS_ResourseManager.Direct.ModifyFood(-1);
+				SYS_ResourseManager.Direct.ModifyResource(2,-1);
 			}
 		}
 	}
