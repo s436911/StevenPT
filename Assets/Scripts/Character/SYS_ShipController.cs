@@ -17,6 +17,7 @@ public class SYS_ShipController : MonoBehaviour {
 	public Vector2 direction = Vector2.up;
 	private Coroutine cououtine;
 	private float fuelTimer;
+	private float foodTimer;
 
 	void Awake() {
 		Direct = this;
@@ -25,25 +26,34 @@ public class SYS_ShipController : MonoBehaviour {
 
 	public void Reset() {
 		transform.localPosition = Vector2.zero;
+		fuelTimer = 0;
+		foodTimer = 0;
 	}
 
 	void Update() {
-		if (direction != Vector2.zero) {
-			Quaternion qua = Quaternion.LookRotation(direction, Vector3.forward);//※  將Vector3型別轉換四元數型別
-			transform.rotation = Quaternion.Lerp(transform.rotation, qua, Time.deltaTime * smoothing);
-		}
+		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
+			if (direction != Vector2.zero) {
+				Quaternion qua = Quaternion.LookRotation(direction, Vector3.forward);//※  將Vector3型別轉換四元數型別
+				transform.rotation = Quaternion.Lerp(transform.rotation, qua, Time.deltaTime * smoothing);
+			}
 
-		if (handling) {
-			if (speed < maxSpeed) {
-				speed = speed + maxSpeed * Time.deltaTime;
-				if (speed > maxSpeed) {
-					speed = maxSpeed;
+			if (handling) {
+				if (speed < maxSpeed) {
+					speed = speed + maxSpeed * Time.deltaTime;
+					if (speed > maxSpeed) {
+						speed = maxSpeed;
+					}
+				}
+
+				if (Time.timeSinceLevelLoad - fuelTimer > 1) {
+					fuelTimer = Time.timeSinceLevelLoad;
+					SYS_ResourseManager.Direct.ModifyFuel(-1);
 				}
 			}
 
-			if (Time.timeSinceLevelLoad - fuelTimer > 1) {
-				fuelTimer = Time.timeSinceLevelLoad;
-				SYS_ResourseManager.Direct.ModifyFuel(-1);
+			if (Time.timeSinceLevelLoad - foodTimer > 10) {
+				foodTimer = Time.timeSinceLevelLoad;
+				SYS_ResourseManager.Direct.ModifyFood(-1);
 			}
 		}
 	}

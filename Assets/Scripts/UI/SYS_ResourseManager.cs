@@ -9,17 +9,25 @@ public class SYS_ResourseManager : MonoBehaviour
 
 	public Text fuelText;
 	public Text armorText;
-	public Text tradeText;
+	public Text foodText;
+	public Text mineralText;
+
+	public int maxFuel = 50;
+	public int maxArmor = 5;
+	public int maxFood = 5;
+	public int maxMineral = 5;
 
 	public int startFuel = 50;
 	public int startArmor = 5;
-	public int startTrade = 5;
+	public int startFood = 5;
+	public int startMineral = 5;
 	
 	public int[] cargo = new int[2]; 
 
 	private int fuel;
 	private int armor;
-	private int trade;
+	private int food;
+	private int mineral;
 
 	void Awake() {
 		Direct = this;
@@ -32,7 +40,8 @@ public class SYS_ResourseManager : MonoBehaviour
 	public void Reset() {
 		SetFuel(startFuel);
 		SetArmor(startArmor);
-		SetTrade(startTrade);
+		SetFood(startFood);
+		SetMineral(startMineral);
 
 		cargo[0] = 0;
 		cargo[1] = 0;
@@ -46,10 +55,13 @@ public class SYS_ResourseManager : MonoBehaviour
 		return armor;
 	}
 
-	public int GetTrade() {
-		return trade;
+	public int GetFood() {
+		return food;
 	}
 
+	public int GetMineral() {
+		return mineral;
+	}
 
 	public void ModifyFuel(int value) {
 		SetFuel(fuel + value);
@@ -59,8 +71,12 @@ public class SYS_ResourseManager : MonoBehaviour
 		SetArmor(armor + value);
 	}
 
-	public void ModifyTrade(int value) {
-		SetTrade(trade + value);
+	public void ModifyFood(int value) {
+		SetFood(food + value);
+	}
+
+	public void ModifyMineral(int value) {
+		SetMineral(mineral + value);
 	}
 
 
@@ -70,7 +86,7 @@ public class SYS_ResourseManager : MonoBehaviour
 			fuel = 0;
 			SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
 
-		} else if (fuel > startFuel) {
+		} else if (fuel > maxFuel) {
 			fuel = startFuel;
 		}
 
@@ -82,21 +98,33 @@ public class SYS_ResourseManager : MonoBehaviour
 		if (armor <= 0) {
 			armor = 0;
 
-		} else if (armor > startArmor) {
+		} else if (armor > maxArmor) {
 			armor = startArmor;
 		}
 
 		armorText.text = armor.ToString();
 	}
 
-	public void SetTrade(int value) {
-		trade = value;
-		if (trade <= 0) {
-			trade = 0;
+	public void SetFood(int value) {
+		food = value;
+		if (food <= 0) {
+			food = 0;
+			SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
 
-		} else if (trade > startTrade) {
-			trade = startTrade;
+		} else if (food > maxFood) {
+			food = startFood;
 		}
-		tradeText.text = trade.ToString();
+		foodText.text = food.ToString();
+	}
+
+	public void SetMineral(int value) {
+		mineral = value;
+		if (mineral <= 0) {
+			mineral = 0;
+
+		} else if (mineral > maxMineral) {
+			mineral = startMineral;
+		}
+		mineralText.text = mineral.ToString();
 	}
 }
