@@ -26,7 +26,16 @@ public class SYS_Interactive : MonoBehaviour
 
 		List<InteractOption> tempAnswers = new List<InteractOption>();
 		tempAnswers.Add(new InteractOption(Affinity.Trade, 3, 1, 0, 40));
-		tempAnswers.Add(new InteractOption(Affinity.Explore, 2, 1, 0, 40));
+		tempAnswers.Add(new InteractOption(Affinity.None, 0, 0, 0, 0, "離開"));
+		
+
+		if (Random.Range(0, 2) == 0) {
+			tempAnswers.Add(new InteractOption(Affinity.Fight, 3, 1, 1, 1));
+		} else {
+
+			tempAnswers.Add(new InteractOption(Affinity.Explore, 2, 1, 0, 40));
+		}
+		
 		templateEvent = new InteractEvent("Planet" , "Resupply...", tempAnswers);
 	}
 
@@ -70,7 +79,13 @@ public class SYS_Interactive : MonoBehaviour
 
 				rawImages[id].texture = affinityIcon[(int)nowEvent.answers[id].affinity];
 				rawImageBacks[id].texture = affinityIcon[(int)nowEvent.answers[id].affinity];
-				texts[id].text = SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
+
+				if (nowEvent.answers[id].text == null) {
+					texts[id].text = SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
+
+				} else {
+					texts[id].text = nowEvent.answers[id].text;
+				}
 
 			} else {
 				rectBTNs[id].gameObject.SetActive(false);

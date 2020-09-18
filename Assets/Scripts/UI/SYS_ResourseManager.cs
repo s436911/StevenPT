@@ -6,10 +6,8 @@ using UnityEngine.UI;
 public class SYS_ResourseManager : MonoBehaviour {
 	public static SYS_ResourseManager Direct;
 
-	public Text fuelText;
-	public Text armorText;
-	public Text foodText;
-	public Text mineralText;
+	public Text[] resourceText = new Text[4];
+	public Text[] resourceMaxText = new Text[4];
 
 	public int maxFuel = 50;
 	public int maxArmor = 5;
@@ -33,6 +31,11 @@ public class SYS_ResourseManager : MonoBehaviour {
 	}
 
 	public void Reset() {
+		resourceMaxText[0].text = "/" + maxFuel.ToString();
+		resourceMaxText[1].text = "/" + maxArmor.ToString();
+		resourceMaxText[2].text = "/" + maxFood.ToString();
+		resourceMaxText[3].text = "/" + maxMineral.ToString();
+
 		SetResource(0, startFuel);
 		SetResource(1, startArmor);
 		SetResource(2, startFood);
@@ -61,9 +64,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 			} else if (resources[type] > maxFuel) {
 				resources[type] = maxFuel;
 			}
-
-			fuelText.text = resources[type].ToString();
-
+			
 		} else if (type == 1) {
 			if (resources[type] <= 0) {
 				resources[type] = 0;
@@ -71,9 +72,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 			} else if (resources[type] > maxArmor) {
 				resources[type] = maxArmor;
 			}
-
-			armorText.text = resources[type].ToString();
-
+			
 		} else if (type == 2) {
 			if (resources[type] <= 0) {
 				resources[type] = 0;
@@ -82,7 +81,6 @@ public class SYS_ResourseManager : MonoBehaviour {
 			} else if (resources[type] > maxFood) {
 				resources[type] = maxFood;
 			}
-			foodText.text = resources[type].ToString();
 
 		} else if (type == 3) {
 			resources[type] = value;
@@ -92,8 +90,10 @@ public class SYS_ResourseManager : MonoBehaviour {
 			} else if (resources[type] > maxMineral) {
 				resources[type] = maxMineral;
 			}
-			mineralText.text = resources[type].ToString();
 		}
+
+
+		resourceText[type].text = resources[type].ToString();
 	}
 
 	public string ToString (int type){
