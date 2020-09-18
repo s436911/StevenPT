@@ -24,8 +24,14 @@ public class PlanetEntity : SpaceEntity {
 	}
 
 	void OnTriggerEnter2D(Collider2D colli) {
-		SYS_Interactive.Direct.Regist(SYS_Interactive.Direct.templateEvent);
-		explored = true;
+		if (info.sType == StarType.Check) {
+			SYS_Interactive.Direct.Regist(SYS_Interactive.Direct.templateEvent);
+			explored = true;
+
+		} else if (info.sType == StarType.End) {
+			SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
+
+		}
 	}
 
 	void OnTriggerExit2D(Collider2D colli) {

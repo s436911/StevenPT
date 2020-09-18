@@ -96,10 +96,29 @@ public class SYS_ResourseManager : MonoBehaviour {
 		}
 	}
 
-	public enum ResourceType {
-		Fuel,
-		Armor,
-		Food,
-		Mineral,
+	public string ToString (int type){
+		switch (type) {
+			case 0:
+				return "燃料";
+				break;
+			case 1:
+				return "裝甲";
+				break;
+			case 2:
+				return "食物";
+				break;
+			case 3:
+				return "礦石";
+				break;
+		}
+
+		return null;
 	}
+}
+
+public enum ResourceType {
+	Fuel,
+	Armor,
+	Food,
+	Mineral,
 }

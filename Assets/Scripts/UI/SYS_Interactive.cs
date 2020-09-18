@@ -25,8 +25,8 @@ public class SYS_Interactive : MonoBehaviour
 		Direct = this;
 
 		List<InteractOption> tempAnswers = new List<InteractOption>();
-		tempAnswers.Add(new InteractOption((Affinity)Random.Range(0, 4), "40 Fuel"));
-		tempAnswers.Add(new InteractOption((Affinity)Random.Range(0, 4), "40 Fuel"));
+		tempAnswers.Add(new InteractOption(Affinity.Trade, 3, 1, 0, 40));
+		tempAnswers.Add(new InteractOption(Affinity.Explore, 2, 1, 0, 40));
 		templateEvent = new InteractEvent("Planet" , "Resupply...", tempAnswers);
 	}
 
@@ -43,32 +43,34 @@ public class SYS_Interactive : MonoBehaviour
     }
 
 	public void Regist(InteractEvent value) {
-		uiPanel.SetActive(true);
-		textFrom.text = value.from;
-		textMsg.text = value.msg;
-		textPs.text = value.ps;
+		nowEvent = value;
 
-		if (value.answers.Count == 1) {
+		uiPanel.SetActive(true);
+		textFrom.text = nowEvent.from;
+		textMsg.text = nowEvent.msg;
+		textPs.text = nowEvent.ps;
+
+		if (nowEvent.answers.Count == 1) {
 			rectBTNs[0].anchoredPosition = new Vector2(0, -2);
 
-		} else if (value.answers.Count == 2) {
-			rectBTNs[0].anchoredPosition = new Vector2(125, -2);
-			rectBTNs[1].anchoredPosition = new Vector2(-125, -2);
+		} else if (nowEvent.answers.Count == 2) {
+			rectBTNs[0].anchoredPosition = new Vector2(-125, -2);
+			rectBTNs[1].anchoredPosition = new Vector2(125, -2);
 
 
-		} else if (value.answers.Count == 3) {
-			rectBTNs[0].anchoredPosition = new Vector2(175, -2);
+		} else if (nowEvent.answers.Count == 3) {
+			rectBTNs[0].anchoredPosition = new Vector2(-175, -2);
 			rectBTNs[1].anchoredPosition = new Vector2(0, -2);
-			rectBTNs[2].anchoredPosition = new Vector2(-175, -2);
+			rectBTNs[2].anchoredPosition = new Vector2(175, -2);
 		}
 
 		for (int id = 0; id < rectBTNs.Length; id++) {
-			if (id < value.answers.Count) {
+			if (id < nowEvent.answers.Count) {
 				rectBTNs[id].gameObject.SetActive(true);
 
-				rawImages[id].texture = affinityIcon[(int)value.answers[id].affinity];
-				rawImageBacks[id].texture = affinityIcon[(int)value.answers[id].affinity];
-				texts[id].text = value.answers[id].text;
+				rawImages[id].texture = affinityIcon[(int)nowEvent.answers[id].affinity];
+				rawImageBacks[id].texture = affinityIcon[(int)nowEvent.answers[id].affinity];
+				texts[id].text = SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
 
 			} else {
 				rectBTNs[id].gameObject.SetActive(false);
@@ -85,8 +87,7 @@ public class SYS_Interactive : MonoBehaviour
 	}
 
 	public void Answer(int value) {
-		SYS_ResourseManager.Direct.ModifyResource(3,-1);
-		SYS_ResourseManager.Direct.ModifyResource(0,40);
+		nowEvent.answers[value].Interact();
 		Clear();
 	}
 }
@@ -111,17 +112,31 @@ public class InteractOption {
 	public Affinity affinity;
 	public string text;
 
-	public InteractOption(Affinity affinity, string text) {
+	public int costType;
+	public int costNum;
+
+	public int getType;
+	public int getNum;
+
+	public int IID;
+	public int SID;
+
+	public InteractOption(Affinity affinity, int costType , int costNum  , int getType , int getNum, string text = null) {
 		this.affinity = affinity;
+		this.costType = costType;
+		this.costNum = costNum;
+		this.getType = getType;
+		this.getNum = getNum;
 		this.text = text;
 	}
 
-	public bool UseAble() {
-		return true;
+	public bool InteractAble() {
+		return SYS_ResourseManager.Direct.resources[costType] >= costNum;
 	}
-
-	public string ToString() {
-		return "40 Fuel";
+	
+	public void Interact() {
+		SYS_ResourseManager.Direct.ModifyResource(costType, -costNum);
+		SYS_ResourseManager.Direct.ModifyResource(getType, getNum);
 	}
 }
 
