@@ -10,6 +10,9 @@ public class SYS_StarmapManager : MonoBehaviour {
 	public int difficult = 0;
 	public int starDis = 100;
 
+	public int baseStarMin = 8;
+	public int baseStarMax = 9;
+
 	public List<StarInfo> starInfos = new List<StarInfo>();
 
 	void Awake() {
@@ -18,7 +21,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 
 	public void Init() {
 		//init starinfo
-		for (int ct = 0; ct < Random.Range(6 - difficult, 8 - difficult); ct++) {
+		for (int ct = 0; ct < Random.Range(baseStarMin - difficult, baseStarMax - difficult); ct++) {
 			starInfos.Add(new StarInfo(StarType.Check , ct < 3));
 		}
 		starInfos.Add(new StarInfo(StarType.End));
@@ -73,6 +76,23 @@ public class SYS_StarmapManager : MonoBehaviour {
 		}
 
 		starInfos = new List<StarInfo>();
+	}
+
+	public void SetDifficult(InputField value) {
+		int tmpDifficult = int.Parse(value.text);
+
+		if (tmpDifficult > 3) {
+			tmpDifficult = 3;
+			value.text = "3";
+
+		} else if (tmpDifficult < 0) {
+			tmpDifficult = 0;
+			value.text = "0";
+		}
+
+		difficult = tmpDifficult;
+		Reset();
+		Init();
 	}
 }
 

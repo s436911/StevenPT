@@ -19,24 +19,9 @@ public class SYS_Interactive : MonoBehaviour
 	public Text[] texts = new Text[3];
 
 	public Texture2D[] affinityIcon = new Texture2D[4];
-	public InteractEvent templateEvent;
 
 	void Awake() {
 		Direct = this;
-
-		List<InteractOption> tempAnswers = new List<InteractOption>();
-		tempAnswers.Add(new InteractOption(Affinity.Trade, 3, 1, 0, 40));
-		tempAnswers.Add(new InteractOption(Affinity.None, 0, 0, 0, 0, "離開"));
-		
-
-		if (Random.Range(0, 2) == 0) {
-			tempAnswers.Add(new InteractOption(Affinity.Fight, 3, 1, 1, 1));
-		} else {
-
-			tempAnswers.Add(new InteractOption(Affinity.Explore, 2, 1, 0, 40));
-		}
-		
-		templateEvent = new InteractEvent("Planet" , "Resupply...", tempAnswers);
 	}
 
 	// Start is called before the first frame update
@@ -81,10 +66,10 @@ public class SYS_Interactive : MonoBehaviour
 				rawImageBacks[id].texture = affinityIcon[(int)nowEvent.answers[id].affinity];
 
 				if (nowEvent.answers[id].text == null) {
-					texts[id].text = SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
+					texts[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : nowEvent.answers[id].successRate.ToString("f0") + "%") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
 
 				} else {
-					texts[id].text = nowEvent.answers[id].text;
+					texts[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : nowEvent.answers[id].successRate.ToString("f0") + "%") + nowEvent.answers[id].text;
 				}
 
 			} else {
@@ -126,6 +111,7 @@ public class InteractEvent {
 public class InteractOption {
 	public Affinity affinity;
 	public string text;
+	public float successRate;
 
 	public int costType;
 	public int costNum;
@@ -136,8 +122,9 @@ public class InteractOption {
 	public int IID;
 	public int SID;
 
-	public InteractOption(Affinity affinity, int costType , int costNum  , int getType , int getNum, string text = null) {
+	public InteractOption(Affinity affinity , float successRate, int costType , int costNum  , int getType , int getNum, string text = null) {
 		this.affinity = affinity;
+		this.successRate = successRate;
 		this.costType = costType;
 		this.costNum = costNum;
 		this.getType = getType;
@@ -150,8 +137,10 @@ public class InteractOption {
 	}
 	
 	public void Interact() {
-		SYS_ResourseManager.Direct.ModifyResource(costType, -costNum);
-		SYS_ResourseManager.Direct.ModifyResource(getType, getNum);
+		if (InteractAble()) {
+			SYS_ResourseManager.Direct.ModifyResource(costType, -costNum);
+			SYS_ResourseManager.Direct.ModifyResource(getType, getNum);
+		}
 	}
 }
 
@@ -161,4 +150,55 @@ public enum Affinity {
 	Fight,
 	Trade,
 	Explore
+}
+
+public static class TMP_InteractEvent {
+	public static InteractEvent GetPlanetEvent(string sName , int planetType = 0) {
+		List<InteractOption> tempAnswers = new List<InteractOption>();
+		string tmpMsg = "";
+		int rand = planetType == 0 ? Random.Range(1, 7) : planetType;
+
+		switch (rand) {
+			case 1:
+				tempAnswers.Add(new InteractOption(Affinity.Trade , 100, 3, 1, 0, 40));
+				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
+				tmpMsg = "這個星球有一間很大的加油站可以用呢!!";
+				break;
+
+			case 2:
+				tempAnswers.Add(new InteractOption(Affinity.None, 75, 2, 1, 0, 40));
+				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
+				tempAnswers.Add(new InteractOption(Affinity.Fight, 100, 1, 1, 0, 60));
+				tmpMsg = "加油站被野生動物佔據了我們只能偷偷加油，但若擊退他們我們就可以加免費燃料了!!";
+				break;
+
+			case 3:
+				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 1, 0, 40));
+				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
+				tempAnswers.Add(new InteractOption(Affinity.Explore, 60, 2, 1, 0, 60));
+				tmpMsg = "加油站旁有座巨大礦坑也許可以找到一點燃料!?";
+				break;
+
+			case 4:
+				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 1, 0, 40));
+				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
+				tempAnswers.Add(new InteractOption(Affinity.Fight, 100, 3, 1, 1, 1));
+				tmpMsg = "這裡的星球武器商可以補給燃料和強化裝甲!!";
+				break;
+
+			case 5:
+				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 2, 1, 0, 40));
+				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
+				tmpMsg = "這顆星球的加油站竟然只收食物!!";
+				break;
+
+			case 6:
+				tempAnswers.Add(new InteractOption(Affinity.Explore, 100, 2, 1, 0, 40));
+				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
+				tmpMsg = "這個加油站已經廢棄很久了，但是也許可以從廢墟中找到一些燃料!!";
+				break;
+		}
+
+		return new InteractEvent(sName, tmpMsg, tempAnswers);
+	}
 }

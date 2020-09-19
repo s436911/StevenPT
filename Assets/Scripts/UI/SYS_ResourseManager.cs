@@ -68,6 +68,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 		} else if (type == 1) {
 			if (resources[type] <= 0) {
 				resources[type] = 0;
+				SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
 
 			} else if (resources[type] > maxArmor) {
 				resources[type] = maxArmor;
