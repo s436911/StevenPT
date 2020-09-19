@@ -6,6 +6,7 @@ public class PlanetEntity : SpaceEntity {
 	public GameObject halo;
 	public Collider2D colli;
 	public InteractEvent iEvent;
+	public TextMesh text;
 	public bool explored = false;
 
 	// Start is called before the first frame update
@@ -23,6 +24,7 @@ public class PlanetEntity : SpaceEntity {
 	public void Regist(StarInfo info, Material mat, float size, bool haveHalo) {
 		Regist(info, mat, size);
 		halo.SetActive(haveHalo);
+		text.text = info.sName;
 	}
 
 	void OnTriggerEnter2D(Collider2D colli) {

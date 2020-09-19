@@ -32,6 +32,8 @@ public class StarObject : MonoBehaviour {
 		sPos.text = sInfo.sPos.ToString();
 		hintTime = Time.timeSinceLevelLoad;
 		hinting = true;
+
+		SYS_StarmapManager.Direct.ClickRoute(sInfo);
 	}
 
 	public void CloseHint() {

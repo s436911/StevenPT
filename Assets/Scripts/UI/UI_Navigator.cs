@@ -11,6 +11,7 @@ public class UI_Navigator : MonoBehaviour
 	public float detectDis = 50;
 	public float closeDis = 5;
 
+
 	void Awake() {
 		Direct = this;
 	}
@@ -49,6 +50,7 @@ public class UI_Navigator : MonoBehaviour
 	}
 
 	public void Reset() {
+
 		foreach (Transform child in transform) {
 			Destroy(child.gameObject);
 		}

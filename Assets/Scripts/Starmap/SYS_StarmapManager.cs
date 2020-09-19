@@ -13,7 +13,10 @@ public class SYS_StarmapManager : MonoBehaviour {
 	public int baseStarMin = 8;
 	public int baseStarMax = 9;
 
+	public LineRenderer line;
+
 	public List<StarInfo> starInfos = new List<StarInfo>();
+	public List<StarInfo> route = new List<StarInfo>();
 
 	void Awake() {
 		Direct = this;
@@ -43,6 +46,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 			if (starInfo.sType == StarType.End) {
 				objGen.sRawImage.GetComponent<RectTransform>().sizeDelta = new Vector2(80, 80);				
 			}
+
 			objGen.sRawImage.color = starInfo.sColor;
 			objRect.localScale = Vector3.one;
 		}
@@ -54,10 +58,26 @@ public class SYS_StarmapManager : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-	void Update()
-    {
-        
-    }
+	public void UpdateLine() {
+
+		if (route.Count > 1) {
+
+			List<Vector3> linePos = new List<Vector3>();
+
+			foreach (StarInfo routePos in route) {
+				linePos.Add(new Vector3(routePos.sPos.x, routePos.sPos.y, 0));
+			}
+
+			Vector3[] tempV3 = linePos.ToArray();
+
+			line.gameObject.SetActive(true);
+			line.positionCount = tempV3.Length;
+			line.SetPositions(tempV3);
+
+		} else {
+			line.gameObject.SetActive(false);
+		}		
+	}
 
 	public Vector2 CheckEntityPos(Vector2 checkPos) {
 		foreach (StarInfo starInfo in Direct.starInfos) {
@@ -75,7 +95,10 @@ public class SYS_StarmapManager : MonoBehaviour {
 			Destroy(child.gameObject);
 		}
 
+
+		route = new List<StarInfo>();
 		starInfos = new List<StarInfo>();
+		line.positionCount = 0;
 	}
 
 	public void SetDifficult(InputField value) {
@@ -93,6 +116,38 @@ public class SYS_StarmapManager : MonoBehaviour {
 		difficult = tmpDifficult;
 		Reset();
 		Init();
+	}
+
+	public void ClickRoute(StarInfo sInfo) {
+		if (route.Count > 0) {
+			if (route[route.Count - 1].sType != StarType.End) {
+				if (route[route.Count - 1] != sInfo) {
+					if (!route.Contains(sInfo)) {
+						route.Add(sInfo);
+						UpdateLine();
+					} else {
+						Debug.LogWarning("無法註冊已存的目標");
+					}
+
+				} else {
+					route.Remove(sInfo);
+					UpdateLine();
+				}
+
+			} else {
+				if (route[route.Count - 1] == sInfo) {
+					route.Remove(sInfo);
+					UpdateLine();
+
+				} else {
+					Debug.LogWarning("無法註冊在目標之後");
+				}				
+			}
+
+		} else {
+			route.Add(sInfo);
+			UpdateLine();
+		}
 	}
 }
 
