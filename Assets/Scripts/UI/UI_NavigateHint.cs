@@ -74,29 +74,31 @@ public class UI_NavigateHint : MonoBehaviour {
 			if (UI_Navigator.Direct.nextPlanet != entity) {
 				if (!entity.explored) {
 					hintColor = new Color(0.85F, 0.85F, 0.85F);
-					star.GetComponent<RectTransform>().sizeDelta = new Vector2(40, 40);
 					textType.text = "???";
 					textDis.text = "";
 
 				} else {
 					hintColor = new Color(0.45F, 0.8F, 0.85F);
-					star.GetComponent<RectTransform>().sizeDelta = new Vector2(40, 40);
 					textType.text = "SUP";
 					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
 				}
 
 			} else {
 				hintColor = new Color(0.4F, 0.7F, 0.25F);
-				star.GetComponent<RectTransform>().sizeDelta = new Vector2(50, 50);
 				textType.text = "REC";
 				textDis.text = "";
 			}
 
+			float nowSize = (1 - Mathf.Clamp( Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 500,0 , 0.9f)) * 80;
+			star.GetComponent<RectTransform>().sizeDelta = new Vector2(nowSize, nowSize);
+
 		} else if (entity.info.sType == StarType.End) {
 			hintColor = new Color(0.9F, 0.7F, 0.15F);
-			star.GetComponent<RectTransform>().sizeDelta = new Vector2(75, 75);
 			textType.text = "TGT";
 			textDis.text = "";
+
+			float nowSize = (1 - Mathf.Clamp(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 500, 0, 0.9f)) * 80;
+			star.GetComponent<RectTransform>().sizeDelta = new Vector2(nowSize, nowSize);
 		}
 
 		textDis.color = hintColor;
