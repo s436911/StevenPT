@@ -52,7 +52,7 @@ public class SYS_SpaceManager : MonoBehaviour {
 				Debug.LogWarning("[Gen]BayerID : " + starInfo.sID + " , BayerName : " + starInfo.sName + " , Type : " + starInfo.sType.ToString() + " , Location : " + starInfo.sPos);
 			}
 		}
-
+		
 		//gen star
 		foreach (StarInfo starInfo in initList) {
 			PlanetEntity objGen = Instantiate(pfbPlanet).GetComponent<PlanetEntity>();

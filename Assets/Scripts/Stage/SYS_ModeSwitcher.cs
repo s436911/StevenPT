@@ -60,11 +60,11 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 	}
 
 	public void SetMode(int gameMode) {
-		if (this.gameMode != (GameMode)gameMode) {
-			this.gameMode = (GameMode)gameMode;
-			animing = Time.timeSinceLevelLoad;
+		if (this.gameMode != (GameMode)gameMode) {		
+			if ((GameMode)gameMode == GameMode.Home) {
+				this.gameMode = (GameMode)gameMode;
+				animing = Time.timeSinceLevelLoad;
 
-			if (this.gameMode == GameMode.Home) {
 				SYS_SpaceManager.Direct.Reset();
 				UI_Navigator.Direct.Reset();
 				SYS_StarmapManager.Direct.Reset();
@@ -73,9 +73,17 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 
 				SYS_StarmapManager.Direct.Init();
 
-			} else if (this.gameMode == GameMode.Space) {
-				SYS_SpaceManager.Direct.Init();
-				SYS_ResourseManager.Direct.Reset();
+			} else if ((GameMode)gameMode == GameMode.Space) {
+				if (SYS_StarmapManager.Direct.GetRouteStatus()) {
+					this.gameMode = (GameMode)gameMode;
+					animing = Time.timeSinceLevelLoad;
+
+					SYS_SpaceManager.Direct.Init();
+					SYS_ResourseManager.Direct.Reset();
+					UI_Navigator.Direct.Init();
+				} else {
+					SYS_Logger.Direct.SystemMsg("請設定路徑至終點再出發");
+				}
 			}
 		}
 	}

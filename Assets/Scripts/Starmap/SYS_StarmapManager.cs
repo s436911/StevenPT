@@ -43,8 +43,10 @@ public class SYS_StarmapManager : MonoBehaviour {
 			objGen.transform.SetParent(transform);
 			objGen.Regist(starInfo);
 			objRect.anchoredPosition3D = starInfo.sPos;
-			if (starInfo.sType == StarType.End) {
-				objGen.sRawImage.GetComponent<RectTransform>().sizeDelta = new Vector2(80, 80);				
+			if (starInfo.sType != StarType.End) {
+				objGen.sRawImage.GetComponent<RectTransform>().sizeDelta = new Vector2(80, 80);
+			} else {
+				objGen.sRawImage.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
 			}
 
 			objGen.sRawImage.color = starInfo.sColor;
@@ -57,12 +59,18 @@ public class SYS_StarmapManager : MonoBehaviour {
 		Init();
 	}
 
+	public bool GetRouteStatus() {
+		return route.Count > 0 && route[route.Count - 1].sType == StarType.End;
+	}
+
 	// Update is called once per frame
 	public void UpdateLine() {
 
-		if (route.Count > 1) {
+		if (route.Count > 0) {
 
 			List<Vector3> linePos = new List<Vector3>();
+
+			linePos.Add(Vector3.zero);
 
 			foreach (StarInfo routePos in route) {
 				linePos.Add(new Vector3(routePos.sPos.x, routePos.sPos.y, 0));
@@ -126,7 +134,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 						route.Add(sInfo);
 						UpdateLine();
 					} else {
-						Debug.LogWarning("無法註冊已存的目標");
+						SYS_Logger.Direct.SystemMsg("無法註冊已存的目標");
 					}
 
 				} else {
@@ -140,7 +148,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 					UpdateLine();
 
 				} else {
-					Debug.LogWarning("無法註冊在目標之後");
+					SYS_Logger.Direct.SystemMsg("無法註冊在終點之後");
 				}				
 			}
 

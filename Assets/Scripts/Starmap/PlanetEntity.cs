@@ -30,6 +30,7 @@ public class PlanetEntity : SpaceEntity {
 	void OnTriggerEnter2D(Collider2D colli) {
 		if (info.sType == StarType.Check) {
 			SYS_Interactive.Direct.Regist(iEvent);
+			UI_Navigator.Direct.Arrive(info);
 			explored = true;
 
 		} else if (info.sType == StarType.End) {
