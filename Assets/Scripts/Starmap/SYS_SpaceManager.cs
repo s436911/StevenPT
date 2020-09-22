@@ -36,7 +36,7 @@ public class SYS_SpaceManager : MonoBehaviour {
 
 	public void InitMeteor() {
 		for (int ct = 0; ct < meteorNum; ct++) {
-			StarInfo starInfo = new StarInfo(StarType.Meteor);
+			StarInfo starInfo = new StarInfo(StarType.Meteor , Vector2.zero);
 
 			MeteorEntity objGen = Instantiate(pfbMeteor).GetComponent<MeteorEntity>();
 			objGen.transform.SetParent(entityGroup);

@@ -8,10 +8,27 @@ public class SYS_StarmapManager : MonoBehaviour {
 	public static SYS_StarmapManager Direct;
 	public GameObject starPfb;
 	public int difficult = 0;
-	public int starDis = 100;
 
-	public int baseStarMin = 8;
-	public int baseStarMax = 9;
+	public float avgSpeed = 4;
+
+	public int goalDisMaxT = 50;
+	public int goalDisMinT = 40;
+
+	public int planetDisMaxT = 45;
+	public int planetDisMinT = 25;
+
+	public int planetMainDisT = 25;
+	public int planetOtherDisT = 35;
+
+	public int planetPerHighT = 2;
+	public int planetPerLowT = 2;
+
+	public int baseStar = 5;
+	public int planetRandMin = 1;
+	public int planetRandMax = 2;
+
+	public int planetSideMin = 1;
+	public int planetSideMax = 2;
 
 	public LineRenderer line;
 
@@ -22,12 +39,128 @@ public class SYS_StarmapManager : MonoBehaviour {
 		Direct = this;
 	}
 
+	public bool IsInMatrix(Vector2 p1, Vector2 p2, Vector2 p) {
+		return (p1.x - p.x) * (p2.x - p.x) <= 0 && (p1.y - p.y) * (p2.y - p.y) <= 0;
+	}
+
+
+	private Vector2 GenRandPlanetPos() {
+		Vector2 genOffset = Vector2.zero;
+
+		int couter = 0;
+		while (genOffset == Vector2.zero) {
+			genOffset = CheckPlanetPos(new Vector2(Random.Range(-250,250) , Random.Range(0, 750)) , planetOtherDisT);
+
+			if (couter > 1000) {
+				Debug.LogError("GenPlanetPos:" + genOffset + " 無限迴圈");
+				break;
+
+			} else {
+				couter++;
+			}
+		}
+
+		return genOffset;
+	}
+
+	private Vector2 GenGoalPos(Vector2 starter, int starNum = 0, int starNumLeft = 0) {
+		Vector2 genOffset = Vector2.zero;
+
+		int couter = 0;
+		while (genOffset == Vector2.zero) {
+			Vector2 routeDirect = Vector2.zero;
+			Vector2 randOffset = Vector2.zero;
+			/*
+			foreach (StarInfo starInfo in starInfos) {
+				routeDirect += starInfo.sPos.normalized;
+			}*/
+
+			routeDirect = starter.normalized;
+
+			if (Mathf.Abs(routeDirect.x) < 0.7f) {
+				randOffset = new Vector2(routeDirect.x > 0 ? -Random.Range(0.5f, 1) : Random.Range(0.5f, 1), Random.Range(0.5f, 1)).normalized;
+			} else {
+				randOffset = new Vector2(routeDirect.x > 0 ? -Random.Range(0, 0.5f) : Random.Range(0, 0.5f), Random.Range(0, 0.5f)).normalized;
+			}
+
+			Debug.LogError(routeDirect + "//" + randOffset);
+
+			randOffset = randOffset * Random.Range(goalDisMinT, goalDisMaxT + difficult) * avgSpeed; //向量 * 時間 * 期望速度
+
+			genOffset = CheckPlanetPos(starter + randOffset , planetMainDisT, starter.y, starNum, starNumLeft);
+
+			if (couter > 1000) {
+				Debug.LogError("GenPlanetPos:" + starNum + " 無限迴圈");
+				break;
+
+			} else {
+				couter++;
+			}
+		}
+
+		return genOffset;
+	}
+
+	private Vector2 GenPlanetPos(Vector2 starter, int starNum = 0, int starNumLeft = 0) {
+		Vector2 genOffset = Vector2.zero;
+
+		int couter = 0;
+		while (genOffset == Vector2.zero) {
+			Vector2 randOffset = Random.insideUnitCircle.normalized * Random.Range(planetDisMinT, planetDisMaxT + difficult) * avgSpeed; //向量 * 時間 * 期望速度
+			if (randOffset.y < 0 && starNum != 0) {
+				randOffset.y = randOffset.y * -1;
+
+			}
+			genOffset = CheckPlanetPos(starter + randOffset , planetMainDisT, starter.y, starNum , starNumLeft);
+
+			if (couter > 1000) {
+				Debug.LogError("GenPlanetPos:" + starNum + " 無限迴圈");
+				break;
+
+			} else {
+				couter++;
+			}
+		}
+
+		return genOffset;
+	}
+	
 	public void Init() {
 		//init starinfo
-		for (int ct = 0; ct < Random.Range(baseStarMin - difficult, baseStarMax - difficult); ct++) {
-			starInfos.Add(new StarInfo(StarType.Check , ct < 3));
+		int planetNum = baseStar + 1;
+
+		for (int ct = 0; ct < planetNum; ct++) {
+			Vector2 randPos = Vector2.zero;
+
+			if (ct < baseStar) {
+				if (ct == 0) {
+					randPos = GenPlanetPos(Vector2.zero, ct + 1, planetNum - ct - 1);
+				} else {
+					randPos = GenPlanetPos(starInfos[ct - 1].sPos, ct + 1, planetNum - ct - 1);
+				}
+				starInfos.Add(new StarInfo(StarType.Check, randPos));
+
+			} else {
+				randPos = GenGoalPos(starInfos[ct - 1].sPos, ct + 1, planetNum - ct - 1);
+				starInfos.Add(new StarInfo(StarType.End, randPos));
+
+			} 
 		}
-		starInfos.Add(new StarInfo(StarType.End));
+		
+		//支線星球生成
+		planetNum = Random.Range(planetSideMin, planetSideMax + 1);
+
+		for (int ct = 0; ct < planetNum; ct++) {
+			starInfos.Add(new StarInfo(StarType.Check, GenPlanetPos(starInfos[Random.Range(0, starInfos.Count)].sPos)));
+		}
+
+		//亂數星球生成
+		planetNum = Random.Range(planetRandMin, planetRandMax + 1);
+
+		for (int ct = 0; ct < planetNum; ct++) {
+			starInfos.Add(new StarInfo(StarType.Check, GenRandPlanetPos()));
+		}
+
 
 		//init log
 		if (SYS_Logger.Direct.logging) {
@@ -44,7 +177,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 			objGen.Regist(starInfo);
 			objRect.anchoredPosition3D = starInfo.sPos;
 			if (starInfo.sType != StarType.End) {
-				objGen.sRawImage.GetComponent<RectTransform>().sizeDelta = new Vector2(80, 80);
+				objGen.sRawImage.GetComponent<RectTransform>().sizeDelta = new Vector2(75, 75);
 			} else {
 				objGen.sRawImage.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
 			}
@@ -84,14 +217,35 @@ public class SYS_StarmapManager : MonoBehaviour {
 
 		} else {
 			line.gameObject.SetActive(false);
-		}		
+		} 
 	}
 
-	public Vector2 CheckEntityPos(Vector2 checkPos) {
-		foreach (StarInfo starInfo in Direct.starInfos) {
-			if (Vector2.Distance(checkPos, starInfo.sPos) < starDis) {
-				checkPos = Vector2.zero;
-				continue;
+	public Vector2 CheckPlanetPos(Vector2 checkPos , float checkDis, float startHigh = 0, int starNum = 0, int starNumLeft = 0) {
+		if (Mathf.Abs(checkPos.x) > 250 || checkPos.y > 750 || checkPos.y < 0) {
+			checkPos = Vector2.zero;
+
+		} else {
+			foreach (StarInfo starInfo in starInfos) {
+				if (Vector2.Distance(checkPos, starInfo.sPos) < checkDis * avgSpeed) { //時間 * 期望速度
+					checkPos = Vector2.zero;
+					break;
+				}
+			}
+
+			if (starNum > 0) {
+				if (750 - starNumLeft * planetPerHighT * avgSpeed > startHigh + starNum * planetPerLowT * avgSpeed) {
+					if (checkPos.y > 750 - starNumLeft * planetPerHighT * avgSpeed) {
+						checkPos = Vector2.zero;
+
+					} else if (checkPos.y < startHigh + starNum * planetPerLowT * avgSpeed) {
+						checkPos = Vector2.zero;
+					}
+				} else {
+					if (checkPos.y > 750 - starNumLeft * planetPerHighT * avgSpeed) {
+						checkPos = Vector2.zero;
+
+					} 
+				}
 			}
 		}
 
@@ -149,7 +303,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 
 				} else {
 					SYS_Logger.Direct.SystemMsg("無法註冊在終點之後");
-				}				
+				}
 			}
 
 		} else {
@@ -157,6 +311,8 @@ public class SYS_StarmapManager : MonoBehaviour {
 			UpdateLine();
 		}
 	}
+
+
 }
 
 public class StarInfo {
@@ -166,12 +322,13 @@ public class StarInfo {
 	public Vector2 sPos;
 	public Color sColor;
 
-	public StarInfo(StarType type , bool coreStar = false ) {
+	public StarInfo(StarType type, Vector2 sPos) {
 		sType = type;
+		this.sPos = sPos;
 
 		if (type == StarType.Check) {
 			BayerCreater();
-			sPos = GenCheckStarPos(coreStar);
+			//sPos = GenCheckStarPos(coreStar);
 			if (Random.Range(0, 100) >= 20) {
 				sColor = new Color(0.9f, 0.9f, 0.9f);
 
@@ -181,10 +338,10 @@ public class StarInfo {
 
 		} else if (type == StarType.End) {
 			BayerCreater();
-			sPos = GenTgtStarPos();
+			//sPos = GenTgtStarPos();
 			sColor = new Color(1, 0.85f, 0);
 		} else {
-			sPos = GenPos();
+			//sPos = GenPos();
 		}
 	}
 
@@ -280,10 +437,10 @@ public class StarInfo {
 		bayerMainName.Add("Vir");
 		bayerMainName.Add("Vol");
 		bayerMainName.Add("Vul");
-		
+
 		//星名
 		string bayerSubName = "αβγδεζηθικλμνξοπρστυφχψω";
-		string planetName = "bcdefghijk";		
+		string planetName = "bcdefghijk";
 
 		int bayerMain = Random.Range(0, bayerMainName.Count);
 		int bayerSub = Random.Range(0, bayerSubName.Length);
@@ -294,34 +451,10 @@ public class StarInfo {
 		sName = bayerSubName[bayerSub] + (bayerMutiStar > 0 ? bayerMutiStar.ToString() : "") + " " + bayerMainName[bayerMain] + " " + planetName[planetNum] + (bayerMutiStar > 0 ? " " + bayerMutiStar.ToString() : "");
 		sID = bayerMain * 100000 + bayerSub * 1000 + bayerMutiStar * 100 + planetNum * 10 + satelliteNum;
 	}
-	
-	//Trip Manager map x600 y900	
-	private Vector2 GenTgtStarPos() {
-		Vector2 genPos = Vector2.zero;
 
-		while (genPos == Vector2.zero) {
-			genPos = SYS_StarmapManager.Direct.CheckEntityPos(new Vector2(Random.Range(-300, 300), Random.Range(850, 900)));
-		}
 
-		return genPos;
-	}
 
-	private Vector2 GenCheckStarPos(bool coreStar = false) {
-		Vector2 genPos = Vector2.zero;
 
-		if (coreStar) {
-			while (genPos == Vector2.zero) {
-				genPos = SYS_StarmapManager.Direct.CheckEntityPos(new Vector2(Random.Range(-210, 210), Random.Range(180, 720)));				
-			}
-
-		} else {
-			while (genPos == Vector2.zero) {
-				genPos = SYS_StarmapManager.Direct.CheckEntityPos(new Vector2(Random.Range(-300, 300), Random.Range(0, 850)));
-			}
-		}
-
-		return genPos;
-	}
 
 	private Vector2 GenPos() {
 		return new Vector2(Random.Range(-360, 360), Random.Range(0, 1280));
