@@ -41,6 +41,7 @@ public class UI_NavigateHint : MonoBehaviour {
 			if (distance > UI_Navigator.Direct.closeDis) {
 				ShowHint();
 				UpdatePos();
+				UpdateHint();
 
 			}  else {
 				CloseHint();
@@ -89,7 +90,7 @@ public class UI_NavigateHint : MonoBehaviour {
 				textDis.text = "";
 			}
 
-			float nowSize = (1 - Mathf.Clamp( Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 500,0 , 0.9f)) * 80;
+			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Mathf.Clamp01(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 900)) * 80; 
 			star.GetComponent<RectTransform>().sizeDelta = new Vector2(nowSize, nowSize);
 
 		} else if (entity.info.sType == StarType.End) {
@@ -97,7 +98,7 @@ public class UI_NavigateHint : MonoBehaviour {
 			textType.text = "TGT";
 			textDis.text = "";
 
-			float nowSize = (1 - Mathf.Clamp(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 500, 0, 0.9f)) * 80;
+			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Mathf.Clamp01(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 900)) * 80;
 			star.GetComponent<RectTransform>().sizeDelta = new Vector2(nowSize, nowSize);
 		}
 

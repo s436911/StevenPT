@@ -6,6 +6,7 @@ public class UI_Navigator : MonoBehaviour
 {
 	public static UI_Navigator Direct;
 	public PlanetEntity nextPlanet;
+	public AnimationCurve hintSizer;
 
 	public GameObject nvPfb;
 	public float detectDis = 50;

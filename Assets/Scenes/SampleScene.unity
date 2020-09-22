@@ -2174,6 +2174,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextPlanet: {fileID: 0}
+  hintSizer:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -4.9846478
+      outSlope: -6
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.24363233
+    - serializedVersion: 3
+      time: 0.1
+      value: 0.4
+      inSlope: -6
+      outSlope: -0.99999994
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.47951272
+      outWeight: 0.068536974
+    - serializedVersion: 3
+      time: 0.3
+      value: 0.2
+      inSlope: -0.99999994
+      outSlope: 0
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.2
+      inSlope: -0
+      outSlope: -0.07710628
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.06152332
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   nvPfb: {fileID: 3941279938075165277, guid: b6232095af8e4554d86dceade7d69f43, type: 3}
   detectDis: 50
   closeDis: 5
@@ -4781,7 +4823,7 @@ MonoBehaviour:
   goalDisMaxT: 50
   goalDisMinT: 40
   planetDisMaxT: 45
-  planetDisMinT: 25
+  planetDisMinT: 30
   planetMainDisT: 25
   planetOtherDisT: 35
   planetPerHighT: 20
@@ -5647,7 +5689,7 @@ MonoBehaviour:
     type: 3}
   entityGroup: {fileID: 201637628}
   meteorNum: 2000
-  scaleRate: 0.4
+  scaleRate: 1
 --- !u!1 &1719154666
 GameObject:
   m_ObjectHideFlags: 0

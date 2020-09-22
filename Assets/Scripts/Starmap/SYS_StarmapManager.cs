@@ -82,9 +82,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 			} else {
 				randOffset = new Vector2(routeDirect.x > 0 ? -Random.Range(0, 0.5f) : Random.Range(0, 0.5f), Random.Range(0, 0.5f)).normalized;
 			}
-
-			Debug.LogError(routeDirect + "//" + randOffset);
-
+			
 			randOffset = randOffset * Random.Range(goalDisMinT, goalDisMaxT + difficult) * avgSpeed; //向量 * 時間 * 期望速度
 
 			genOffset = CheckPlanetPos(starter + randOffset , planetMainDisT, starter.y, starNum, starNumLeft);
