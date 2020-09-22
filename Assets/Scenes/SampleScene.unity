@@ -644,6 +644,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 201637628}
+  - component: {fileID: 201637629}
   m_Layer: 0
   m_Name: EntityGroup
   m_TagString: Untagged
@@ -665,6 +666,35 @@ Transform:
   m_Father: {fileID: 1662209366}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &201637629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201637627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e89d7c81aad3fa7479511d9f45b241c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  planets: []
+  matPlanets:
+  - {fileID: 2100000, guid: 9d22019179f097445861db39e76bae83, type: 2}
+  - {fileID: 2100000, guid: c8b6fff6b6efed747923951234773eed, type: 2}
+  - {fileID: 2100000, guid: a9c6f51a2f75387459a07eb3c5c564ae, type: 2}
+  - {fileID: 2100000, guid: 5f5343677ac7c2542b00f6c79eff4dce, type: 2}
+  - {fileID: 2100000, guid: fd0e415e1d797ae4baae6d7df8583a43, type: 2}
+  - {fileID: 2100000, guid: 7c8b06ca58898af45ab8d346594282d1, type: 2}
+  - {fileID: 2100000, guid: 2216851ff0ca4ba448596d613fa1c435, type: 2}
+  - {fileID: 2100000, guid: dbdf2f95f97b1174f881b4b2bd8d70c8, type: 2}
+  - {fileID: 2100000, guid: c9de642b42422f44ab81a6cd8a222205, type: 2}
+  - {fileID: 2100000, guid: 58c87fa9d50f6724d9c7e1c4fafdcd9c, type: 2}
+  - {fileID: 2100000, guid: e152965961c275244b664fb16f327251, type: 2}
+  tgtPlanet: {fileID: 0}
+  pfbPlanet: {fileID: 2753797603239301453, guid: 70d8e7e49815b7a449e2f5e3cb33401e,
+    type: 3}
+  entityGroup: {fileID: 201637628}
 --- !u!1 &207431892
 GameObject:
   m_ObjectHideFlags: 0
@@ -3697,6 +3727,58 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 624, y: 2160}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1264386277
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1264386278}
+  - component: {fileID: 1264386279}
+  m_Layer: 0
+  m_Name: BackGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1264386278
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264386277}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1662209366}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1264386279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264386277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d9e253eb18d745419937d5f2b8449a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  matMeteors:
+  - {fileID: 2100000, guid: ebf8cbf8e78b240479e2b84363a8a456, type: 2}
+  - {fileID: 2100000, guid: b9d6fee3043cacd4593abc5e42da16fb, type: 2}
+  pfbMeteor: {fileID: 6655734757899309621, guid: 73348ca753ae93c49907fa1fc07d43e3,
+    type: 3}
+  entityGroup: {fileID: 1264386278}
+  meteorNum: 20
+  meteorRadius: 12
+  timer: 0
 --- !u!1 &1280729741
 GameObject:
   m_ObjectHideFlags: 0
@@ -5630,7 +5712,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1662209366}
-  - component: {fileID: 1662209367}
   m_Layer: 0
   m_Name: SpacePanel
   m_TagString: Untagged
@@ -5651,45 +5732,10 @@ Transform:
   m_Children:
   - {fileID: 207431893}
   - {fileID: 201637628}
+  - {fileID: 1264386278}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1662209367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1662209365}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e89d7c81aad3fa7479511d9f45b241c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  planets: []
-  matPlanets:
-  - {fileID: 2100000, guid: 9d22019179f097445861db39e76bae83, type: 2}
-  - {fileID: 2100000, guid: c8b6fff6b6efed747923951234773eed, type: 2}
-  - {fileID: 2100000, guid: a9c6f51a2f75387459a07eb3c5c564ae, type: 2}
-  - {fileID: 2100000, guid: 5f5343677ac7c2542b00f6c79eff4dce, type: 2}
-  - {fileID: 2100000, guid: fd0e415e1d797ae4baae6d7df8583a43, type: 2}
-  - {fileID: 2100000, guid: 7c8b06ca58898af45ab8d346594282d1, type: 2}
-  - {fileID: 2100000, guid: 2216851ff0ca4ba448596d613fa1c435, type: 2}
-  - {fileID: 2100000, guid: dbdf2f95f97b1174f881b4b2bd8d70c8, type: 2}
-  - {fileID: 2100000, guid: c9de642b42422f44ab81a6cd8a222205, type: 2}
-  - {fileID: 2100000, guid: 58c87fa9d50f6724d9c7e1c4fafdcd9c, type: 2}
-  - {fileID: 2100000, guid: e152965961c275244b664fb16f327251, type: 2}
-  matMeteors:
-  - {fileID: 2100000, guid: ebf8cbf8e78b240479e2b84363a8a456, type: 2}
-  - {fileID: 2100000, guid: b9d6fee3043cacd4593abc5e42da16fb, type: 2}
-  tgtPlanet: {fileID: 0}
-  pfbPlanet: {fileID: 2753797603239301453, guid: 70d8e7e49815b7a449e2f5e3cb33401e,
-    type: 3}
-  pfbMeteor: {fileID: 6655734757899309621, guid: 73348ca753ae93c49907fa1fc07d43e3,
-    type: 3}
-  entityGroup: {fileID: 201637628}
-  meteorNum: 2000
-  scaleRate: 1
 --- !u!1 &1719154666
 GameObject:
   m_ObjectHideFlags: 0
@@ -6493,7 +6539,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 720, y: 1280}
+  m_SizeDelta: {x: 720, y: 1440}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1956945389
 MonoBehaviour:

@@ -66,6 +66,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				animing = Time.timeSinceLevelLoad;
 
 				SYS_SpaceManager.Direct.Reset();
+				SYS_WeatherManager.Direct.Reset();
 				UI_Navigator.Direct.Reset();
 				SYS_StarmapManager.Direct.Reset();
 				SYS_ShipController.Direct.Reset();
@@ -79,6 +80,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 					animing = Time.timeSinceLevelLoad;
 
 					SYS_SpaceManager.Direct.Init();
+					SYS_WeatherManager.Direct.Init();
 					SYS_ResourseManager.Direct.Reset();
 					UI_Navigator.Direct.Init();
 				} else {

@@ -6,14 +6,11 @@ public class SYS_SpaceManager : MonoBehaviour {
 	public static SYS_SpaceManager Direct;
 	public List<PlanetEntity> planets = new List<PlanetEntity>();
 	public List<Material> matPlanets = new List<Material> ();
-	public List<Material> matMeteors = new List<Material>();
 
 	public PlanetEntity tgtPlanet;
 	public GameObject pfbPlanet;
-	public GameObject pfbMeteor;
 	public Transform entityGroup;
-	public int meteorNum = 1000;
-	public float scaleRate = 1;
+
 
 	void Awake() {
 		Direct = this;
@@ -31,19 +28,8 @@ public class SYS_SpaceManager : MonoBehaviour {
 
 	public void Init() {
 		InitPlanet(SYS_StarmapManager.Direct.starInfos);
-		InitMeteor();
 	}
 
-	public void InitMeteor() {
-		for (int ct = 0; ct < meteorNum; ct++) {
-			StarInfo starInfo = new StarInfo(StarType.Meteor , Vector2.zero);
-
-			MeteorEntity objGen = Instantiate(pfbMeteor).GetComponent<MeteorEntity>();
-			objGen.transform.SetParent(entityGroup);
-			objGen.transform.localPosition = new Vector3(starInfo.sPos.x * scaleRate, starInfo.sPos.y * scaleRate, 0);
-			objGen.Regist(starInfo, matMeteors[Random.Range(0, matMeteors.Count)], Random.Range(0.5f, 1.5F));
-		}
-	}
 
 	public void InitPlanet(List<StarInfo> initList) {
 		//init log
@@ -57,7 +43,7 @@ public class SYS_SpaceManager : MonoBehaviour {
 		foreach (StarInfo starInfo in initList) {
 			PlanetEntity objGen = Instantiate(pfbPlanet).GetComponent<PlanetEntity>();
 			objGen.transform.SetParent(entityGroup);
-			objGen.transform.localPosition = new Vector3(starInfo.sPos.x * scaleRate, starInfo.sPos.y * scaleRate, 0);
+			objGen.transform.localPosition = new Vector3(starInfo.sPos.x , starInfo.sPos.y , 0);
 			objGen.name = starInfo.sName;
 
 			if (starInfo.sType == StarType.Check) {

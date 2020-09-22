@@ -22,10 +22,6 @@ public class UI_Navigator : MonoBehaviour
 		/*推薦星球邏輯
 
 		if (SYS_SpaceManager.Direct.planets.Count > 0) {
-
-
-
-
 			
 			PlanetEntity lowestPlanet = null;
 			foreach (PlanetEntity planet in SYS_SpaceManager.Direct.planets) {

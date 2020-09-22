@@ -175,7 +175,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 			objGen.Regist(starInfo);
 			objRect.anchoredPosition3D = starInfo.sPos;
 			if (starInfo.sType != StarType.End) {
-				objGen.sRawImage.GetComponent<RectTransform>().sizeDelta = new Vector2(75, 75);
+				objGen.sRawImage.GetComponent<RectTransform>().sizeDelta = new Vector2(60, 60);
 			} else {
 				objGen.sRawImage.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
 			}
@@ -326,7 +326,6 @@ public class StarInfo {
 
 		if (type == StarType.Check) {
 			BayerCreater();
-			//sPos = GenCheckStarPos(coreStar);
 			if (Random.Range(0, 100) >= 20) {
 				sColor = new Color(0.9f, 0.9f, 0.9f);
 
@@ -336,11 +335,8 @@ public class StarInfo {
 
 		} else if (type == StarType.End) {
 			BayerCreater();
-			//sPos = GenTgtStarPos();
 			sColor = new Color(1, 0.85f, 0);
-		} else {
-			//sPos = GenPos();
-		}
+		} 
 	}
 
 
