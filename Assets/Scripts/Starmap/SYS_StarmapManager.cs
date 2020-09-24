@@ -456,7 +456,13 @@ public class StarInfo {
 }
 
 public enum StarType {
+	//planet
 	Check,
 	End,
-	Meteor
+
+	//weather
+	Meteor,
+
+	//activity
+	Activity
 }

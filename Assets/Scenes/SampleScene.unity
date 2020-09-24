@@ -691,8 +691,15 @@ MonoBehaviour:
   - {fileID: 2100000, guid: c9de642b42422f44ab81a6cd8a222205, type: 2}
   - {fileID: 2100000, guid: 58c87fa9d50f6724d9c7e1c4fafdcd9c, type: 2}
   - {fileID: 2100000, guid: e152965961c275244b664fb16f327251, type: 2}
+  matActivities:
+  - {fileID: 2100000, guid: 3f9c94bbe045830429f6d3d319a5fd1c, type: 2}
+  - {fileID: 2100000, guid: 3f09e1f693074184498aef0d33d79d51, type: 2}
+  - {fileID: 2100000, guid: 53ef848b7c13c45488e54c07daeecbe9, type: 2}
+  - {fileID: 2100000, guid: b9b2f18205896b347bec684712030d8f, type: 2}
   tgtPlanet: {fileID: 0}
   pfbPlanet: {fileID: 2753797603239301453, guid: 70d8e7e49815b7a449e2f5e3cb33401e,
+    type: 3}
+  pfbActivity: {fileID: 4945747622319447963, guid: 67c04fe0c1bd2af4ab19cfa289aac964,
     type: 3}
   entityGroup: {fileID: 201637628}
 --- !u!1 &207431892
@@ -2247,7 +2254,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   nvPfb: {fileID: 3941279938075165277, guid: b6232095af8e4554d86dceade7d69f43, type: 3}
-  detectDis: 50
+  detectDisT: 12
   closeDis: 5
 --- !u!222 &772740886
 CanvasRenderer:
@@ -3053,11 +3060,11 @@ MonoBehaviour:
   - {fileID: 1145724104}
   - {fileID: 197330101}
   maxFuel: 60
-  maxArmor: 4
+  maxArmor: 5
   maxFood: 40
   maxMineral: 10
   startFuel: 60
-  startArmor: 2
+  startArmor: 3
   startFood: 30
   startMineral: 5
   resources: 00000000000000000000000000000000
@@ -3752,7 +3759,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1264386277}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1662209366}
@@ -3770,13 +3777,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d9e253eb18d745419937d5f2b8449a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matMeteors:
+  matBackMeteor:
   - {fileID: 2100000, guid: ebf8cbf8e78b240479e2b84363a8a456, type: 2}
   - {fileID: 2100000, guid: b9d6fee3043cacd4593abc5e42da16fb, type: 2}
-  pfbMeteor: {fileID: 6655734757899309621, guid: 73348ca753ae93c49907fa1fc07d43e3,
+  pfbBackMeteor: {fileID: 6655734757899309621, guid: 73348ca753ae93c49907fa1fc07d43e3,
     type: 3}
-  entityGroup: {fileID: 1264386278}
-  meteorNum: 20
+  matFrontMeteor:
+  - {fileID: 2100000, guid: 3ff0ebe18769cce458f2d66fb533298c, type: 2}
+  - {fileID: 2100000, guid: 907a00df5b59f4a488a8b4e03b74c81e, type: 2}
+  pfbFrontMeteor: {fileID: 2245220859109290782, guid: ee055fcc176da0e45837010e93c07740,
+    type: 3}
+  backGroup: {fileID: 1264386278}
+  frontGroup: {fileID: 1391704130}
+  backMeteorNum: 20
+  frontMeteorNum: 5
   meteorRadius: 12
   timer: 0
 --- !u!1 &1280729741
@@ -4338,6 +4352,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1378832891}
   m_CullTransparentMesh: 0
+--- !u!1 &1391704129
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1391704130}
+  m_Layer: 0
+  m_Name: MeteorGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1391704130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1391704129}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1662209366}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1416241620
 GameObject:
   m_ObjectHideFlags: 0
@@ -5733,6 +5777,7 @@ Transform:
   - {fileID: 207431893}
   - {fileID: 201637628}
   - {fileID: 1264386278}
+  - {fileID: 1391704130}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

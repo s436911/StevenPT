@@ -207,4 +207,39 @@ public static class TMP_InteractEvent {
 
 		return new InteractEvent(sName, tmpMsg, tempAnswers);
 	}
+
+	public static InteractEvent GetActivityEvent(string sName, int activityType = 0) {
+		List<InteractOption> tempAnswers = new List<InteractOption>();
+		string tmpMsg = "";
+		int rand = activityType == 0 ? Random.Range(1, 5) : activityType;
+
+		switch (rand) {
+			case 1:
+				tempAnswers.Add(new InteractOption(Affinity.Explore, 60, 2, 1, 0, 40, "探索"));
+				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
+				tmpMsg = "這裡有一艘被廢棄的太空船，也許可以從中找到一些東西!!!!";
+				break;
+
+			case 2:
+				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 2, 1, 3, 1, "交易"));
+				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
+				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 1, 0, 60, "交易"));
+				tmpMsg = "有艘商船想和我們進行交易，也許可以看看!!";
+				break;
+
+			case 3:
+				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
+				tempAnswers.Add(new InteractOption(Affinity.Explore, 60, 2, 1, 0, 60, "探索"));
+				tmpMsg = "是一個太空膠囊，等等裡面好像有個人影!?";
+				break;
+
+			case 4:
+				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
+				tempAnswers.Add(new InteractOption(Affinity.Fight, 100, 1, 1, 3, 2, "強化"));
+				tmpMsg = "是一架採集機器人，背後背著大量的礦物!!";
+				break;
+		}
+
+		return new InteractEvent(sName, tmpMsg, tempAnswers);
+	}
 }

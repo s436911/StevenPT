@@ -9,7 +9,7 @@ public class UI_NavigateHint : MonoBehaviour {
 	public Text textType;
 	public Text textDis;
 	public Image star;
-	public PlanetEntity entity;
+	public SpaceEntity entity;
 	public bool navigating = false;
 
 
@@ -22,12 +22,14 @@ public class UI_NavigateHint : MonoBehaviour {
 		if (entity.info.sType == StarType.Check) {
 			float distance = Vector2.Distance(Camera.main.transform.position, entity.transform.position);
 
+			//標記星球
 			if (UI_Navigator.Direct.nextPlanet == entity && distance > UI_Navigator.Direct.closeDis) {
 				ShowHint();
 				UpdatePos();
 				UpdateHint();
-
-			} else if (distance < UI_Navigator.Direct.detectDis && distance > UI_Navigator.Direct.closeDis) {
+			
+			//一般星球
+			} else if (distance < UI_Navigator.Direct.detectDisT * SYS_StarmapManager.Direct.avgSpeed && distance > UI_Navigator.Direct.closeDis) {
 				ShowHint();
 				UpdatePos();
 				UpdateHint();
@@ -46,10 +48,22 @@ public class UI_NavigateHint : MonoBehaviour {
 			}  else {
 				CloseHint();
 			}
-		} 
+		} else if (entity.info.sType == StarType.Activity) {
+			float distance = Vector2.Distance(Camera.main.transform.position, entity.transform.position);
+
+			//一般星球
+			if (distance < UI_Navigator.Direct.detectDisT * SYS_StarmapManager.Direct.avgSpeed && distance > UI_Navigator.Direct.closeDis) {
+				ShowHint();
+				UpdatePos();
+				UpdateHint();
+
+			} else {
+				CloseHint();
+			}
+		}
 	}
 
-	public void Regist(PlanetEntity entity) {
+	public void Regist(SpaceEntity entity) {
 		this.entity = entity;
 		UpdateHint();
 	}
@@ -100,6 +114,24 @@ public class UI_NavigateHint : MonoBehaviour {
 
 			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Mathf.Clamp01(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 900)) * 80;
 			star.GetComponent<RectTransform>().sizeDelta = new Vector2(nowSize, nowSize);
+
+		} else if (entity.info.sType == StarType.Activity) {
+			if (UI_Navigator.Direct.nextPlanet != entity) {
+				if (!entity.explored) {
+					hintColor = new Color(0.85F, 0.85F, 0.85F);
+					textType.text = "???";
+					textDis.text = "";
+
+				} else {
+					hintColor = new Color(0.45F, 0.8F, 0.85F);
+					textType.text = "ACT";
+					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+				}
+			} 
+
+			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Mathf.Clamp01(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 900)) * 80;
+			star.GetComponent<RectTransform>().sizeDelta = new Vector2(nowSize, nowSize);
+
 		}
 
 		textDis.color = hintColor;

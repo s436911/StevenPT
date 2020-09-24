@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MeteorEntity : SpaceEntity {
-		
 
-	// Start is called before the first frame update
-	void Start() {
-
+	void OnTriggerEnter2D(Collider2D colli) {
+		if (colli.transform.parent.GetComponent<SYS_ShipController>() != null) {
+			SYS_ResourseManager.Direct.ModifyResource(1,-1);
+		}
 	}
 
-	// Update is called once per frame
-	void Update() {
+	void OnTriggerExit2D(Collider2D colli) {
 
 	}
 }

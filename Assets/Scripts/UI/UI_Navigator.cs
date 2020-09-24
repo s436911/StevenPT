@@ -9,7 +9,7 @@ public class UI_Navigator : MonoBehaviour
 	public AnimationCurve hintSizer;
 
 	public GameObject nvPfb;
-	public float detectDis = 50;
+	public float detectDisT = 12;
 	public float closeDis = 5;
 
 	public StarInfo preRoute;
@@ -57,6 +57,7 @@ public class UI_Navigator : MonoBehaviour
 		}
 	}
 
+	//到達星球
 	public void Arrive(StarInfo aInfo) {
 		if (SYS_StarmapManager.Direct.route.Contains(aInfo)) {
 			int aIndex = SYS_StarmapManager.Direct.route.IndexOf(aInfo);
@@ -73,7 +74,7 @@ public class UI_Navigator : MonoBehaviour
 		}
 	}
 
-	public void Regist(PlanetEntity entity) {
+	public void Regist(SpaceEntity entity) {
 		UI_NavigateHint objGen = Instantiate(nvPfb).GetComponent<UI_NavigateHint>();
 		objGen.transform.SetParent(transform);
 		objGen.Regist(entity);

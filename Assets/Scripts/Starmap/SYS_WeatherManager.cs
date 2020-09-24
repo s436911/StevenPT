@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class SYS_WeatherManager : MonoBehaviour {
 	public static SYS_WeatherManager Direct;
-	public List<Material> matMeteors = new List<Material>();
 
-	public GameObject pfbMeteor;
-	public Transform entityGroup;
-	public int meteorNum = 25;
+	public List<Material> matBackMeteor = new List<Material>();
+	public GameObject pfbBackMeteor;
+
+	public List<Material> matFrontMeteor = new List<Material>();
+	public GameObject pfbFrontMeteor;
+
+	public Transform backGroup;
+	public Transform frontGroup;
+	public int backMeteorNum = 20;
+	public int frontMeteorNum = 5;
 
 	public float meteorRadius;
 	public float timer;
@@ -18,45 +24,76 @@ public class SYS_WeatherManager : MonoBehaviour {
 	}
 
 	public void Init() {
-		for (int ct = 0; ct < meteorNum; ct++) {
-			spawnMeteor((Vector2)SYS_ShipController.Direct.transform.position + Random.insideUnitCircle * meteorRadius);
+		for (int ct = 0; ct < backMeteorNum; ct++) {
+			spawnBack((Vector2)SYS_ShipController.Direct.transform.position + Random.insideUnitCircle * meteorRadius);
+		}
+
+		for (int ct = 0; ct < frontMeteorNum; ct++) {
+			spawnFront((Vector2)SYS_ShipController.Direct.transform.position + Random.insideUnitCircle * meteorRadius);
 		}
 	}
 	
-	public void spawnMeteor(Vector2 dePos) {
+	public void spawnBack(Vector2 dePos) {
 		StarInfo starInfo = new StarInfo(StarType.Meteor, dePos);
 
-		MeteorEntity objGen = Instantiate(pfbMeteor).GetComponent<MeteorEntity>();
-		objGen.transform.SetParent(entityGroup);
+		SpaceEntity objGen = Instantiate(pfbBackMeteor).GetComponent<SpaceEntity>();
+		objGen.transform.SetParent(backGroup);
 
-		objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, 0);
-		objGen.Regist(starInfo, matMeteors[Random.Range(0, matMeteors.Count)], Random.Range(0.5f, 1.5F));
+		objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, backGroup.transform.position.z);
+		objGen.Regist(starInfo, matBackMeteor[Random.Range(0, matBackMeteor.Count)], Random.Range(0.3f, 0.9F));
 	}
+
+	public void spawnFront(Vector2 dePos) {
+		StarInfo starInfo = new StarInfo(StarType.Meteor, dePos);
+
+		MeteorEntity objGen = Instantiate(pfbFrontMeteor).GetComponent<MeteorEntity>();
+		objGen.transform.SetParent(frontGroup);
+
+		objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, frontGroup.transform.position.z);
+		objGen.Regist(starInfo, matFrontMeteor[Random.Range(0, matFrontMeteor.Count)], Random.Range(0.5f, 1.5F));
+	} 
 
 	// Update is called once per frame
 	void Update() {
 		if (Time.timeSinceLevelLoad - timer > 1) {
 			List<Vector2> reVextors = new List<Vector2>();
 
-			foreach (Transform child in entityGroup) {
-				if (Vector2.Distance(SYS_ShipController.Direct.transform.position , child.position) > meteorRadius) {
+			//背景清除
+			foreach (Transform child in backGroup) {
+				if (Vector2.Distance(SYS_ShipController.Direct.transform.position, child.position) > meteorRadius) {
 					reVextors.Add(2 * SYS_ShipController.Direct.transform.position - child.position);
 					Destroy(child.gameObject);
 				}
 			}
 
 			foreach (Vector2 reVextor in reVextors) {
-				spawnMeteor(reVextor);
+				spawnBack(reVextor);
 			}
 
+			reVextors = new List<Vector2>();
+
+			//前景清除
+			foreach (Transform child in frontGroup) {
+				if (Vector2.Distance(SYS_ShipController.Direct.transform.position, child.position) > meteorRadius) {
+					reVextors.Add(2 * SYS_ShipController.Direct.transform.position - child.position);
+					Destroy(child.gameObject);
+				}
+			}
+
+			foreach (Vector2 reVextor in reVextors) {
+				spawnFront(reVextor);
+			}
+			
 			timer = Time.timeSinceLevelLoad;
 		}
-
-		
 	}
 
 	public void Reset() {
-		foreach (Transform child in entityGroup) {
+		foreach (Transform child in backGroup) {
+			Destroy(child.gameObject);
+		}
+
+		foreach (Transform child in frontGroup) {
 			Destroy(child.gameObject);
 		}
 	}
