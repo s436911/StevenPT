@@ -1414,7 +1414,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: -0.09845133, y: 0, z: 0, w: 0.99514186}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: -2, z: -12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 541447296}
@@ -3789,8 +3789,8 @@ MonoBehaviour:
     type: 3}
   backGroup: {fileID: 1264386278}
   frontGroup: {fileID: 1391704130}
-  backMeteorNum: 20
-  frontMeteorNum: 5
+  backMeteorNum: 22
+  frontMeteorNum: 4
   meteorRadius: 12
   timer: 0
 --- !u!1 &1280729741
