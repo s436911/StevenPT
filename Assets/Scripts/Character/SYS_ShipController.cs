@@ -90,7 +90,12 @@ public class SYS_ShipController : MonoBehaviour {
 
 	public void OnEndMove() {
 		ridgid.velocity = Vector2.zero;
-		StopCoroutine(this.cououtine);
+		try{
+			StopCoroutine(this.cououtine);
+		} catch {
+			Debug.LogWarning("有空再修");
+		}
+		
 		this.speed = 0;
 		handling = false;
 	}

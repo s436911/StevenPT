@@ -139,7 +139,6 @@ GameObject:
   - component: {fileID: 2753797601325697459}
   - component: {fileID: 2753797601325697485}
   - component: {fileID: 2753797601325697458}
-  - component: {fileID: 2753797601325697484}
   m_Layer: 0
   m_Name: core
   m_TagString: Untagged
@@ -208,25 +207,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!95 &2753797601325697484
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2753797601325697456}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 32490bc37a1d37b428e9131314daa068, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2753797601772473501
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,7 +482,6 @@ GameObject:
   - component: {fileID: 2753797602560221863}
   - component: {fileID: 2753797602560221857}
   - component: {fileID: 2753797602560221862}
-  - component: {fileID: 2753797602560221856}
   m_Layer: 0
   m_Name: core
   m_TagString: Untagged
@@ -571,25 +550,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!95 &2753797602560221856
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2753797602560221860}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 32490bc37a1d37b428e9131314daa068, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2753797602823529521
 GameObject:
   m_ObjectHideFlags: 0
@@ -632,7 +592,6 @@ GameObject:
   - component: {fileID: 2753797602886575736}
   - component: {fileID: 2753797602886575738}
   - component: {fileID: 2753797602886575739}
-  - component: {fileID: 2753797602886575733}
   m_Layer: 0
   m_Name: core
   m_TagString: Untagged
@@ -701,25 +660,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!95 &2753797602886575733
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2753797602886575737}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 32490bc37a1d37b428e9131314daa068, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2753797602946880223
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,10 +819,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 2753797602436344571}
-  halo: {fileID: 2753797602353983587}
-  colli: {fileID: 0}
-  text: {fileID: 7492000882968808293}
   explored: 0
+  halo: {fileID: 2753797602353983587}
+  text: {fileID: 7492000882968808293}
 --- !u!58 &4454753866859924366
 CircleCollider2D:
   m_ObjectHideFlags: 0

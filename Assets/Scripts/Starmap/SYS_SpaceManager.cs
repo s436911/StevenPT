@@ -13,6 +13,9 @@ public class SYS_SpaceManager : MonoBehaviour {
 	public GameObject pfbActivity;
 	public Transform entityGroup;
 
+	public int activityNum = 12;
+	public int activityMax = 24;
+	public int activityMin = 6;
 
 	void Awake() {
 		Direct = this;
@@ -35,8 +38,8 @@ public class SYS_SpaceManager : MonoBehaviour {
 
 	public void InitActivity() {
 		List<StarInfo> initList = new List<StarInfo>();
-		for (int ct = 0; ct < 10; ct++) {
-			initList.Add(new StarInfo(StarType.Activity, SYS_StarmapManager.Direct.starInfos[Random.Range(0, SYS_StarmapManager.Direct.starInfos.Count)].sPos + Random.insideUnitCircle.normalized * SYS_StarmapManager.Direct.avgSpeed * Random.Range(6,15)));
+		for (int ct = 0; ct < activityNum; ct++) {
+			initList.Add(new StarInfo(StarType.Activity, SYS_StarmapManager.Direct.starInfos[Random.Range(0, SYS_StarmapManager.Direct.starInfos.Count)].sPos + Random.insideUnitCircle.normalized * SYS_StarmapManager.Direct.avgSpeed * Random.Range(activityMin, activityMax)));
 		}
 
 		foreach (StarInfo starInfo in initList) {

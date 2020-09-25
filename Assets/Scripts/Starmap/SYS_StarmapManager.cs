@@ -190,7 +190,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 		Init();
 	}
 
-	public bool GetRouteStatus() {
+	public bool IsRouteComplete() {
 		return route.Count > 0 && route[route.Count - 1].sType == StarType.End;
 	}
 
@@ -254,10 +254,13 @@ public class SYS_StarmapManager : MonoBehaviour {
 		foreach (Transform child in transform) {
 			Destroy(child.gameObject);
 		}
-
-
-		route = new List<StarInfo>();
+		
 		starInfos = new List<StarInfo>();
+		ResetRoute();
+	}
+
+	public void ResetRoute() {
+		route = new List<StarInfo>();
 		line.positionCount = 0;
 	}
 
@@ -309,8 +312,6 @@ public class SYS_StarmapManager : MonoBehaviour {
 			UpdateLine();
 		}
 	}
-
-
 }
 
 public class StarInfo {

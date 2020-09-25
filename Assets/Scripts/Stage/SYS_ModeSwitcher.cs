@@ -75,7 +75,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				SYS_StarmapManager.Direct.Init();
 
 			} else if ((GameMode)gameMode == GameMode.Space) {
-				if (SYS_StarmapManager.Direct.GetRouteStatus()) {
+				if (SYS_StarmapManager.Direct.IsRouteComplete()) {
 					this.gameMode = (GameMode)gameMode;
 					animing = Time.timeSinceLevelLoad;
 
