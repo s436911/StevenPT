@@ -99,7 +99,8 @@ public class UI_NavigateHint : MonoBehaviour {
 				}
 
 			} else {
-				hintColor = new Color(0.4F, 0.7F, 0.25F);
+				//hintColor = new Color(0.4F, 0.7F, 0.25F);
+				hintColor = new Color(0.9F, 0.7F, 0.15F);
 				textType.text = "REC";
 				textDis.text = "";
 			}
@@ -108,9 +109,17 @@ public class UI_NavigateHint : MonoBehaviour {
 			star.GetComponent<RectTransform>().sizeDelta = new Vector2(nowSize, nowSize);
 
 		} else if (entity.info.sType == StarType.End) {
-			hintColor = new Color(0.9F, 0.7F, 0.15F);
-			textType.text = "TGT";
-			textDis.text = "";
+			if (UI_Navigator.Direct.nextPlanet != entity) {
+				hintColor = new Color(0.9F, 0.7F, 0.15F);
+				textType.gameObject.SetActive(false);
+
+			} else {
+				textType.gameObject.SetActive(true);
+
+				hintColor = new Color(0.9F, 0.7F, 0.15F);
+				textType.text = "TGT";
+				textDis.text = "";
+			}
 
 			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Mathf.Clamp01(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 900)) * 80;
 			star.GetComponent<RectTransform>().sizeDelta = new Vector2(nowSize, nowSize);
@@ -131,7 +140,6 @@ public class UI_NavigateHint : MonoBehaviour {
 
 			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Mathf.Clamp01(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 900)) * 80;
 			star.GetComponent<RectTransform>().sizeDelta = new Vector2(nowSize, nowSize);
-
 		}
 
 		textDis.color = hintColor;
