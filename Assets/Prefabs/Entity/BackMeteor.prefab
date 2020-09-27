@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 6655734757619657091}
+  explored: 0
 --- !u!58 &338741577950299407
 CircleCollider2D:
   m_ObjectHideFlags: 0

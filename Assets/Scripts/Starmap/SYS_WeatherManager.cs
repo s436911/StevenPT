@@ -50,7 +50,7 @@ public class SYS_WeatherManager : MonoBehaviour {
 		objGen.transform.SetParent(frontGroup);
 
 		objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, frontGroup.transform.position.z);
-		objGen.Regist(starInfo, matFrontMeteor[Random.Range(0, matFrontMeteor.Count)], Random.Range(0.5f, 1.5F));
+		objGen.Regist(starInfo, matFrontMeteor[Random.Range(0, matFrontMeteor.Count)], Random.Range(1f, 1.5F));
 	} 
 
 	// Update is called once per frame
