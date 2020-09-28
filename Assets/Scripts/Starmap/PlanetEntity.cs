@@ -40,12 +40,7 @@ public class PlanetEntity : SpaceEntity {
 				}
 
 			} else if (info.sType == StarType.End) {
-				SYS_ResourseManager.Direct.ModifyResourceHome(0, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(0) * 2 * (1 + (0.2f * SYS_StarmapManager.Direct.difficult))));
-				SYS_ResourseManager.Direct.ModifyResourceHome(2, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(2) * 5 * (1 + (0.2f * SYS_StarmapManager.Direct.difficult))));
-				SYS_ResourseManager.Direct.ModifyResourceHome(3, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(3) * 10 * (1 + (0.2f * SYS_StarmapManager.Direct.difficult))));
-				SYS_ResourseManager.Direct.ModifyResourceHome(4, Mathf.RoundToInt(1 * (1 + (0.1f * SYS_StarmapManager.Direct.difficult))));
-				SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
-
+				UI_ScoreManager.Direct.Victory();
 			}
 		}
 	}

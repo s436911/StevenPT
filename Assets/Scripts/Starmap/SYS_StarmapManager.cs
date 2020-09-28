@@ -298,7 +298,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 						route.Add(sInfo);
 						UpdateLine();
 					} else {
-						SYS_Logger.Direct.SystemMsg("無法註冊已存的目標");
+						SYS_Logger.Direct.SetSystemMsg("無法註冊已存的目標");
 					}
 
 				} else {
@@ -312,7 +312,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 					UpdateLine();
 
 				} else {
-					SYS_Logger.Direct.SystemMsg("無法註冊在終點之後");
+					SYS_Logger.Direct.SetSystemMsg("無法註冊在終點之後");
 				}
 			}
 

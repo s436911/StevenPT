@@ -26,6 +26,7 @@ public class UI_Home : MonoBehaviour, IBeginDragHandler , IEndDragHandler {
 				if (contenter.anchoredPosition.y < -720) {
 					contenter.anchoredPosition = new Vector2(0, -720);
 					scrollRect.velocity = Vector2.zero;
+					SYS_Logger.Direct.SetSystemMsg("設定完導航路徑後點擊望遠鏡出發");
 				}
 
 
@@ -34,6 +35,7 @@ public class UI_Home : MonoBehaviour, IBeginDragHandler , IEndDragHandler {
 				if (contenter.anchoredPosition.y > 720) {
 					contenter.anchoredPosition = new Vector2(0, 720);
 					scrollRect.velocity = Vector2.zero;
+					SYS_Logger.Direct.SetSystemMsg("花費資源可升級飛船或太空站");
 				}
 
 			} else {
@@ -41,6 +43,7 @@ public class UI_Home : MonoBehaviour, IBeginDragHandler , IEndDragHandler {
 				if (Mathf.Abs(scrollRect.velocity.y) < 252) {
 					contenter.anchoredPosition = new Vector2(0, 0);
 					scrollRect.velocity = Vector2.zero;
+					SYS_Logger.Direct.SetSystemMsg("向右滑動至觀測站出任務\n向左滑動至太空站強化設備");
 				}
 
 			}

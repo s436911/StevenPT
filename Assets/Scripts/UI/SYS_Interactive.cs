@@ -24,20 +24,10 @@ public class SYS_Interactive : MonoBehaviour
 	void Awake() {
 		Direct = this;
 	}
-
-	// Start is called before the first frame update
-	void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+	
 	public void Regist(InteractEvent value) {
+		SYS_GameEngine.Direct.SetPause(true);
+
 		nowEvent = value;
 
 		uiPanel.SetActive(true);
@@ -90,6 +80,7 @@ public class SYS_Interactive : MonoBehaviour
 	}
 
 	public void Answer(int value) {
+		SYS_GameEngine.Direct.SetPause(false);
 		nowEvent.answers[value].Interact();
 		Clear();
 	}

@@ -84,7 +84,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 					SYS_ResourseManager.Direct.Reset();
 					UI_Navigator.Direct.Init();
 				} else {
-					SYS_Logger.Direct.SystemMsg("請設定路徑至終點再出發");
+					SYS_Logger.Direct.SetSystemMsg("請設定路徑至終點再出發");
 				}
 			}
 		}

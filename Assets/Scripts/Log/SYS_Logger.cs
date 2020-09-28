@@ -14,7 +14,7 @@ public class SYS_Logger : MonoBehaviour {
 		Direct = this;
 	}
 
-	public void SystemMsg(string msg){
+	public void SetSystemMsg(string msg){
 		systemMsg.text = msg;
 	}
 
