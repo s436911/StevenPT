@@ -23,9 +23,8 @@ public class SYS_StarmapManager : MonoBehaviour {
 	public int planetPerHighT = 2;
 	public int planetPerLowT = 2;
 
-	public int baseStar = 5;
-	public int planetRandMin = 1;
-	public int planetRandMax = 2;
+	public int baseStarNum = 4;
+	public int otherStarNum = 5;
 
 	public int planetSideMin = 1;
 	public int planetSideMax = 2;
@@ -125,12 +124,12 @@ public class SYS_StarmapManager : MonoBehaviour {
 	
 	public void Init() {
 		//init starinfo
-		int planetNum = baseStar + 1;
+		int planetNum = baseStarNum + 1;
 
 		for (int ct = 0; ct < planetNum; ct++) {
 			Vector2 randPos = Vector2.zero;
 
-			if (ct < baseStar) {
+			if (ct < baseStarNum) {
 				if (ct == 0) {
 					randPos = GenPlanetPos(Vector2.zero, ct + 1, planetNum - ct - 1);
 				} else {
@@ -153,7 +152,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 		}
 
 		//亂數星球生成
-		planetNum = Random.Range(planetRandMin, planetRandMax + 1) + Random.Range(SYS_ResourseManager.Direct.scopeLv,6) == 5 ? 1 : 0;
+		planetNum = otherStarNum - planetNum + (Random.Range(0 , 100) < (SYS_ResourseManager.Direct.scopeLv * 10) ? 1 : 0);//
 
 		for (int ct = 0; ct < planetNum; ct++) {
 			starInfos.Add(new StarInfo(StarType.Check, GenRandPlanetPos()));
@@ -257,6 +256,16 @@ public class SYS_StarmapManager : MonoBehaviour {
 		
 		starInfos = new List<StarInfo>();
 		ResetRoute();
+	}
+	
+	public void AutoRoute() {
+		ResetRoute();
+		foreach (StarInfo info in starInfos) {
+			ClickRoute(info);
+			if (info.sType == StarType.End) {
+				break;
+			}
+		}
 	}
 
 	public void ResetRoute() {

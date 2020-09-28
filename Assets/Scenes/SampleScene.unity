@@ -259,7 +259,7 @@ RectTransform:
   - {fileID: 42239037}
   - {fileID: 1905186864}
   m_Father: {fileID: 1238424971}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1558,7 +1558,7 @@ GameObject:
   - component: {fileID: 397002754}
   - component: {fileID: 397002753}
   m_Layer: 5
-  m_Name: ClearBTN
+  m_Name: ResetBTN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2150,7 +2150,6 @@ RectTransform:
   - {fileID: 1427811586}
   - {fileID: 1535950169}
   - {fileID: 1635793458}
-  - {fileID: 1695729357}
   m_Father: {fileID: 1636352674}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3284,7 +3283,7 @@ RectTransform:
   m_Children:
   - {fileID: 1497445010}
   m_Father: {fileID: 1238424971}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4279,7 +4278,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: clear
+  m_Text: reset
 --- !u!222 &858051788
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5927,6 +5926,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 397002752}
+  - {fileID: 1695729357}
   - {fileID: 1983235046}
   - {fileID: 37262134}
   - {fileID: 645590978}
@@ -6194,7 +6194,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u63A2\u7D22\u5230\u984D\u5916\u661F\u7403\u7684\u96E3\u5EA6"
+  m_Text: "\u63A2\u7D22\u5230\u984D\u5916\u661F\u7403\u7684\u6A5F\u7387"
 --- !u!222 &1283963530
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7637,9 +7637,8 @@ MonoBehaviour:
   planetOtherDisT: 15
   planetPerHighT: 15
   planetPerLowT: 3
-  baseStar: 5
-  planetRandMin: 2
-  planetRandMax: 2
+  baseStarNum: 4
+  otherStarNum: 5
   planetSideMin: 2
   planetSideMax: 2
   line: {fileID: 1893734854}
@@ -8835,7 +8834,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1695729357
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8843,17 +8842,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1695729356}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 226371687}
-  m_Father: {fileID: 480678137}
-  m_RootOrder: 4
+  m_Father: {fileID: 1238424971}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 255, y: -25.361}
+  m_AnchoredPosition: {x: 303.13895, y: -255.00021}
   m_SizeDelta: {x: 190.5, y: 50.72119}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1695729358
@@ -8899,9 +8898,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 519420035}
-        m_MethodName: SetMode
-        m_Mode: 3
+      - m_Target: {fileID: 1528541269}
+        m_MethodName: AutoRoute
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -10031,7 +10030,7 @@ RectTransform:
   - {fileID: 1563875515}
   - {fileID: 2021751960}
   m_Father: {fileID: 1238424971}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -10929,7 +10928,7 @@ RectTransform:
   m_Children:
   - {fileID: 305747290}
   m_Father: {fileID: 1238424971}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
