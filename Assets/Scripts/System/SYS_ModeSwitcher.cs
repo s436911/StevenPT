@@ -8,6 +8,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 	public List<RectTransform> switcherRect = new List<RectTransform>();
 	public List<Transform> switcherTrans = new List<Transform>();
 
+
 	public float switchRectRate = 1280;
 	public float switchTransRate = 16;
 
@@ -69,20 +70,23 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				SYS_WeatherManager.Direct.Reset();
 				UI_Navigator.Direct.Reset();
 				SYS_StarmapManager.Direct.Reset();
-				SYS_ShipController.Direct.Reset();
 				SYS_SelfDriving.Direct.Reset();
-
+				SYS_ShipController.Direct.Reset();
 				SYS_StarmapManager.Direct.Init();
+				SYS_PopupManager.Direct.Reset();
 
 			} else if ((GameMode)gameMode == GameMode.Space) {
 				if (SYS_StarmapManager.Direct.IsRouteComplete()) {
 					this.gameMode = (GameMode)gameMode;
 					animing = Time.timeSinceLevelLoad;
 
+					SYS_ShipController.Direct.Regist();
 					SYS_SpaceManager.Direct.Init();
 					SYS_WeatherManager.Direct.Init();
 					SYS_ResourseManager.Direct.Reset();
 					UI_Navigator.Direct.Init();
+
+					SYS_PopupManager.Direct.Regist("LAN", "相信會是一場愉快的冒險");
 				} else {
 					SYS_Logger.Direct.SetSystemMsg("請設定路徑至終點再出發");
 				}
@@ -93,8 +97,6 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 	public void SetMode(GameMode gameMode) {
 		SetMode((int)gameMode);
 	}
-
-	
 }
 
 public enum GameMode {

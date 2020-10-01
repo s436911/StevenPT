@@ -11,7 +11,8 @@ public class SYS_ShipController : MonoBehaviour {
 	public float maxSpeed = 2;
 	public float accelerate = 2;
 	public float smoothing = 0.5f;
-
+	
+	public GameObject character;
 	public Collider2D colli;
 	public Rigidbody2D ridgid;
 	public Vector2 direction = Vector2.up;
@@ -24,10 +25,19 @@ public class SYS_ShipController : MonoBehaviour {
 		ridgid = GetComponent<Rigidbody2D>();
 	}
 
+	public void Start() {
+		Reset();
+	}
+
+	public void Regist() {
+		character.SetActive(true);
+	}
+
 	public void Reset() {
 		transform.localPosition = Vector2.zero;
 		fuelTimer = 0;
 		foodTimer = 0;
+		character.SetActive(false);
 	}
 
 	void Update() {

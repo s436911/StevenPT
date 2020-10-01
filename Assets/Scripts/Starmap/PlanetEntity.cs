@@ -30,12 +30,19 @@ public class PlanetEntity : SpaceEntity {
 
 					if (randomResource == 0) {
 						SYS_ResourseManager.Direct.ModifyResource(0, 5);
+						SYS_PopupManager.Direct.Regist("LAN", "好多好多的燃料!");
+
 					} else if(randomResource == 1) {
 						SYS_ResourseManager.Direct.ModifyResource(1, 1);
+						SYS_PopupManager.Direct.Regist("TUDEN", "裝甲升級!");
+
 					} else if (randomResource == 2) {
 						SYS_ResourseManager.Direct.ModifyResource(2, 1);
+						SYS_PopupManager.Direct.Regist("MIG", "BUFFET!");
+
 					} else if (randomResource == 3) {
 						SYS_ResourseManager.Direct.ModifyResource(3, 1);
+						SYS_PopupManager.Direct.Regist("STEVEN", "我好餓RRRRR!");
 					}
 				}
 

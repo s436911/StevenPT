@@ -155,8 +155,8 @@ public class UI_NavigateHint : MonoBehaviour {
 		float scale = Mathf.Abs(offset.x) / 360;
 		offset = offset / scale;
 
-		if (Mathf.Abs(offset.y) > 640) {
-			scale = Mathf.Abs(offset.y) / 640;
+		if (Mathf.Abs(offset.y) > 560) {//640
+			scale = Mathf.Abs(offset.y) / 560;//640
 			offset = offset / scale;
 		}
 
