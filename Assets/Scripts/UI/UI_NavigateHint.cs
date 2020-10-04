@@ -173,6 +173,10 @@ public class UI_NavigateHint : MonoBehaviour {
 	}
 
 	public void SelfDrive() {
-		SYS_SelfDriving.Direct.Regist(entity.transform);
+		if (SYS_SelfDriving.Direct.GetTGT() == null || SYS_SelfDriving.Direct.GetTGT().tgtTrans != entity.transform) {
+			SYS_SelfDriving.Direct.Regist(entity.transform);
+		} else {
+			SYS_SelfDriving.Direct.Reset();
+		}
 	}
 }

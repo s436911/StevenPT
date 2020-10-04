@@ -35,7 +35,6 @@ public class SYS_PopupManager : MonoBehaviour
 
 	public void Reset() {
 		for (int ct = 0; ct < pops.Count; ct++) {
-			pops.Remove(pops[ct]);
 			Destroy(pops[ct].gameObject);
 		}
 

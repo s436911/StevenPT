@@ -6,6 +6,8 @@ public class SYS_SelfDriving : MonoBehaviour {
 	public static SYS_SelfDriving Direct;
 	public SelfDriveTGT tgt;
 	public float stopDis = 2;
+	public bool pause = false;
+	public GameObject uiPanel;
 
 	void Awake() {
 		Direct = this;
@@ -13,32 +15,51 @@ public class SYS_SelfDriving : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
-		if (tgt != null) {
+		if (tgt != null && !pause) {
 			SYS_ShipController.Direct.OnUpdateDirection((tgt.GetPos() - (Vector2)SYS_ShipController.Direct.transform.position));
-
-			if (Vector2.Distance(tgt.GetPos(),(Vector2)SYS_ShipController.Direct.transform.position) < stopDis) {
+			if (Vector2.Distance(tgt.GetPos(),SYS_ShipController.Direct.transform.position) < stopDis) {
 				Reset();
 			}
 		}
 	}
 
+	public SelfDriveTGT GetTGT() {
+		return tgt;
+	}
+
 	public void Regist(Vector2 tgtPos) {
 		tgt = new SelfDriveTGT(tgtPos);
 		SYS_ShipController.Direct.OnBeginMove();
+		uiPanel.SetActive(true);
 	}
 
 	public void Regist(Transform tgtTrans) {
 		tgt = new SelfDriveTGT(tgtTrans);
 		SYS_ShipController.Direct.OnBeginMove();
+		uiPanel.SetActive(true);
+	}
+
+	public void Pause() {
+		if (tgt != null) {
+			pause = true;
+			SYS_ShipController.Direct.OnEndMove(false);
+			uiPanel.SetActive(false);
+		}
+	}
+
+	public void Play() {
+		if (tgt != null) {
+			pause = false;
+			SYS_ShipController.Direct.OnBeginMove();
+			uiPanel.SetActive(true);
+		}
 	}
 
 	public void Reset() {
-		ClearTGT();
-		SYS_ShipController.Direct.OnEndMove();
-	}
-
-	public void ClearTGT() {
 		tgt = null;
+		SYS_ShipController.Direct.OnEndMove();
+		pause = false;
+		uiPanel.SetActive(false);
 	}
 }
 

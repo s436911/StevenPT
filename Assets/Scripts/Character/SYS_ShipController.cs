@@ -82,7 +82,7 @@ public class SYS_ShipController : MonoBehaviour {
 		
 
 	public void BeginMove() {
-		SYS_SelfDriving.Direct.ClearTGT();
+		SYS_SelfDriving.Direct.Pause();
 		OnBeginMove();
 	}
 
@@ -91,22 +91,23 @@ public class SYS_ShipController : MonoBehaviour {
 		handling = true;
 	}
 
-	
-
 	public void EndMove() {
-		SYS_SelfDriving.Direct.ClearTGT();
 		OnEndMove();
+		SYS_SelfDriving.Direct.Play();
 	}
 
-	public void OnEndMove() {
+	public void OnEndMove(bool stop = true) {
 		ridgid.velocity = Vector2.zero;
 		try{
 			StopCoroutine(this.cououtine);
 		} catch {
 			Debug.LogWarning("有空再修");
 		}
+
+		if (stop) {
+			this.speed = 0;
+		}
 		
-		this.speed = 0;
 		handling = false;
 	}
 
@@ -115,12 +116,10 @@ public class SYS_ShipController : MonoBehaviour {
 	}
 
 	public void UpdateDirection(Vector2 direction) {
-		SYS_SelfDriving.Direct.ClearTGT();
 		OnUpdateDirection(direction);
 	}
 
 	public void UpdateDirection(Vector3 direction) {
-		SYS_SelfDriving.Direct.ClearTGT();
 		OnUpdateDirection(direction);
 	}
 }

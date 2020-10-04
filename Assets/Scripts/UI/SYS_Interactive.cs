@@ -26,6 +26,7 @@ public class SYS_Interactive : MonoBehaviour
 	}
 	
 	public void Regist(InteractEvent value) {
+		SYS_SelfDriving.Direct.Reset();
 		SYS_GameEngine.Direct.SetPause(true);
 
 		nowEvent = value;
