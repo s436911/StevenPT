@@ -67,6 +67,13 @@ public class UI_Navigator : MonoBehaviour
 						nextPlanet = planet;
 					}
 				}
+
+				if (aIndex == SYS_StarmapManager.Direct.route.Count - 2) {
+					SYS_AudioManager.Direct.Play(BGMType.End);
+
+				} else {
+					SYS_AudioManager.Direct.Play(BGMType.Space);
+				}
 			} else {
 				nextPlanet = null;
 			}

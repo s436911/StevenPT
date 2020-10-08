@@ -28,7 +28,7 @@ public class SYS_Interactive : MonoBehaviour
 	}
 	
 	public void Regist(InteractEvent value) {
-		if (Time.timeSinceLevelLoad - intaTimer < 5) {
+		if (Time.timeSinceLevelLoad - intaTimer < 3) {
 			return;
 		}
 
@@ -159,7 +159,6 @@ public class InteractOption {
 		}
 	}
 }
-
 
 public enum Affinity {
 	None,

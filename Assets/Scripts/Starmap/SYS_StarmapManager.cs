@@ -183,12 +183,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 			objRect.localScale = Vector3.one;
 		}
 	}
-
-	// Start is called before the first frame update
-	void Start() {
-		Init();
-	}
-
+	
 	public bool IsRouteComplete() {
 		return route.Count > 0 && route[route.Count - 1].sType == StarType.End;
 	}

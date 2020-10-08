@@ -22,6 +22,10 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 		Direct = this;
 	}
 
+	void Start() {
+		SetMode(GameMode.Home);
+	}
+
 	// Update is called once per frame
 	void Update() {
 		if (animing != 0 && Time.timeSinceLevelLoad - animing <= animTime) {
@@ -66,6 +70,8 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				this.gameMode = (GameMode)gameMode;
 				animing = Time.timeSinceLevelLoad;
 
+				SYS_AudioManager.Direct.Play(BGMType.Home);
+
 				SYS_SpaceManager.Direct.Reset();
 				SYS_WeatherManager.Direct.Reset();
 				UI_Navigator.Direct.Reset();
@@ -81,6 +87,8 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				if (SYS_StarmapManager.Direct.IsRouteComplete()) {
 					this.gameMode = (GameMode)gameMode;
 					animing = Time.timeSinceLevelLoad;
+
+					SYS_AudioManager.Direct.Play(BGMType.Launch);
 
 					SYS_ShipController.Direct.Init();
 					SYS_SpaceManager.Direct.Init();
@@ -102,6 +110,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 }
 
 public enum GameMode {
+	Nono,
 	Home,
 	Space
 }
