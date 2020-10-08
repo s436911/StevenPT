@@ -6,10 +6,15 @@ using UnityEngine.UI;
 public class SYS_ResourseManager : MonoBehaviour {
 	public static SYS_ResourseManager Direct;
 
+	public Texture2D[] itemIcon = new Texture2D[6];
+	
 	public Text[] resourceText = new Text[5];
 	public Text[] resourceMaxText = new Text[5];
 
 	public Text[] resourceText_Home = new Text[5];
+
+	public Image fuelBar;
+	public Image foodBar;
 
 	public int maxFuel = 50;
 	public int maxArmor = 5;
@@ -22,7 +27,9 @@ public class SYS_ResourseManager : MonoBehaviour {
 	public int startMineral = 5;
 
 	public int[] resources = new int[5];
-	public int[] cargo = new int[2];
+	public UI_ItemSlot[] cargo = new UI_ItemSlot[2];
+	public UI_ItemSlot[] preCargo = new UI_ItemSlot[2];
+	public UI_ItemSlot[] inventory = new UI_ItemSlot[9];
 
 	//-------------------------------home
 	public int startFuel_Home = 0;
@@ -66,19 +73,95 @@ public class SYS_ResourseManager : MonoBehaviour {
 		SetLevel(1, 1);
 		SetLevel(2, 1);
 		SetLevel(3, 1);
+		
+		for (int ct = 0; ct < cargo.Length; ct++) {
+			cargo[ct].Init(ct);
+		}
 
-		Reset();
+		for (int ct = 0; ct < inventory.Length; ct++) {
+			inventory[ct].Init(ct);
+		}
+
+		for (int ct = 0; ct < preCargo.Length; ct++) {
+			preCargo[ct].Init(ct);
+		}
 	}
 
-	public void Reset() {
+	public void Init() {
 		SetResource(0, startFuel);
 		SetResource(1, startArmor);
 		SetResource(2, startFood);
 		SetResource(3, startMineral);
 
-		cargo[0] = 0;
-		cargo[1] = 0;
+		AddCargo(preCargo[0].item);
+		AddCargo(preCargo[1].item);
 	}
+
+	public void AddCargo(Item item) {
+		for (int ct = 0; ct < cargo.Length; ct++) {
+			if (cargo[ct].item == null) {
+				SetCargoSlot(ct, item);
+				return;
+			}
+		}
+	}
+
+	public void AddPreCargo(Item item) {
+		for (int ct = 0; ct < preCargo.Length; ct++) {
+			if (preCargo[ct].item == null) {
+				SetPreCargoSlot(ct, item);
+				return;
+			}
+		}
+	}
+
+	public void AddInventory(Item item) {
+		for (int ct = 0; ct < inventory.Length; ct++) {
+			if (inventory[ct].item == null) {
+				SetdInventorySlot(ct, item);
+				return;
+			}
+		}
+	}
+
+	public void SetdInventorySlot(int slot, Item item = null) {
+		inventory[slot].SetItem(item);
+	}
+
+	public void SetCargoSlot(int slot , Item item = null) {
+		cargo[slot].SetItem(item);
+	}
+
+	public void SetPreCargoSlot(int slot, Item item = null) {
+		preCargo[slot].SetItem(item);
+	}
+	/*
+	public int GetItemAmount(int typeID, int effectID) {
+		int re = 0;
+		for (int ct = 0; ct < cargo.Length; ct++) {
+			if (cargo[ct].gameObject.activeSelf && cargo[ct].item.typeID == typeID && cargo[ct].item.effectID == effectID) {
+				re++;
+			}
+		}
+		return re;
+	}
+
+	public bool ContainsItem(int typeID, int effectID) {
+		for (int ct = 0; ct < cargo.Length; ct++) {
+			if (cargo[ct].gameObject && cargo[ct].item.typeID == typeID && cargo[ct].item.effectID == effectID) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void UpdateItem() {
+		if (ContainsItem(2,1)) {
+			UI_Navigator.Direct.showDisHint = true;
+		} else {
+			UI_Navigator.Direct.showDisHint = false;
+		}
+	}*/
 
 	public int GetResourceHome(int type) {
 		return resources_Home[type];
@@ -108,6 +191,8 @@ public class SYS_ResourseManager : MonoBehaviour {
 				resources[type] = maxFuel;
 			}
 
+			fuelBar.fillAmount = (float)resources[type] / (float)maxFuel * 0.2f;
+
 		} else if (type == 1) {
 			if (resources[type] <= 0) {
 				resources[type] = 0;
@@ -125,6 +210,8 @@ public class SYS_ResourseManager : MonoBehaviour {
 			} else if (resources[type] > maxFood) {
 				resources[type] = maxFood;
 			}
+
+			foodBar.fillAmount = (float)resources[type] / (float)maxFood * 0.2f;
 
 		} else if (type == 3) {
 			if (resources[type] <= 0) {
@@ -156,6 +243,67 @@ public class SYS_ResourseManager : MonoBehaviour {
 		}
 
 		resourceText_Home[type].text = resources_Home[type].ToString();
+	}
+	
+	public void UseCargo(int slot) {
+		bool used = false;
+
+		if (cargo[slot].item.typeID == 1) {
+			if (cargo[slot].item.effectID == 2) {//加倍油料
+				UI_ScoreManager.Direct.bonusEnd[0] += 1;
+				used = true;
+				SYS_PopupManager.Direct.Regist("MIG", "95加滿!");
+
+			} else if (cargo[slot].item.effectID == 3) {//加倍食物
+				UI_ScoreManager.Direct.bonusEnd[1] += 1;
+				used = true;
+				SYS_PopupManager.Direct.Regist("STEVEN", "看起來好好吃!");				
+
+			} else if (cargo[slot].item.effectID == 4) {//加倍礦石
+				UI_ScoreManager.Direct.bonusEnd[2] += 1;
+				used = true;
+				SYS_PopupManager.Direct.Regist("MIG", "大顆鑽石!");
+
+			} else if (cargo[slot].item.effectID == 5) {//加倍硬幣
+				UI_ScoreManager.Direct.bonusEnd[3] += 1;
+				used = true;
+				SYS_PopupManager.Direct.Regist("CINDY", "請給我黃金!");
+
+			} else if (cargo[slot].item.effectID == 6) {//偵測雷達
+				SYS_ShipController.Direct.detector.SetActive(true);
+				used = true;
+				SYS_PopupManager.Direct.Regist("LAN", "喔喔到處都是隕石呢!");
+
+			} else if (cargo[slot].item.effectID == 7) {//反射裝甲
+				SYS_ShipController.Direct.reflecter.SetActive(true);
+				used = true;
+				SYS_PopupManager.Direct.Regist("CINDY", "我要撞飛所有壞隕石!");
+			}
+		}
+
+		if (used) {
+			cargo[slot].Clear();
+		}
+	}
+
+	public void UsePreCargo(int slot) {
+		AddInventory(preCargo[slot].item);
+		preCargo[slot].Clear();
+	}
+
+	public void UseInventory(int slot) {
+		bool used = false;
+
+		if (inventory[slot].item.typeID == 3) {
+			
+		} else if (preCargo[0].item == null || preCargo[1].item == null) {
+			AddPreCargo(inventory[slot].item);
+			inventory[slot].Clear();
+		}
+
+		if (used) {
+			inventory[slot].Clear();
+		}
 	}
 
 	public string ToString (int type){

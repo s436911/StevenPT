@@ -90,7 +90,12 @@ public class UI_NavigateHint : MonoBehaviour {
 				if (!entity.explored) {
 					hintColor = new Color(0.85F, 0.85F, 0.85F);
 					textType.text = "???";
-					textDis.text = "";
+
+					if (SYS_ShipController.Direct.detector.activeSelf) {
+						textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+					} else {
+						textDis.text = "";
+					}
 
 				} else {
 					hintColor = new Color(0.45F, 0.8F, 0.85F);
@@ -102,10 +107,15 @@ public class UI_NavigateHint : MonoBehaviour {
 				//hintColor = new Color(0.4F, 0.7F, 0.25F);
 				hintColor = new Color(0.9F, 0.7F, 0.15F);
 				textType.text = "REC";
-				textDis.text = "";
+
+				if (SYS_ShipController.Direct.detector.activeSelf) {
+					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+				} else {
+					textDis.text = "";
+				}
 			}
 
-			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Mathf.Clamp01(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 900)) * 80; 
+			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 4) * 80;
 			star.GetComponent<RectTransform>().sizeDelta = new Vector2(nowSize, nowSize);
 
 		} else if (entity.info.sType == StarType.End) {
@@ -118,10 +128,15 @@ public class UI_NavigateHint : MonoBehaviour {
 
 				hintColor = new Color(0.9F, 0.7F, 0.15F);
 				textType.text = "TGT";
-				textDis.text = "";
+
+				if (SYS_ShipController.Direct.detector.activeSelf) {
+					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+				} else {
+					textDis.text = "";
+				}
 			}
 
-			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Mathf.Clamp01(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 900)) * 80;
+			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 4) * 80;
 			star.GetComponent<RectTransform>().sizeDelta = new Vector2(nowSize, nowSize);
 
 		} else if (entity.info.sType == StarType.Activity) {
@@ -129,16 +144,21 @@ public class UI_NavigateHint : MonoBehaviour {
 				if (!entity.explored) {
 					hintColor = new Color(0.85F, 0.85F, 0.85F);
 					textType.text = "???";
-					textDis.text = "";
+
+					if (SYS_ShipController.Direct.detector.activeSelf) {
+						textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+					} else {
+						textDis.text = "";
+					}
 
 				} else {
 					hintColor = new Color(0.45F, 0.8F, 0.85F);
 					textType.text = "ACT";
 					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
 				}
-			} 
+			}
 
-			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Mathf.Clamp01(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 900)) * 80;
+			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 4) * 80;
 			star.GetComponent<RectTransform>().sizeDelta = new Vector2(nowSize, nowSize);
 		}
 

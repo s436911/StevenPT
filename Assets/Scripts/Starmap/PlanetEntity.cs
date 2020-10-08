@@ -6,12 +6,7 @@ public class PlanetEntity : SpaceEntity {
 	public GameObject halo;
 	public InteractEvent iEvent;
 	public TextMesh text;
-
-	// Start is called before the first frame update
-	void Awake() {
-		GetComponent<Collider2D>();
-	}
-	
+		
 	public void Regist(StarInfo info, Material mat, float size, bool haveHalo, int eventId) {
 		Regist(info, mat, size);
 		halo.SetActive(haveHalo);
@@ -21,6 +16,7 @@ public class PlanetEntity : SpaceEntity {
 
 	void OnTriggerEnter2D(Collider2D colli) {
 		if (colli.transform.parent.GetComponent<SYS_ShipController>() != null) {
+
 			if (info.sType == StarType.Check) {
 				SYS_Interactive.Direct.Regist(iEvent);
 				UI_Navigator.Direct.Arrive(info);

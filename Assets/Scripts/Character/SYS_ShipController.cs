@@ -11,14 +11,18 @@ public class SYS_ShipController : MonoBehaviour {
 	public float maxSpeed = 2;
 	public float accelerate = 2;
 	public float smoothing = 0.5f;
-	
+
 	public GameObject character;
-	public Collider2D colli;
 	public Rigidbody2D ridgid;
 	public Vector2 direction = Vector2.up;
+
+	public GameObject reflecter;
+	public GameObject detector;
+
 	private Coroutine cououtine;
 	private float fuelTimer;
 	private float foodTimer;
+	private float damageTimer;
 
 	void Awake() {
 		Direct = this;
@@ -29,7 +33,7 @@ public class SYS_ShipController : MonoBehaviour {
 		Reset();
 	}
 
-	public void Regist() {
+	public void Init() {
 		character.SetActive(true);
 	}
 
@@ -38,6 +42,8 @@ public class SYS_ShipController : MonoBehaviour {
 		fuelTimer = 0;
 		foodTimer = 0;
 		character.SetActive(false);
+		detector.SetActive(false);
+		reflecter.SetActive(false);
 	}
 
 	void Update() {
@@ -49,10 +55,7 @@ public class SYS_ShipController : MonoBehaviour {
 
 			if (handling) {
 				if (speed < maxSpeed) {
-					speed = speed + maxSpeed * Time.deltaTime;
-					if (speed > maxSpeed) {
-						speed = maxSpeed;
-					}
+					speed = Mathf.Clamp(speed + maxSpeed * Time.deltaTime, 0, maxSpeed);
 				}
 
 				if (Time.timeSinceLevelLoad - fuelTimer > 1) {
@@ -104,8 +107,8 @@ public class SYS_ShipController : MonoBehaviour {
 			Debug.LogWarning("有空再修");
 		}
 
-		if (stop) {
-			this.speed = 0;
+		if (stop && SYS_SelfDriving.Direct.tgt == null) {
+			speed = 0;
 		}
 		
 		handling = false;
@@ -121,5 +124,21 @@ public class SYS_ShipController : MonoBehaviour {
 
 	public void UpdateDirection(Vector3 direction) {
 		OnUpdateDirection(direction);
+	}
+
+	public bool DamageAble() {
+		return (Time.timeSinceLevelLoad - damageTimer) > 0.5f;
+	}
+
+	public void Damage(int damage , int speedDown = 0) {
+		damageTimer = Time.timeSinceLevelLoad;
+		SYS_ResourseManager.Direct.ModifyResource(1, -damage);
+		speed = Mathf.Clamp(speed - speedDown, 0, maxSpeed);
+
+		if (Random.Range(0, 100) < 50) {
+			SYS_PopupManager.Direct.Regist("MIG", "好痛!");
+		} else {
+			SYS_PopupManager.Direct.Regist("MIG", "不能好好開船嗎!");
+		}
 	}
 }

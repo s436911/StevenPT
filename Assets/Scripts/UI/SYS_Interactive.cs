@@ -21,11 +21,18 @@ public class SYS_Interactive : MonoBehaviour
 
 	public Texture2D[] affinityIcon = new Texture2D[4];
 
+	private float intaTimer;
+
 	void Awake() {
 		Direct = this;
 	}
 	
 	public void Regist(InteractEvent value) {
+		if (Time.timeSinceLevelLoad - intaTimer < 5) {
+			return;
+		}
+
+		intaTimer = Time.timeSinceLevelLoad;
 		SYS_SelfDriving.Direct.Reset();
 		SYS_GameEngine.Direct.SetPause(true);
 
@@ -59,8 +66,11 @@ public class SYS_Interactive : MonoBehaviour
 
 				texts[id].text = nowEvent.answers[id].text;
 
-				if (nowEvent.answers[id].costNum != 0 || nowEvent.answers[id].getNum != 0) {
-					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : nowEvent.answers[id].successRate.ToString("f0") + "%") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
+				if (nowEvent.answers[id].costNum != 0 && nowEvent.answers[id].getNum != 0) {
+					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : nowEvent.answers[id].successRate.ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
+
+				} else if (nowEvent.answers[id].costNum != 0) {
+					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : nowEvent.answers[id].successRate.ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum;
 
 				} else {
 					textmsgs[id].text = "---";
@@ -117,13 +127,16 @@ public class InteractOption {
 	public int IID;
 	public int SID;
 
-	public InteractOption(Affinity affinity , float successRate, int costType , int costNum  , int getType , int getNum, string text = null) {
+	public Item getItem;
+
+	public InteractOption(Affinity affinity , float successRate, int costType , int costNum  , int getType , int getNum , string text , Item getItem = null) {
 		this.affinity = affinity;
 		this.successRate = successRate;
 		this.costType = costType;
 		this.costNum = costNum;
 		this.getType = getType;
 		this.getNum = getNum;
+		this.getItem = getItem;
 		this.text = text;
 	}
 
@@ -136,7 +149,12 @@ public class InteractOption {
 			SYS_ResourseManager.Direct.ModifyResource(costType, -costNum);
 
 			if (Random.Range(0, 100) < successRate) {
-				SYS_ResourseManager.Direct.ModifyResource(getType, getNum);
+				if (getItem == null) {
+					SYS_ResourseManager.Direct.ModifyResource(getType, getNum);
+
+				} else {
+					SYS_ResourseManager.Direct.AddCargo(getItem);
+				}
 			}
 		}
 	}
@@ -207,7 +225,12 @@ public static class TMP_InteractEvent {
 
 		switch (rand) {
 			case 1:
-				tempAnswers.Add(new InteractOption(Affinity.Explore, 60, 2, 1, 0, 30, "探索"));
+				if (Random.Range(0, 2) == 0) {
+					tempAnswers.Add(new InteractOption(Affinity.Explore, 100, 2, 2, 0, 0, "探索", Random.Range(0, 2) == 0 ? new Item(0, 1, 6) : new Item(1, 1, 3)));
+				} else {
+					tempAnswers.Add(new InteractOption(Affinity.Explore, 60, 2, 1, 3, 2, "探索"));
+				}
+			
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
 				tmpMsg = "這裡有一艘被廢棄的太空船，也許可以從中找到一些東西!!!!";
 				break;
@@ -215,7 +238,11 @@ public static class TMP_InteractEvent {
 			case 2:
 				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 2, 1, 3, 1, "交易"));
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
-				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 1, 0, 30, "交易"));
+				if (Random.Range(0, 2) == 0) {
+					tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 2, 0, 0, "交易", Random.Range(0, 2) == 0 ? new Item(0, 1, 6) : new Item(2, 1, 7)));
+				} else {
+					tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 1, 0, 30, "交易"));
+				}
 				tmpMsg = "有艘商船想和我們進行交易，也許可以看看!!";
 				break;
 
@@ -227,7 +254,13 @@ public static class TMP_InteractEvent {
 
 			case 4:
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
-				tempAnswers.Add(new InteractOption(Affinity.Fight, 100, 1, 1, 3, 2, "強化"));
+				
+				if (Random.Range(0, 2) == 0) {
+					tempAnswers.Add(new InteractOption(Affinity.Fight, 100, 1, 1, 3, 2, "掠奪"));
+				} else {
+					tempAnswers.Add(new InteractOption(Affinity.Fight, 100, 1, 1, 0, 0, "掠奪", new Item(4, 1, 4)));
+				}
+
 				tmpMsg = "是一架採集機器人，背後背著大量的礦物!!";
 				break;
 		}

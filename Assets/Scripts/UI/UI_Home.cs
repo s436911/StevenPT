@@ -18,10 +18,10 @@ public class UI_Home : MonoBehaviour, IBeginDragHandler , IEndDragHandler {
     // Update is called once per frame
     void Update()
     {
-		
+
 		if (!draging && Mathf.Abs(scrollRect.velocity.y) < 360 && Mathf.Abs(scrollRect.velocity.y) > 0) {
 
-			if (contenter.anchoredPosition.y < -360) {
+			if (contenter.anchoredPosition.y > -1080 && contenter.anchoredPosition.y < -360) {
 				contenter.anchoredPosition = Vector2.Lerp(contenter.anchoredPosition, new Vector2(0, -720), 0.5f);
 				if (contenter.anchoredPosition.y < -720) {
 					contenter.anchoredPosition = new Vector2(0, -720);
@@ -30,12 +30,28 @@ public class UI_Home : MonoBehaviour, IBeginDragHandler , IEndDragHandler {
 				}
 
 
-			} else if (contenter.anchoredPosition.y > 360) {
+			} else if (contenter.anchoredPosition.y > 360 && contenter.anchoredPosition.y < 1080) {
 				contenter.anchoredPosition = Vector2.Lerp(contenter.anchoredPosition, new Vector2(0, 720), 0.5f);
 				if (contenter.anchoredPosition.y > 720) {
 					contenter.anchoredPosition = new Vector2(0, 720);
 					scrollRect.velocity = Vector2.zero;
+					SYS_Logger.Direct.SetSystemMsg("可自訂船隻和船員");
+				}
+
+			} else if (contenter.anchoredPosition.y > 1080) {
+				contenter.anchoredPosition = Vector2.Lerp(contenter.anchoredPosition, new Vector2(0, 1440), 0.5f);
+				if (contenter.anchoredPosition.y > 1440) {
+					contenter.anchoredPosition = new Vector2(0, 1440);
+					scrollRect.velocity = Vector2.zero;
 					SYS_Logger.Direct.SetSystemMsg("花費資源可升級飛船或太空站");
+				}
+
+			} else if (contenter.anchoredPosition.y < -1080) {
+				contenter.anchoredPosition = Vector2.Lerp(contenter.anchoredPosition, new Vector2(0, -1440), 0.5f);
+				if (contenter.anchoredPosition.y < -1440) {
+					contenter.anchoredPosition = new Vector2(0, -1440);
+					scrollRect.velocity = Vector2.zero;
+					SYS_Logger.Direct.SetSystemMsg("施工中");
 				}
 
 			} else {

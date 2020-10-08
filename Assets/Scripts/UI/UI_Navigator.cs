@@ -8,10 +8,11 @@ public class UI_Navigator : MonoBehaviour
 	public PlanetEntity nextPlanet;
 	public AnimationCurve hintSizer;
 
+	public GameObject uiPanel;
 	public GameObject nvPfb;
 	public float detectDisT = 12;
 	public float closeDis = 5;
-
+	
 	public StarInfo preRoute;
 
 	void Awake() {
@@ -74,12 +75,12 @@ public class UI_Navigator : MonoBehaviour
 
 	public void Regist(SpaceEntity entity) {
 		UI_NavigateHint objGen = Instantiate(nvPfb).GetComponent<UI_NavigateHint>();
-		objGen.transform.SetParent(transform);
+		objGen.transform.SetParent(uiPanel.transform);
 		objGen.Regist(entity);
 	}
 
 	public void Reset() {
-		foreach (Transform child in transform) {
+		foreach (Transform child in uiPanel.transform) {
 			Destroy(child.gameObject);
 		}
 	}

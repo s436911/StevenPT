@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class MeteorEntity : SpaceEntity {
 
-	void OnTriggerEnter2D(Collider2D colli) {
-		if (colli.transform.parent.GetComponent<SYS_ShipController>() != null) {
-			SYS_ResourseManager.Direct.ModifyResource(1,-1);
+	void OnCollisionEnter2D(Collision2D colli) {
+		SYS_ShipController ship = colli.transform.GetComponent<SYS_ShipController>();
 
-			if (Random.Range(0, 100) < 50) {
-				SYS_PopupManager.Direct.Regist("MIG", "好痛!");
-			} else {
-				SYS_PopupManager.Direct.Regist("MIG", "不能好好開船嗎!");
+		if (ship != null && ship.DamageAble()) {
+			SYS_CameraController.Direct.Shake(0.3f);
+
+			if (!ship.reflecter.activeSelf) {
+				ship.Damage(1, 2);
 			}
+			
+			//ridgid.velocity = ship.ridgid.velocity * 1.25f;
+			ridgid.velocity = Random.insideUnitCircle.normalized * 2f;
 		}
 	}
 

@@ -72,18 +72,20 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				SYS_StarmapManager.Direct.Reset();
 				SYS_SelfDriving.Direct.Reset();
 				SYS_ShipController.Direct.Reset();
-				SYS_StarmapManager.Direct.Init();
 				SYS_PopupManager.Direct.Reset();
+				UI_ScoreManager.Direct.Reset();
+				
+				SYS_StarmapManager.Direct.Init();
 
 			} else if ((GameMode)gameMode == GameMode.Space) {
 				if (SYS_StarmapManager.Direct.IsRouteComplete()) {
 					this.gameMode = (GameMode)gameMode;
 					animing = Time.timeSinceLevelLoad;
 
-					SYS_ShipController.Direct.Regist();
+					SYS_ShipController.Direct.Init();
 					SYS_SpaceManager.Direct.Init();
 					SYS_WeatherManager.Direct.Init();
-					SYS_ResourseManager.Direct.Reset();
+					SYS_ResourseManager.Direct.Init();
 					UI_Navigator.Direct.Init();
 
 					SYS_PopupManager.Direct.Regist("LAN", "相信會是一場愉快的冒險");
