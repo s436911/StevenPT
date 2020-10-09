@@ -172,6 +172,10 @@ public class SYS_ResourseManager : MonoBehaviour {
 	}
 
 	public void ModifyResource(int type, int value) {
+		if (value > 0) {
+			SYS_SideLog.Direct.Regist(type, value.ToString());
+		}
+
 		SetResource(type, resources[type] + value);
 	}
 

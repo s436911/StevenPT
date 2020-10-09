@@ -181,7 +181,7 @@ public static class TMP_InteractEvent {
 				break;
 
 			case 2:
-				tempAnswers.Add(new InteractOption(Affinity.None, 75, 2, 1, 0, 30, "加油"));
+				tempAnswers.Add(new InteractOption(Affinity.None, 100, 2, 1, 0, 30, "加油"));
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
 				tempAnswers.Add(new InteractOption(Affinity.Fight, 100, 1, 1, 0, 60, "交戰"));
 				tmpMsg = "加油站被野生動物佔據了我們只能偷偷加油，但若擊退他們我們就可以加免費燃料了!!";
@@ -191,7 +191,7 @@ public static class TMP_InteractEvent {
 				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 1, 0, 30, "加油"));
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
 				tempAnswers.Add(new InteractOption(Affinity.Explore, 60, 2, 1, 0, 60, "探索"));
-				tmpMsg = "加油站旁有座巨大礦坑也許可以找到一點燃料!?";
+				tmpMsg = "加油站旁有座巨大礦坑也許可以找到更多燃料!?";
 				break;
 
 			case 4:

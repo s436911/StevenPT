@@ -49,7 +49,7 @@ public class SYS_PopupManager : MonoBehaviour
 				if (pop.anchoredPosition.x < endPosX) {
 					destroys.Add(pop);
 				} else {
-					pop.anchoredPosition = pop.anchoredPosition - new Vector2(speed * Time.deltaTime, 0);
+					pop.anchoredPosition = pop.anchoredPosition - new Vector2(speed * Time.unscaledDeltaTime, 0);
 				}
 			}
 
@@ -58,8 +58,8 @@ public class SYS_PopupManager : MonoBehaviour
 				Destroy(destroys[ct].gameObject);
 			}
 
-			if (Time.timeSinceLevelLoad - timer > 10) {
-				timer = Time.timeSinceLevelLoad;
+			if (Time.unscaledTime - timer > 10) {
+				timer = Time.unscaledTime;
 				if (SYS_ResourseManager.Direct.GetResource(2) < 10) {
 					Regist("Steven", "我好餓喔..");
 				}

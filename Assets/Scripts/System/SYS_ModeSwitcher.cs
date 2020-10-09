@@ -80,6 +80,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				SYS_ShipController.Direct.Reset();
 				SYS_PopupManager.Direct.Reset();
 				UI_ScoreManager.Direct.Reset();
+				SYS_SideLog.Direct.Reset();
 				
 				SYS_StarmapManager.Direct.Init();
 
