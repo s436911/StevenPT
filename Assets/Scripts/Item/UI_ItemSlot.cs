@@ -8,6 +8,7 @@ public class UI_ItemSlot : MonoBehaviour {
 	public Item item;
     public RawImage icon;
 	public Text text;
+	public Text textDescript;
 
 	public void Init(int slot) {
 		this.slot = slot;
@@ -28,12 +29,20 @@ public class UI_ItemSlot : MonoBehaviour {
 			} else if (item.typeID == 3) {
 				text.text = "HOME";
 			}
+
+			if (textDescript != null) {
+				textDescript.text = item.text;
+			}
 		} else {
 			this.item = item;
 			icon.texture = null;
 			icon.color = new Color(0, 0, 0, 0);
 
 			text.text = "N/A";
+
+			if (textDescript != null) {
+				textDescript.text = "N/A";
+			}
 		}
 	}
 

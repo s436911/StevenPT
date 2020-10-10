@@ -7,14 +7,17 @@ public class Item {
 	public int typeID; //1主動使用效果型、2主動使用buff型、3家中使用
 	public int effectID; 
 	public int valueID;
+	public string text;
 
-	public Item(int iconID , int typeID , int effectID , int valueID = 0) {
+	public Item(int iconID , int typeID , int effectID , int valueID = 0 , string text = null) {
 		this.iconID = iconID;
 		this.typeID = typeID;
 		this.effectID = effectID;
 		this.valueID = valueID;
+		this.text = text;
 	}
 }
+
 /*
  * [1]
  * 1加速器

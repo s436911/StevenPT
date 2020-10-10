@@ -71,7 +71,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				animing = Time.timeSinceLevelLoad;
 
 				SYS_AudioManager.Direct.Play(BGMType.Home);
-
+				SYS_RadarManager.Direct.Reset();
 				SYS_SpaceManager.Direct.Reset();
 				SYS_WeatherManager.Direct.Reset();
 				UI_Navigator.Direct.Reset();

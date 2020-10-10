@@ -7,15 +7,19 @@ public class MeteorEntity : SpaceEntity {
 	void OnCollisionEnter2D(Collision2D colli) {
 		SYS_ShipController ship = colli.transform.GetComponent<SYS_ShipController>();
 
-		if (ship != null && ship.DamageAble() && Random.Range(0,100) < SYS_TeamManager.Direct.GetLuk()) {
-			SYS_CameraController.Direct.Shake(0.3f);
+		if (ship != null && ship.DamageAble()) {
+			if (Random.Range(0, 100) > SYS_TeamManager.Direct.GetLuk()) {
+				SYS_CameraController.Direct.Shake(0.3f);
 
-			if (!ship.reflecter.activeSelf) {
-				ship.Damage(1, 2);
+				if (!ship.reflecter.activeSelf) {
+					ship.Damage(1, 2);
+				}
+
+				//ridgid.velocity = ship.ridgid.velocity * 1.25f;
+				ridgid.velocity = Random.insideUnitCircle.normalized * 2f;
+			} else {
+				SYS_PopupManager.Direct.Regist(SYS_TeamManager.Direct.members[Random.Range(0, 4)].member.name, "呼~好險!");
 			}
-			
-			//ridgid.velocity = ship.ridgid.velocity * 1.25f;
-			ridgid.velocity = Random.insideUnitCircle.normalized * 2f;
 		}
 	}
 

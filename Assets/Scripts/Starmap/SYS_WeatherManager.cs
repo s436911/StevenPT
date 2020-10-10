@@ -16,7 +16,7 @@ public class SYS_WeatherManager : MonoBehaviour {
 	public int backMeteorNum = 20;
 	public int frontMeteorNum = 5;
 
-	public float meteorRadius;
+	public float meteorRadiusT;
 	public float timer;
 
 	void Awake() {
@@ -25,11 +25,11 @@ public class SYS_WeatherManager : MonoBehaviour {
 
 	public void Init() {
 		for (int ct = 0; ct < backMeteorNum; ct++) {
-			spawnBack((Vector2)SYS_ShipController.Direct.transform.position + Random.insideUnitCircle * meteorRadius);
+			spawnBack((Vector2)SYS_ShipController.Direct.transform.position + Random.insideUnitCircle * meteorRadiusT * 4);
 		}
 
 		for (int ct = 0; ct < frontMeteorNum; ct++) {
-			spawnFront((Vector2)SYS_ShipController.Direct.transform.position + Random.insideUnitCircle * meteorRadius);
+			spawnFront((Vector2)SYS_ShipController.Direct.transform.position + Random.insideUnitCircle * meteorRadiusT * 4);
 		}
 	}
 	
@@ -60,7 +60,7 @@ public class SYS_WeatherManager : MonoBehaviour {
 
 			//背景清除
 			foreach (Transform child in backGroup) {
-				if (Vector2.Distance(SYS_ShipController.Direct.transform.position, child.position) > meteorRadius) {
+				if (Vector2.Distance(SYS_ShipController.Direct.transform.position, child.position) > meteorRadiusT * 4) {
 					reVextors.Add(2 * SYS_ShipController.Direct.transform.position - child.position);
 					Destroy(child.gameObject);
 				}
@@ -74,7 +74,7 @@ public class SYS_WeatherManager : MonoBehaviour {
 
 			//前景清除
 			foreach (Transform child in frontGroup) {
-				if (Vector2.Distance(SYS_ShipController.Direct.transform.position, child.position) > meteorRadius) {
+				if (Vector2.Distance(SYS_ShipController.Direct.transform.position, child.position) > meteorRadiusT * 4) {
 					reVextors.Add(2 * SYS_ShipController.Direct.transform.position - child.position);
 					Destroy(child.gameObject);
 				}

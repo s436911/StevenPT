@@ -225,7 +225,7 @@ public static class TMP_InteractEvent {
 		switch (rand) {
 			case 1:
 				if (Random.Range(0, 2) == 0) {
-					tempAnswers.Add(new InteractOption(Affinity.Explore, 100, 2, 2, 0, 0, "探索", Random.Range(0, 2) == 0 ? new Item(0, 1, 6) : new Item(1, 1, 3)));
+					tempAnswers.Add(new InteractOption(Affinity.Explore, 100, 2, 2, 0, 0, "探索", Random.Range(0, 2) == 0 ? new Item(0, 1, 6, 0, "這東西似乎可以用來強化探測機!") : new Item(1, 1, 3)));
 				} else {
 					tempAnswers.Add(new InteractOption(Affinity.Explore, 50, 2, 1, 3, 2, "探索"));
 				}
@@ -238,7 +238,7 @@ public static class TMP_InteractEvent {
 				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 2, 1, 3, 1, "交易"));
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
 				if (Random.Range(0, 2) == 0) {
-					tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 2, 0, 0, "交易", Random.Range(0, 2) == 0 ? new Item(0, 1, 6) : new Item(2, 1, 7)));
+					tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 2, 0, 0, "交易", Random.Range(0, 2) == 0 ? new Item(0, 1, 6, 0, "這東西似乎可以用來強化探測機!") : new Item(2, 1, 7, 0, "這東西似乎可以用來彈開什麼??")));
 				} else {
 					tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 1, 0, 30, "交易"));
 				}
@@ -247,7 +247,7 @@ public static class TMP_InteractEvent {
 
 			case 3:
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
-				tempAnswers.Add(new InteractOption(Affinity.Explore, 50, 2, 2, 0, 0, "探索" , new Item(5, 3, 1)));
+				tempAnswers.Add(new InteractOption(Affinity.Explore, 50, 2, 2, 0, 0, "探索" , new Item(5, 3, 1 , 0 ,"膠囊裡面裡面有個人呢..")));
 				tmpMsg = "是一個太空膠囊，等等裡面好像有個人影!?";
 				break;
 

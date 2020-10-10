@@ -91,6 +91,9 @@ public class UI_ScoreManager : MonoBehaviour
 
 		SYS_ResourseManager.Direct.AddInventory(SYS_ResourseManager.Direct.cargo[0].item);
 		SYS_ResourseManager.Direct.AddInventory(SYS_ResourseManager.Direct.cargo[1].item);
+
+		SYS_ResourseManager.Direct.SetCargoSlot(0);
+		SYS_ResourseManager.Direct.SetCargoSlot(1);
 	}
 
 	public void Confirm() {
