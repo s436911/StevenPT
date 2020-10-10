@@ -67,10 +67,10 @@ public class SYS_Interactive : MonoBehaviour
 				texts[id].text = nowEvent.answers[id].text;
 
 				if (nowEvent.answers[id].costNum != 0 && nowEvent.answers[id].getNum != 0) {
-					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : nowEvent.answers[id].successRate.ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
+					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : (nowEvent.answers[id].successRate + SYS_TeamManager.Direct.GetInt()).ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
 
 				} else if (nowEvent.answers[id].costNum != 0) {
-					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : nowEvent.answers[id].successRate.ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum;
+					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : (nowEvent.answers[id].successRate + SYS_TeamManager.Direct.GetInt()).ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum;
 
 				} else {
 					textmsgs[id].text = "---";
@@ -148,7 +148,7 @@ public class InteractOption {
 		if (InteractAble()) {
 			SYS_ResourseManager.Direct.ModifyResource(costType, -costNum);
 
-			if (Random.Range(0, 100) < successRate) {
+			if (Random.Range(0, 100) < successRate + SYS_TeamManager.Direct.GetLuk()) {
 				if (getItem == null) {
 					SYS_ResourseManager.Direct.ModifyResource(getType, getNum);
 
@@ -190,7 +190,7 @@ public static class TMP_InteractEvent {
 			case 3:
 				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 1, 0, 30, "加油"));
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
-				tempAnswers.Add(new InteractOption(Affinity.Explore, 60, 2, 1, 0, 60, "探索"));
+				tempAnswers.Add(new InteractOption(Affinity.Explore, 50, 2, 1, 0, 60, "探索"));
 				tmpMsg = "加油站旁有座巨大礦坑也許可以找到更多燃料!?";
 				break;
 
@@ -227,7 +227,7 @@ public static class TMP_InteractEvent {
 				if (Random.Range(0, 2) == 0) {
 					tempAnswers.Add(new InteractOption(Affinity.Explore, 100, 2, 2, 0, 0, "探索", Random.Range(0, 2) == 0 ? new Item(0, 1, 6) : new Item(1, 1, 3)));
 				} else {
-					tempAnswers.Add(new InteractOption(Affinity.Explore, 60, 2, 1, 3, 2, "探索"));
+					tempAnswers.Add(new InteractOption(Affinity.Explore, 50, 2, 1, 3, 2, "探索"));
 				}
 			
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
@@ -247,7 +247,7 @@ public static class TMP_InteractEvent {
 
 			case 3:
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
-				tempAnswers.Add(new InteractOption(Affinity.Explore, 60, 2, 1, 0, 30, "探索"));
+				tempAnswers.Add(new InteractOption(Affinity.Explore, 50, 2, 2, 0, 0, "探索" , new Item(5, 3, 1)));
 				tmpMsg = "是一個太空膠囊，等等裡面好像有個人影!?";
 				break;
 

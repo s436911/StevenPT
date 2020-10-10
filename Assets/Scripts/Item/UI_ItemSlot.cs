@@ -11,6 +11,7 @@ public class UI_ItemSlot : MonoBehaviour {
 
 	public void Init(int slot) {
 		this.slot = slot;
+		Clear();
 	}
 
 	public void SetItem(Item item = null) {

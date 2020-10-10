@@ -85,22 +85,27 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				SYS_StarmapManager.Direct.Init();
 
 			} else if ((GameMode)gameMode == GameMode.Space) {
-				if (SYS_StarmapManager.Direct.IsRouteComplete()) {
-					this.gameMode = (GameMode)gameMode;
-					animing = Time.timeSinceLevelLoad;
-
-					SYS_AudioManager.Direct.Play(BGMType.Launch);
-
-					SYS_ShipController.Direct.Init();
-					SYS_SpaceManager.Direct.Init();
-					SYS_WeatherManager.Direct.Init();
-					SYS_ResourseManager.Direct.Init();
-					UI_Navigator.Direct.Init();
-
-					SYS_PopupManager.Direct.Regist("LAN", "相信會是一場愉快的冒險");
-				} else {
+				if (!SYS_StarmapManager.Direct.IsRouteComplete()) {
 					SYS_Logger.Direct.SetSystemMsg("請設定路徑至終點再出發");
+					return;
+				} else if (!SYS_TeamManager.Direct.IsTeamComplete()) {
+					SYS_Logger.Direct.SetSystemMsg("請將船塞滿人再出發");
+					return;
 				}
+
+
+				this.gameMode = (GameMode)gameMode;
+				animing = Time.timeSinceLevelLoad;
+
+				SYS_AudioManager.Direct.Play(BGMType.Launch);
+
+				SYS_ShipController.Direct.Init();
+				SYS_SpaceManager.Direct.Init();
+				SYS_WeatherManager.Direct.Init();
+				SYS_ResourseManager.Direct.Init();
+				UI_Navigator.Direct.Init();
+
+				SYS_PopupManager.Direct.Regist(SYS_TeamManager.Direct.members[Random.Range(0, 4)].member.name, "相信會是一場愉快的冒險");
 			}
 		}
 	}

@@ -256,32 +256,32 @@ public class SYS_ResourseManager : MonoBehaviour {
 			if (cargo[slot].item.effectID == 2) {//加倍油料
 				UI_ScoreManager.Direct.bonusEnd[0] += 1;
 				used = true;
-				SYS_PopupManager.Direct.Regist("MIG", "95加滿!");
+				SYS_PopupManager.Direct.Regist(SYS_TeamManager.Direct.members[Random.Range(0, 4)].member.name, "95加滿!");
 
 			} else if (cargo[slot].item.effectID == 3) {//加倍食物
 				UI_ScoreManager.Direct.bonusEnd[1] += 1;
 				used = true;
-				SYS_PopupManager.Direct.Regist("STEVEN", "看起來好好吃!");				
+				SYS_PopupManager.Direct.Regist(SYS_TeamManager.Direct.members[Random.Range(0, 4)].member.name, "看起來好好吃!");				
 
 			} else if (cargo[slot].item.effectID == 4) {//加倍礦石
 				UI_ScoreManager.Direct.bonusEnd[2] += 1;
 				used = true;
-				SYS_PopupManager.Direct.Regist("MIG", "大顆鑽石!");
+				SYS_PopupManager.Direct.Regist(SYS_TeamManager.Direct.members[Random.Range(0, 4)].member.name, "大顆鑽石!");
 
 			} else if (cargo[slot].item.effectID == 5) {//加倍硬幣
 				UI_ScoreManager.Direct.bonusEnd[3] += 1;
 				used = true;
-				SYS_PopupManager.Direct.Regist("CINDY", "請給我黃金!");
+				SYS_PopupManager.Direct.Regist(SYS_TeamManager.Direct.members[Random.Range(0, 4)].member.name, "請給我黃金!");
 
 			} else if (cargo[slot].item.effectID == 6) {//偵測雷達
 				SYS_ShipController.Direct.detector.SetActive(true);
 				used = true;
-				SYS_PopupManager.Direct.Regist("LAN", "喔喔到處都是隕石呢!");
+				SYS_PopupManager.Direct.Regist(SYS_TeamManager.Direct.members[Random.Range(0, 4)].member.name, "喔喔到處都是隕石呢!");
 
 			} else if (cargo[slot].item.effectID == 7) {//反射裝甲
 				SYS_ShipController.Direct.reflecter.SetActive(true);
 				used = true;
-				SYS_PopupManager.Direct.Regist("CINDY", "我要撞飛所有壞隕石!");
+				SYS_PopupManager.Direct.Regist(SYS_TeamManager.Direct.members[Random.Range(0, 4)].member.name, "我要撞飛所有壞隕石!");
 			}
 		}
 
@@ -298,15 +298,22 @@ public class SYS_ResourseManager : MonoBehaviour {
 	public void UseInventory(int slot) {
 		bool used = false;
 
-		if (inventory[slot].item.typeID == 3) {
-			
-		} else if (preCargo[0].item == null || preCargo[1].item == null) {
-			AddPreCargo(inventory[slot].item);
-			inventory[slot].Clear();
-		}
+		if (inventory[slot].item != null) {
+			if (inventory[slot].item.typeID == 3) {
+				if (inventory[slot].item.effectID == 1) {//加倍油料
+					SYS_TeamManager.Direct.AddBullpen(new Member(Random.Range(0, SYS_TeamManager.Direct.headIcons.Count), Random.Range(0, SYS_TeamManager.Direct.bodyIcons.Count), Random.Range(0, 2), (NatureType)Random.Range(0, 5), Random.Range(1,5)));
+					used = true;
 
-		if (used) {
-			inventory[slot].Clear();
+				}
+
+			} else if (preCargo[0].item == null || preCargo[1].item == null) {
+				AddPreCargo(inventory[slot].item);
+				inventory[slot].Clear();
+			}
+
+			if (used) {
+				inventory[slot].Clear();
+			}
 		}
 	}
 
