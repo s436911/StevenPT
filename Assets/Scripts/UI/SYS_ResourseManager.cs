@@ -53,8 +53,15 @@ public class SYS_ResourseManager : MonoBehaviour {
 	public Text[] lvText = new Text[4];
 	public Text[] needText = new Text[4];
 
+	public Image back;
+	public bool deleteMode;
+	private Color baseColor;
+	public Color deleteColor;
+
 	void Awake() {
 		Direct = this;
+
+		baseColor = back.color;
 	}
 
 	void Start() {
@@ -85,6 +92,13 @@ public class SYS_ResourseManager : MonoBehaviour {
 		for (int ct = 0; ct < preCargo.Length; ct++) {
 			preCargo[ct].Init(ct);
 		}
+
+		SYS_ResourseManager.Direct.SetInventorySlot(0, new Item(5, 3, 1));
+		SYS_ResourseManager.Direct.SetInventorySlot(1, new Item(5, 3, 1));
+		SYS_ResourseManager.Direct.SetInventorySlot(2, new Item(0, 1, 6, 0, "這東西似乎可以用來強化探測機!"));
+		SYS_ResourseManager.Direct.SetInventorySlot(3, new Item(0, 1, 6, 0, "這東西似乎可以用來強化探測機!"));
+		SYS_ResourseManager.Direct.SetInventorySlot(4, new Item(0, 1, 6, 0, "這東西似乎可以用來強化探測機!"));
+		SYS_ResourseManager.Direct.SetInventorySlot(5, new Item(0, 1, 6, 0, "這東西似乎可以用來強化探測機!"));
 	}
 
 	public void Init() {
@@ -118,13 +132,13 @@ public class SYS_ResourseManager : MonoBehaviour {
 	public void AddInventory(Item item) {
 		for (int ct = 0; ct < inventory.Length; ct++) {
 			if (inventory[ct].item == null) {
-				SetdInventorySlot(ct, item);
+				SetInventorySlot(ct, item);
 				return;
 			}
 		}
 	}
 
-	public void SetdInventorySlot(int slot, Item item = null) {
+	public void SetInventorySlot(int slot, Item item = null) {
 		inventory[slot].SetItem(item);
 	}
 
@@ -135,34 +149,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 	public void SetPreCargoSlot(int slot, Item item = null) {
 		preCargo[slot].SetItem(item);
 	}
-	/*
-	public int GetItemAmount(int typeID, int effectID) {
-		int re = 0;
-		for (int ct = 0; ct < cargo.Length; ct++) {
-			if (cargo[ct].gameObject.activeSelf && cargo[ct].item.typeID == typeID && cargo[ct].item.effectID == effectID) {
-				re++;
-			}
-		}
-		return re;
-	}
-
-	public bool ContainsItem(int typeID, int effectID) {
-		for (int ct = 0; ct < cargo.Length; ct++) {
-			if (cargo[ct].gameObject && cargo[ct].item.typeID == typeID && cargo[ct].item.effectID == effectID) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public void UpdateItem() {
-		if (ContainsItem(2,1)) {
-			UI_Navigator.Direct.showDisHint = true;
-		} else {
-			UI_Navigator.Direct.showDisHint = false;
-		}
-	}*/
-
+	
 	public int GetResourceHome(int type) {
 		return resources_Home[type];
 	}
@@ -248,7 +235,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 
 		resourceText_Home[type].text = resources_Home[type].ToString();
 	}
-	
+		
 	public void UseCargo(int slot) {
 		bool used = false;
 
@@ -289,32 +276,65 @@ public class SYS_ResourseManager : MonoBehaviour {
 			cargo[slot].Clear();
 		}
 	}
+	
+	public void DeteteMode() {
+		if (!deleteMode) {
+			back.color = deleteColor;
+			deleteMode = true;
+
+		} else {
+			back.color = baseColor;
+			deleteMode = false;
+		}
+	}
 
 	public void UsePreCargo(int slot) {
-		AddInventory(preCargo[slot].item);
-		preCargo[slot].Clear();
+		if (preCargo[slot].item != null) {
+			if (!deleteMode) {
+				if (!IsSlotFull(inventory)) {
+					AddInventory(preCargo[slot].item);
+					preCargo[slot].Clear();
+				}
+			} else {
+				preCargo[slot].Clear();
+			}
+		}
 	}
 
 	public void UseInventory(int slot) {
 		bool used = false;
 
 		if (inventory[slot].item != null) {
-			if (inventory[slot].item.typeID == 3) {
-				if (inventory[slot].item.effectID == 1) {//加倍油料
-					SYS_TeamManager.Direct.AddBullpen(new Member(Random.Range(0, SYS_TeamManager.Direct.headIcons.Count), Random.Range(0, SYS_TeamManager.Direct.bodyIcons.Count), Random.Range(0, 2), (NatureType)Random.Range(0, 5), Random.Range(1,5)));
-					used = true;
+			if (!deleteMode) {
+				if (inventory[slot].item.typeID == 3) {
+					if (inventory[slot].item.effectID == 1) {
+						SYS_TeamManager.Direct.AddBullpen(new Member(Random.Range(0, SYS_TeamManager.Direct.headIcons.Count), Random.Range(0, SYS_TeamManager.Direct.bodyIcons.Count), Random.Range(0, 2), (NatureType)Random.Range(0, 5), Random.Range(1, 5)));
+						used = true;
 
+					}
+
+				} else if (preCargo[0].item == null || preCargo[1].item == null) {
+					if (!IsSlotFull(preCargo)) {
+						AddPreCargo(inventory[slot].item);
+						inventory[slot].Clear();
+					}
 				}
 
-			} else if (preCargo[0].item == null || preCargo[1].item == null) {
-				AddPreCargo(inventory[slot].item);
-				inventory[slot].Clear();
-			}
-
-			if (used) {
+				if (used) {
+					inventory[slot].Clear();
+				}
+			} else {
 				inventory[slot].Clear();
 			}
 		}
+	}
+	public bool IsSlotFull(UI_ItemSlot[] slots) {
+		foreach (UI_ItemSlot itemSlot in inventory) {
+			if (itemSlot.item == null) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public string ToString (int type){

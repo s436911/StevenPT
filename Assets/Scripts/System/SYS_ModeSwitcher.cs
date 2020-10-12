@@ -84,6 +84,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				
 				SYS_StarmapManager.Direct.Init();
 
+
 			} else if ((GameMode)gameMode == GameMode.Space) {
 				if (!SYS_StarmapManager.Direct.IsRouteComplete()) {
 					SYS_Logger.Direct.SetSystemMsg("請設定路徑至終點再出發");

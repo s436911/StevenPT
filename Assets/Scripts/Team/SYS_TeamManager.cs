@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SYS_TeamManager : MonoBehaviour {
 	public static SYS_TeamManager Direct;
@@ -13,6 +14,11 @@ public class SYS_TeamManager : MonoBehaviour {
 
 	public UI_Member[] bullpen = new UI_Member[9];
 	public UI_Member[] members = new UI_Member[4];
+
+	public Image back;
+	public bool deleteMode;
+	private Color baseColor;
+	public Color deleteColor;
 
 	void Awake() {
 		Direct = this;
@@ -29,17 +35,40 @@ public class SYS_TeamManager : MonoBehaviour {
 		members[1].SetMember(new Member(Random.Range(0, headIcons.Count), Random.Range(0, bodyIcons.Count), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
 		members[2].SetMember(new Member(Random.Range(0, headIcons.Count), Random.Range(0, bodyIcons.Count), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
 		members[3].SetMember(new Member(Random.Range(0, headIcons.Count), Random.Range(0, bodyIcons.Count), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
+
+		baseColor = back.color;
+	}
+
+	public bool IsSlotFull(UI_Member[] slots) {
+		foreach (UI_Member member in slots) {
+			if (member.member == null) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public void UseMember(int slot) {
-		AddBullpen(members[slot].member);
-		members[slot].Clear();
+		if (members[slot].member != null) {
+			if (!deleteMode) {
+				if (!IsSlotFull(bullpen)) {
+					AddBullpen(members[slot].member);
+					members[slot].Clear();
+				}
+			} else {
+				members[slot].Clear();
+			}
+		}
 	}
 
 	public void UseBullpen(int slot) {
 		if (bullpen[slot].member != null) {
-			if (members[0].member == null || members[1].member == null || members[2].member == null || members[3].member == null ) {
-				AddMember(bullpen[slot].member);
+			if (!deleteMode) {
+				if (!IsSlotFull(members)) {
+					AddMember(bullpen[slot].member);
+					bullpen[slot].Clear();
+				}
+			} else {
 				bullpen[slot].Clear();
 			}
 		}
@@ -113,6 +142,17 @@ public class SYS_TeamManager : MonoBehaviour {
 			}
 		}
 		return rt;
+	}
+
+	public void DeteteMode() {
+		if (!deleteMode) {
+			back.color = deleteColor;
+			deleteMode = true;
+
+		} else {
+			back.color = baseColor;
+			deleteMode = false;
+		}
 	}
 }
 
