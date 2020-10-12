@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class UI_ItemSlot : MonoBehaviour {
 	public int slot;
-	public Item item;
     public RawImage icon;
 	public Text text;
 	public Text textDescript;
@@ -15,10 +14,8 @@ public class UI_ItemSlot : MonoBehaviour {
 		Clear();
 	}
 
-	public void SetItem(Item item = null) {
-		if (item != null) {
-
-			this.item = item;
+	public void SetItem(Item item) {
+		if (!item.isNull) {
 			icon.texture = SYS_ResourseManager.Direct.itemIcon[item.iconID];
 			icon.color = new Color(1, 1, 1, 1);
 
@@ -34,7 +31,6 @@ public class UI_ItemSlot : MonoBehaviour {
 				textDescript.text = item.text;
 			}
 		} else {
-			this.item = item;
 			icon.texture = null;
 			icon.color = new Color(0, 0, 0, 0);
 
@@ -47,7 +43,7 @@ public class UI_ItemSlot : MonoBehaviour {
 	}
 
 	public void Clear() {
-		SetItem();
+		SetItem(new Item());
 	}
 
 	public void UseCargo() {

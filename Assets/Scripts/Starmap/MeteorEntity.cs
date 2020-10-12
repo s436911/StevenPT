@@ -8,7 +8,7 @@ public class MeteorEntity : SpaceEntity {
 		SYS_ShipController ship = colli.transform.GetComponent<SYS_ShipController>();
 
 		if (ship != null && ship.DamageAble()) {
-			if (Random.Range(0, 100) > SYS_TeamManager.Direct.GetLuk()) {
+			if (Random.Range(0, 100) > SYS_SaveManager.Direct.GetMembersAttribute(3)) {
 				SYS_CameraController.Direct.Shake(0.3f);
 
 				if (!ship.reflecter.activeSelf) {
@@ -18,7 +18,7 @@ public class MeteorEntity : SpaceEntity {
 				//ridgid.velocity = ship.ridgid.velocity * 1.25f;
 				ridgid.velocity = Random.insideUnitCircle.normalized * 2f;
 			} else {
-				SYS_PopupManager.Direct.Regist(SYS_TeamManager.Direct.members[Random.Range(0, 4)].member.name, "呼~好險!");
+				SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "呼~好險!");
 			}
 		}
 	}

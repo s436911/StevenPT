@@ -81,19 +81,26 @@ public class UI_ScoreManager : MonoBehaviour
 		getText[2].text = "+" + Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(3) * getRate[2] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[2] > 1 ? bonusEnd[2] : 1)).ToString();
 		getText[3].text = "+" + Mathf.RoundToInt(getCoin                                   * getRate[3] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[3] > 1 ? bonusEnd[3] : 1)).ToString();
 
-		SYS_ResourseManager.Direct.ModifyResourceHome(0, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(0) * getRate[0] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[0] > 1 ? bonusEnd[0] : 1)));
-		SYS_ResourseManager.Direct.ModifyResourceHome(2, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(2) * getRate[1] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[1] > 1 ? bonusEnd[1] : 1)));
-		SYS_ResourseManager.Direct.ModifyResourceHome(3, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(3) * getRate[2] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[2] > 1 ? bonusEnd[2] : 1)));
-		SYS_ResourseManager.Direct.ModifyResourceHome(4, Mathf.RoundToInt(getCoin                                   * getRate[3] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[3] > 1 ? bonusEnd[3] : 1)));
+		SYS_SaveManager.Direct.ModifyResource(0, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(0) * getRate[0] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[0] > 1 ? bonusEnd[0] : 1)));
+		SYS_SaveManager.Direct.ModifyResource(2, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(2) * getRate[1] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[1] > 1 ? bonusEnd[1] : 1)));
+		SYS_SaveManager.Direct.ModifyResource(3, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(3) * getRate[2] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[2] > 1 ? bonusEnd[2] : 1)));
+		SYS_SaveManager.Direct.ModifyResource(4, Mathf.RoundToInt(getCoin                                   * getRate[3] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[3] > 1 ? bonusEnd[3] : 1)));
+		
+		//顯示結算
+		cargo[0].SetItem(SYS_ResourseManager.Direct.cargos[0]);
+		cargo[1].SetItem(SYS_ResourseManager.Direct.cargos[1]);
 
-		cargo[0].SetItem(SYS_ResourseManager.Direct.cargo[0].item);
-		cargo[1].SetItem(SYS_ResourseManager.Direct.cargo[1].item);
+		//加進道具攔
+		SYS_SaveManager.Direct.AddInventory(SYS_ResourseManager.Direct.cargos[0]);
+		SYS_SaveManager.Direct.AddInventory(SYS_ResourseManager.Direct.cargos[1]);
 
-		SYS_ResourseManager.Direct.AddInventory(SYS_ResourseManager.Direct.cargo[0].item);
-		SYS_ResourseManager.Direct.AddInventory(SYS_ResourseManager.Direct.cargo[1].item);
-
-		SYS_ResourseManager.Direct.SetCargoSlot(0);
-		SYS_ResourseManager.Direct.SetCargoSlot(1);
+		//清除副本道具
+		SYS_ResourseManager.Direct.SetCargo(0);
+		SYS_ResourseManager.Direct.SetCargo(1);
+		
+		//清除攜帶副本道具
+		SYS_SaveManager.Direct.SetPrecargo(0);
+		SYS_SaveManager.Direct.SetPrecargo(1);
 	}
 
 	public void Confirm() {

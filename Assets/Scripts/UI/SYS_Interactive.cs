@@ -67,10 +67,10 @@ public class SYS_Interactive : MonoBehaviour
 				texts[id].text = nowEvent.answers[id].text;
 
 				if (nowEvent.answers[id].costNum != 0 && nowEvent.answers[id].getNum != 0) {
-					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : (nowEvent.answers[id].successRate + SYS_TeamManager.Direct.GetInt()).ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
+					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : (nowEvent.answers[id].successRate + SYS_SaveManager.Direct.GetMembersAttribute(2)).ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
 
 				} else if (nowEvent.answers[id].costNum != 0) {
-					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : (nowEvent.answers[id].successRate + SYS_TeamManager.Direct.GetInt()).ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum;
+					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : (nowEvent.answers[id].successRate + SYS_SaveManager.Direct.GetMembersAttribute(2)).ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum;
 
 				} else {
 					textmsgs[id].text = "---";
@@ -130,6 +130,10 @@ public class InteractOption {
 	public Item getItem;
 
 	public InteractOption(Affinity affinity , float successRate, int costType , int costNum  , int getType , int getNum , string text , Item getItem = null) {
+		if (getItem == null) {
+			getItem = new Item();
+		}
+
 		this.affinity = affinity;
 		this.successRate = successRate;
 		this.costType = costType;
@@ -148,8 +152,8 @@ public class InteractOption {
 		if (InteractAble()) {
 			SYS_ResourseManager.Direct.ModifyResource(costType, -costNum);
 
-			if (Random.Range(0, 100) < successRate + SYS_TeamManager.Direct.GetLuk()) {
-				if (getItem == null) {
+			if (Random.Range(0, 100) < successRate + SYS_SaveManager.Direct.GetMembersAttribute(2)) {
+				if (getItem.isNull) {
 					SYS_ResourseManager.Direct.ModifyResource(getType, getNum);
 
 				} else {
@@ -247,7 +251,7 @@ public static class TMP_InteractEvent {
 
 			case 3:
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
-				tempAnswers.Add(new InteractOption(Affinity.Explore, 50, 2, 2, 0, 0, "探索" , new Item(5, 3, 1 , 0 ,"膠囊裡面裡面有個人呢..")));
+				tempAnswers.Add(new InteractOption(Affinity.Explore, 50, 2, 2, 0, 0, "探索" , new Item(5, 3, 1 , (int)(SYS_StarmapManager.Direct.difficult * 0.5f) ,"膠囊裡面裡面有個人呢..")));
 				tmpMsg = "是一個太空膠囊，等等裡面好像有個人影!?";
 				break;
 

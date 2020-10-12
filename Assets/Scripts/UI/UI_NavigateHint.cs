@@ -29,7 +29,7 @@ public class UI_NavigateHint : MonoBehaviour {
 				UpdateHint();
 			
 			//一般星球
-			} else if (distance < (UI_Navigator.Direct.detectDisT + SYS_ResourseManager.Direct.detectLv) * SYS_StarmapManager.Direct.avgSpeed && distance > UI_Navigator.Direct.closeDis) {
+			} else if (distance < (UI_Navigator.Direct.detectDisT + SYS_SaveManager.Direct.GetResearch(1)) * SYS_StarmapManager.Direct.avgSpeed && distance > UI_Navigator.Direct.closeDis) {
 				ShowHint();
 				UpdatePos();
 				UpdateHint();
@@ -52,7 +52,7 @@ public class UI_NavigateHint : MonoBehaviour {
 			float distance = Vector2.Distance(Camera.main.transform.position, entity.transform.position);
 
 			//一般星球
-			if (distance < (UI_Navigator.Direct.detectDisT + SYS_ResourseManager.Direct.detectLv) * SYS_StarmapManager.Direct.avgSpeed && distance > UI_Navigator.Direct.closeDis) {
+			if (distance < (UI_Navigator.Direct.detectDisT + SYS_SaveManager.Direct.GetResearch(1)) * SYS_StarmapManager.Direct.avgSpeed && distance > UI_Navigator.Direct.closeDis) {
 				ShowHint();
 				UpdatePos();
 				UpdateHint();

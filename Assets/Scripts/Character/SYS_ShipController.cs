@@ -55,7 +55,7 @@ public class SYS_ShipController : MonoBehaviour {
 
 			if (handling) {
 				if (speed < maxSpeed) {
-					speed = Mathf.Clamp(speed + accelerate * SYS_TeamManager.Direct.GetAGI() * 0.1f * Time.deltaTime, 0, maxSpeed);
+					speed = Mathf.Clamp(speed + accelerate * SYS_SaveManager.Direct.GetMembersAttribute(1) * 0.1f * Time.deltaTime, 0, maxSpeed);
 				}
 
 				if (Time.timeSinceLevelLoad - fuelTimer > 1) {
@@ -72,7 +72,7 @@ public class SYS_ShipController : MonoBehaviour {
 	}
 
 	public float  GetMaxSpeed() {
-		return maxSpeed + SYS_TeamManager.Direct.GetStr() * 0.05f;
+		return maxSpeed + SYS_SaveManager.Direct.GetMembersAttribute(0) * 0.05f;
 	}
 
 	private IEnumerator Move() {
@@ -140,9 +140,9 @@ public class SYS_ShipController : MonoBehaviour {
 		speed = Mathf.Clamp(speed - speedDown, 0, maxSpeed);
 
 		if (Random.Range(0, 100) < 50) {
-			SYS_PopupManager.Direct.Regist(SYS_TeamManager.Direct.members[Random.Range(0, 4)].member.name, "好痛!");
+			SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "好痛!");
 		} else {
-			SYS_PopupManager.Direct.Regist(SYS_TeamManager.Direct.members[Random.Range(0, 4)].member.name, "不能好好開船嗎!");
+			SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "不能好好開船嗎!");
 		}
 	}
 }

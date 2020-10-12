@@ -23,7 +23,17 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 	}
 
 	void Start() {
+		SYS_ResourseManager.Direct.Init();
+		SYS_SaveManager.Direct.Init();
 		SetMode(GameMode.Home);
+		//Stub();
+	}
+
+	public void Stub() {
+		SYS_SaveManager.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
+		SYS_SaveManager.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
+		SYS_SaveManager.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
+		SYS_SaveManager.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
 	}
 
 	// Update is called once per frame
@@ -89,7 +99,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				if (!SYS_StarmapManager.Direct.IsRouteComplete()) {
 					SYS_Logger.Direct.SetSystemMsg("請設定路徑至終點再出發");
 					return;
-				} else if (!SYS_TeamManager.Direct.IsTeamComplete()) {
+				} else if (!SYS_SaveManager.Direct.IsMembersComplete()) {
 					SYS_Logger.Direct.SetSystemMsg("請將船塞滿人再出發");
 					return;
 				}
@@ -103,10 +113,10 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				SYS_ShipController.Direct.Init();
 				SYS_SpaceManager.Direct.Init();
 				SYS_WeatherManager.Direct.Init();
-				SYS_ResourseManager.Direct.Init();
+				SYS_ResourseManager.Direct.Restart();
 				UI_Navigator.Direct.Init();
 
-				SYS_PopupManager.Direct.Regist(SYS_TeamManager.Direct.members[Random.Range(0, 4)].member.name, "相信會是一場愉快的冒險");
+				SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "相信會是一場愉快的冒險");
 			}
 		}
 	}

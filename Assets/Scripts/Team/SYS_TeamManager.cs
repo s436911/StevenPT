@@ -31,117 +31,41 @@ public class SYS_TeamManager : MonoBehaviour {
 			members[ct].Init(ct);
 		}
 
-		members[0].SetMember(new Member(Random.Range(0, headIcons.Count), Random.Range(0, bodyIcons.Count), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
-		members[1].SetMember(new Member(Random.Range(0, headIcons.Count), Random.Range(0, bodyIcons.Count), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
-		members[2].SetMember(new Member(Random.Range(0, headIcons.Count), Random.Range(0, bodyIcons.Count), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
-		members[3].SetMember(new Member(Random.Range(0, headIcons.Count), Random.Range(0, bodyIcons.Count), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
-
 		baseColor = back.color;
 	}
 
-	public bool IsSlotFull(UI_Member[] slots) {
-		foreach (UI_Member member in slots) {
-			if (member.member == null) {
-				return false;
-			}
-		}
-		return true;
+	public void SetdBullpenSlot(int slot, Member member) {
+		bullpen[slot].SetMember(member);
+	}
+
+	public void SetMemberSlot(int slot, Member member) {
+		members[slot].SetMember(member);
 	}
 
 	public void UseMember(int slot) {
-		if (members[slot].member != null) {
+		if (!SYS_SaveManager.Direct.GetMember(slot).isNull) {
 			if (!deleteMode) {
-				if (!IsSlotFull(bullpen)) {
-					AddBullpen(members[slot].member);
-					members[slot].Clear();
+				if (!SYS_SaveManager.Direct.IsBullpenFull()) {
+					SYS_SaveManager.Direct.AddBullpen(SYS_SaveManager.Direct.GetMember(slot));
+					SYS_SaveManager.Direct.SetMembers(slot);
 				}
 			} else {
-				members[slot].Clear();
+				SYS_SaveManager.Direct.SetMembers(slot);
 			}
 		}
 	}
 
 	public void UseBullpen(int slot) {
-		if (bullpen[slot].member != null) {
+		if (!SYS_SaveManager.Direct.GetBullpen(slot).isNull) {
 			if (!deleteMode) {
-				if (!IsSlotFull(members)) {
-					AddMember(bullpen[slot].member);
-					bullpen[slot].Clear();
+				if (!SYS_SaveManager.Direct.IsMembersFull()) {
+					SYS_SaveManager.Direct.AddMembers(SYS_SaveManager.Direct.GetBullpen(slot));
+					SYS_SaveManager.Direct.SetBullpen(slot);
 				}
 			} else {
-				bullpen[slot].Clear();
+				SYS_SaveManager.Direct.SetBullpen(slot);
 			}
 		}
-	}
-
-	public void AddMember(Member member) {
-		for (int ct = 0; ct < members.Length; ct++) {
-			if (members[ct].member == null) {
-				SetMemberSlot(ct, member);
-				return;
-			}
-		}
-	}
-
-	public void AddBullpen(Member member) {
-		for (int ct = 0; ct < bullpen.Length; ct++) {
-			if (bullpen[ct].member == null) {
-				SetdBullpenSlot(ct, member);
-				return;
-			}
-		}
-	}
-
-	public void SetdBullpenSlot(int slot, Member member = null) {
-		bullpen[slot].SetMember(member);
-	}
-	
-	public void SetMemberSlot(int slot, Member member = null) {
-		members[slot].SetMember(member);
-	}
-
-	public bool IsTeamComplete() {
-		return members[0].member != null && members[1].member != null && members[2].member != null && members[3].member != null;
-	}
-
-	public int GetStr() {
-		int rt = 0;
-		foreach (UI_Member member in members) {
-			if (member.member != null) {
-				rt = rt + member.member.v_str;
-			}
-		}
-		return rt;
-	}
-
-	public int GetLuk() {
-		int rt = 0;
-		foreach (UI_Member member in members) {
-			if (member.member != null) {
-				rt = rt + member.member.v_luk;
-			}
-		}
-		return rt;
-	}
-
-	public int GetAGI() {
-		int rt = 0;
-		foreach (UI_Member member in members) {
-			if (member.member != null) {
-				rt = rt + member.member.v_agi;
-			}
-		}
-		return rt;
-	}
-
-	public int GetInt() {
-		int rt = 0;
-		foreach (UI_Member member in members) {
-			if (member.member != null) {
-				rt = rt + member.member.v_int;
-			}
-		}
-		return rt;
 	}
 
 	public void DeteteMode() {
@@ -156,20 +80,23 @@ public class SYS_TeamManager : MonoBehaviour {
 	}
 }
 
+[System.Serializable]
 public class Member {
+	public bool isNull = false;
 	public string name;
 	public int headID;
 	public int bodyID;
 	public int sex;
-	public NatureType nature;
+	public NatureType nature;	
 
-	public int v_str = 1; //影響戰鬥
-	public int v_agi = 1; //影響船隻
-	public int v_int = 1; //影響交易
-	public int v_luk = 1; //影響機率
+	public int[] attribute = {1,1,1,1};
+
+	public Member() {
+		isNull = true;
+	}
 
 	public Member(int headID , int bodyID , int sex, NatureType nature , int lv) {
-
+		isNull = false;
 		if (sex == 0) {
 			this.name = SYS_TeamManager.Direct.womanName[Random.Range(0, SYS_TeamManager.Direct.womanName.Count)];
 		} else {
@@ -187,16 +114,8 @@ public class Member {
 	}
 
 	public void AddAttribute() {
-		int tmp = Random.Range(0, 5);
-		if (tmp == 0) {
-			v_str += 1;
-		} else if (tmp == 1) {
-			v_agi += 1;
-		} else if (tmp == 2) {
-			v_int += 1;
-		} else {
-			v_luk += 1;
-		}
+		int tmp = Random.Range(0, 4);
+		attribute[tmp] += 1;
 	}
 }
 

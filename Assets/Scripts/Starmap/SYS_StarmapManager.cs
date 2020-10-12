@@ -82,7 +82,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 				randOffset = new Vector2(routeDirect.x > 0 ? -Random.Range(0, 0.5f) : Random.Range(0, 0.5f), Random.Range(0, 0.5f)).normalized;
 			}
 			
-			randOffset = randOffset * Random.Range(goalDisMinT, goalDisMaxT + (difficult - SYS_ResourseManager.Direct.engineLv) * 2) * avgSpeed; //向量 * 時間 * 期望速度
+			randOffset = randOffset * Random.Range(goalDisMinT, goalDisMaxT + (difficult - SYS_SaveManager.Direct.GetResearch(0)) * 2) * avgSpeed; //向量 * 時間 * 期望速度
 
 			genOffset = CheckPlanetPos(starter + randOffset , planetMainDisT, starter.y, starNum, starNumLeft);
 
@@ -103,7 +103,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 
 		int couter = 0;
 		while (genOffset == Vector2.zero) {
-			Vector2 randOffset = Random.insideUnitCircle.normalized * Random.Range(planetDisMinT, planetDisMaxT + (difficult - SYS_ResourseManager.Direct.engineLv) * 2) * avgSpeed; //向量 * 時間 * 期望速度
+			Vector2 randOffset = Random.insideUnitCircle.normalized * Random.Range(planetDisMinT, planetDisMaxT + (difficult - SYS_SaveManager.Direct.GetResearch(0)) * 2) * avgSpeed; //向量 * 時間 * 期望速度
 			if (randOffset.y < 0 && starNum != 0) {
 				randOffset.y = randOffset.y * -1;
 
@@ -152,7 +152,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 		}
 
 		//亂數星球生成
-		planetNum = otherStarNum - planetNum + (Random.Range(0 , 100) < (SYS_ResourseManager.Direct.scopeLv * 10) ? 1 : 0);//
+		planetNum = otherStarNum - planetNum + (Random.Range(0 , 100) < (SYS_SaveManager.Direct.GetResearch(3) * 10) ? 1 : 0);//
 
 		for (int ct = 0; ct < planetNum; ct++) {
 			starInfos.Add(new StarInfo(StarType.Check, GenRandPlanetPos()));
@@ -271,8 +271,8 @@ public class SYS_StarmapManager : MonoBehaviour {
 	public void SetDifficult(InputField value) {
 		int tmpDifficult = int.Parse(value.text);
 
-		if (tmpDifficult > 5 + SYS_ResourseManager.Direct.shipLv) {
-			tmpDifficult = 5 + SYS_ResourseManager.Direct.shipLv;
+		if (tmpDifficult > 5 + SYS_SaveManager.Direct.GetResearch(2)) {
+			tmpDifficult = 5 + SYS_SaveManager.Direct.GetResearch(2);
 			value.text = tmpDifficult.ToString();
 
 		} else if (tmpDifficult < 0) {
