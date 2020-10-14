@@ -86,7 +86,7 @@ public class SYS_SaveManager : MonoBehaviour {
 		try {
 			byte[] serizliedData = File.ReadAllBytes(filePath);
 			string serizliedDataStr = Encoding.UTF8.GetString(serizliedData);
-			Debug.LogError(serizliedDataStr);
+			//Debug.LogError(serizliedDataStr);
 			return JsonUtility.FromJson<T>(serizliedDataStr);
 
 		} catch (System.IO.FileNotFoundException) {
