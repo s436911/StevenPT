@@ -251,7 +251,7 @@ public static class TMP_InteractEvent {
 
 			case 3:
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
-				tempAnswers.Add(new InteractOption(Affinity.Explore, 50, 2, 2, 0, 0, "探索" , new Item(5, 3, 1 , (int)(SYS_StarmapManager.Direct.difficult * 0.5f) ,"膠囊裡面裡面有個人呢..")));
+				tempAnswers.Add(new InteractOption(Affinity.Explore, 50, 2, 2, 0, 0, "探索" , new Item(5, 3, 1 , (int)(SYS_Mission.Direct.nowMission.difficult * 0.5f) ,"膠囊裡面裡面有個人呢..")));
 				tmpMsg = "是一個太空膠囊，等等裡面好像有個人影!?";
 				break;
 

@@ -38,8 +38,12 @@ public class SYS_RadarManager : MonoBehaviour {
 
 					} else {
 						RawImage objGen = Instantiate(hintObj).GetComponent<RawImage>();
-						objGen.color = new Color(1, 0.85f, 0.3f, 0.5f);
-						//objGen.color = new Color(0.5f, 0.9f, 1, 0.5f);
+						if (tmpEntity.info.sType == StarType.Resoreces) {
+							objGen.color = new Color(0.9f, 0.9f, 0.9f, 0.65f);
+
+						} else {
+							objGen.color = new Color(1, 0.85f, 0.3f, 0.65f);
+						}
 
 						RectTransform objRect = objGen.GetComponent<RectTransform>();
 						objGen.transform.SetParent(uiPanel);
@@ -70,7 +74,7 @@ public class SYS_RadarManager : MonoBehaviour {
 
 					} else {
 						RawImage objGen = Instantiate(hintObj).GetComponent<RawImage>();
-						objGen.color = new Color(1, 0.15f, 0, 0.5f);
+						objGen.color = new Color(1, 0.15f, 0, 0.65f);
 
 						RectTransform objRect = objGen.GetComponent<RectTransform>();
 						objGen.transform.SetParent(uiPanel);
@@ -87,6 +91,13 @@ public class SYS_RadarManager : MonoBehaviour {
 					}
 				}
 			}
+		}
+	}
+
+	public void Remove(Transform trans) {
+		if (hintsSide.ContainsKey(trans)) {
+			Destroy(hintsSide[trans].gameObject);
+			hintsSide.Remove(trans);
 		}
 	}
 

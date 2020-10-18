@@ -9,7 +9,6 @@ public class SYS_ResourseManager : MonoBehaviour {
 	public Texture2D[] itemIcon = new Texture2D[6];
 	
 	public Text[] resourceText = new Text[5];
-	public Text[] resourceMaxText = new Text[5];
 
 	public Text[] resourceText_Home = new Text[5];
 
@@ -53,12 +52,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 		baseColor = back.color;
 	}
 
-	public void Init() {
-		resourceMaxText[0].text = "/" + maxFuel.ToString();
-		resourceMaxText[1].text = "/" + maxArmor.ToString();
-		resourceMaxText[2].text = "/" + maxFood.ToString();
-		resourceMaxText[3].text = "/" + maxMineral.ToString();
-		
+	public void Init() {		
 		SetLevel(0, 1);
 		SetLevel(1, 1);
 		SetLevel(2, 1);
@@ -121,6 +115,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 	}
 
 	public void SetResource(int type, int value) {
+		bool full = false;
 		resources[type] = value;
 
 		if (type == 0) {
@@ -128,8 +123,9 @@ public class SYS_ResourseManager : MonoBehaviour {
 				resources[type] = 0;
 				SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
 
-			} else if (resources[type] > maxFuel) {
+			} else if (resources[type] >= maxFuel) {
 				resources[type] = maxFuel;
+				full = true;
 			}
 
 			fuelBar.fillAmount = (float)resources[type] / (float)maxFuel * 0.2f;
@@ -139,8 +135,9 @@ public class SYS_ResourseManager : MonoBehaviour {
 				resources[type] = 0;
 				SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
 
-			} else if (resources[type] > maxArmor) {
+			} else if (resources[type] >= maxArmor) {
 				resources[type] = maxArmor;
+				full = true;
 			}
 
 		} else if (type == 2) {
@@ -148,8 +145,9 @@ public class SYS_ResourseManager : MonoBehaviour {
 				resources[type] = 0;
 				SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
 
-			} else if (resources[type] > maxFood) {
+			} else if (resources[type] >= maxFood) {
 				resources[type] = maxFood;
+				full = true;
 			}
 
 			foodBar.fillAmount = (float)resources[type] / (float)maxFood * 0.2f;
@@ -158,14 +156,21 @@ public class SYS_ResourseManager : MonoBehaviour {
 			if (resources[type] <= 0) {
 				resources[type] = 0;
 
-			} else if (resources[type] > maxMineral) {
+			} else if (resources[type] >= maxMineral) {
 				resources[type] = maxMineral;
+				full = true;
 			}
 		} else {
 			Debug.LogError("修改錯誤的資源型態");
 		}
 
 		resourceText[type].text = resources[type].ToString();
+
+		if (!full) {
+			resourceText[type].color = new Color(0.9f, 0.9f, 0.9f);
+		} else {
+			resourceText[type].color = new Color(0.9f, 0.7f, 0);
+		}
 	}
 			
 	public void UseCargo(int slot) {

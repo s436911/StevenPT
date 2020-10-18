@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SYS_CameraController : MonoBehaviour
+public class SYS_Camera : MonoBehaviour
 {
-	public static SYS_CameraController Direct;
+	public static SYS_Camera Direct;
 	public Transform objFollowed;
 	public Vector2 followOffset;
 	public float followDis;

@@ -8,7 +8,6 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 	public List<RectTransform> switcherRect = new List<RectTransform>();
 	public List<Transform> switcherTrans = new List<Transform>();
 
-
 	public float switchRectRate = 1280;
 	public float switchTransRate = 16;
 
@@ -25,6 +24,8 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 	void Start() {
 		SYS_ResourseManager.Direct.Init();
 		SYS_SaveManager.Direct.Init();
+		SYS_Mission.Direct.Init();
+
 		SetMode(GameMode.Home);
 		//Stub();
 	}
@@ -76,11 +77,11 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 
 	public void SetMode(int gameMode) {
 		if (this.gameMode != (GameMode)gameMode) {		
-			if ((GameMode)gameMode == GameMode.Home) {
+			if ((GameMode)gameMode == GameMode.Home) {//回家
 				this.gameMode = (GameMode)gameMode;
 				animing = Time.timeSinceLevelLoad;
 
-				SYS_AudioManager.Direct.Play(BGMType.Home);
+				SYS_Audio.Direct.Play(BGMType.Home);
 				SYS_RadarManager.Direct.Reset();
 				SYS_SpaceManager.Direct.Reset();
 				SYS_WeatherManager.Direct.Reset();
@@ -91,30 +92,29 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				SYS_PopupManager.Direct.Reset();
 				UI_ScoreManager.Direct.Reset();
 				SYS_SideLog.Direct.Reset();
-				
-				SYS_StarmapManager.Direct.Init();
+				SYS_Mission.Direct.Reset();
 
-
-			} else if ((GameMode)gameMode == GameMode.Space) {
+			} else if ((GameMode)gameMode == GameMode.Space) {//出任務
 				if (!SYS_StarmapManager.Direct.IsRouteComplete()) {
-					SYS_Logger.Direct.SetSystemMsg("請設定路徑至終點再出發");
+					SYS_StarmapManager.Direct.AutoRoute();
+					SYS_Logger.Direct.SetSystemMsg("自動生成路徑");
 					return;
 				} else if (!SYS_SaveManager.Direct.IsMembersComplete()) {
 					SYS_Logger.Direct.SetSystemMsg("請將船塞滿人再出發");
 					return;
 				}
 
-
 				this.gameMode = (GameMode)gameMode;
 				animing = Time.timeSinceLevelLoad;
 
-				SYS_AudioManager.Direct.Play(BGMType.Launch);
+				SYS_Audio.Direct.Play(BGMType.Launch);
 
 				SYS_ShipController.Direct.Init();
 				SYS_SpaceManager.Direct.Init();
 				SYS_WeatherManager.Direct.Init();
 				SYS_ResourseManager.Direct.Restart();
 				UI_Navigator.Direct.Init();
+				SYS_Mission.Direct.Restart();
 
 				SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "相信會是一場愉快的冒險");
 			}

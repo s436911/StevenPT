@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public class SYS_AudioManager : MonoBehaviour {
-	public static SYS_AudioManager Direct;
+public class SYS_Audio : MonoBehaviour {
+	public static SYS_Audio Direct;
 
 	public int nowPass = 0;
 	public AudioSource[] passes = new AudioSource[2];

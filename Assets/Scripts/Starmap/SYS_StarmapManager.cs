@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class SYS_StarmapManager : MonoBehaviour {
 	public static SYS_StarmapManager Direct;
 	public GameObject starPfb;
-	public int difficult = 0;
+	public ParticleSystem backNarblua;
+	public Vector2 backColor;
 
 	public float avgSpeed = 4;
 
@@ -23,7 +24,6 @@ public class SYS_StarmapManager : MonoBehaviour {
 	public int planetPerHighT = 2;
 	public int planetPerLowT = 2;
 
-	public int baseStarNum = 4;
 	public int otherStarNum = 5;
 
 	public int planetSideMin = 1;
@@ -33,6 +33,8 @@ public class SYS_StarmapManager : MonoBehaviour {
 
 	public List<StarInfo> starInfos = new List<StarInfo>();
 	public List<StarInfo> route = new List<StarInfo>();
+
+	//星球座標X-250,250 Y0,750
 
 	void Awake() {
 		Direct = this;
@@ -62,7 +64,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 		return genOffset;
 	}
 
-	private Vector2 GenGoalPos(Vector2 starter, int starNum = 0, int starNumLeft = 0) {
+	private Vector2 GenGoalPos(int difficult , Vector2 starter, int starNum = 0, int starNumLeft = 0 ) {
 		Vector2 genOffset = Vector2.zero;
 
 		int couter = 0;
@@ -98,7 +100,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 		return genOffset;
 	}
 
-	private Vector2 GenPlanetPos(Vector2 starter, int starNum = 0, int starNumLeft = 0) {
+	private Vector2 GenPlanetPos(int difficult, Vector2 starter, int starNum = 0, int starNumLeft = 0) {
 		Vector2 genOffset = Vector2.zero;
 
 		int couter = 0;
@@ -121,24 +123,25 @@ public class SYS_StarmapManager : MonoBehaviour {
 
 		return genOffset;
 	}
-	
-	public void Init() {
+
+	public void GenStarmap(MissionSet misSet) {
+		Reset();
 		//init starinfo
-		int planetNum = baseStarNum + 1;
+		int planetNum = misSet.mainStarNum + 1;
 
 		for (int ct = 0; ct < planetNum; ct++) {
 			Vector2 randPos = Vector2.zero;
 
-			if (ct < baseStarNum) {
+			if (ct < misSet.mainStarNum) {
 				if (ct == 0) {
-					randPos = GenPlanetPos(Vector2.zero, ct + 1, planetNum - ct - 1);
+					randPos = GenPlanetPos(misSet.difficult , Vector2.zero, ct + 1, planetNum - ct - 1);
 				} else {
-					randPos = GenPlanetPos(starInfos[ct - 1].sPos, ct + 1, planetNum - ct - 1);
+					randPos = GenPlanetPos(misSet.difficult, starInfos[ct - 1].sPos, ct + 1, planetNum - ct - 1);
 				}
 				starInfos.Add(new StarInfo(StarType.Check, randPos));
 
 			} else {
-				randPos = GenGoalPos(starInfos[ct - 1].sPos, ct + 1, planetNum - ct - 1);
+				randPos = GenGoalPos(misSet.difficult, starInfos[ct - 1].sPos, ct + 1, planetNum - ct - 1);
 				starInfos.Add(new StarInfo(StarType.End, randPos));
 
 			} 
@@ -148,7 +151,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 		planetNum = Random.Range(planetSideMin, planetSideMax + 1);
 
 		for (int ct = 0; ct < planetNum; ct++) {
-			starInfos.Add(new StarInfo(StarType.Check, GenPlanetPos(starInfos[Random.Range(0, starInfos.Count)].sPos)));
+			starInfos.Add(new StarInfo(StarType.Check, GenPlanetPos(misSet.difficult, starInfos[Random.Range(0, starInfos.Count)].sPos)));
 		}
 
 		//亂數星球生成
@@ -182,8 +185,19 @@ public class SYS_StarmapManager : MonoBehaviour {
 			objGen.sRawImage.color = starInfo.sColor;
 			objRect.localScale = Vector3.one;
 		}
+
+		//backNarblua
+		if (Random.Range(0, 3) == 0) {
+			backNarblua.startColor = new Color(backColor.x, backColor.y, Random.Range(backColor.x, backColor.y), 0.06f);
+		} else if (Random.Range(0, 2) == 0) {
+			backNarblua.startColor = new Color(Random.Range(backColor.x, backColor.y), backColor.x, backColor.y, 0.06f);
+		} else {
+			backNarblua.startColor = new Color(backColor.y, Random.Range(backColor.x, backColor.y), backColor.x, 0.06f);
+		}
+		backNarblua.gameObject.SetActive(false);
+		backNarblua.gameObject.SetActive(true);
 	}
-	
+
 	public bool IsRouteComplete() {
 		return route.Count > 0 && route[route.Count - 1].sType == StarType.End;
 	}
@@ -268,22 +282,6 @@ public class SYS_StarmapManager : MonoBehaviour {
 		line.positionCount = 0;
 	}
 
-	public void SetDifficult(InputField value) {
-		int tmpDifficult = int.Parse(value.text);
-
-		if (tmpDifficult > 5 + SYS_SaveManager.Direct.GetResearch(2)) {
-			tmpDifficult = 5 + SYS_SaveManager.Direct.GetResearch(2);
-			value.text = tmpDifficult.ToString();
-
-		} else if (tmpDifficult < 0) {
-			tmpDifficult = 0;
-			value.text = tmpDifficult.ToString();
-		}
-
-		difficult = tmpDifficult;
-		Reset();
-		Init();
-	}
 
 	public void ClickRoute(StarInfo sInfo) {
 		if (route.Count > 0) {
@@ -464,10 +462,11 @@ public enum StarType {
 	//planet
 	Check,
 	End,
+	Activity,
 
 	//weather
 	Meteor,
-
-	//activity
-	Activity
+	
+	//Resoreces
+	Resoreces
 }

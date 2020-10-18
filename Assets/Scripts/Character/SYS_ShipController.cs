@@ -18,11 +18,15 @@ public class SYS_ShipController : MonoBehaviour {
 
 	public GameObject reflecter;
 	public GameObject detector;
+	public GameObject shield;
+	public GameObject dash;
+	public GameObject drill;
 
 	private Coroutine cououtine;
 	private float fuelTimer;
 	private float foodTimer;
 	private float damageTimer;
+	private float shieldTimer;
 
 	void Awake() {
 		Direct = this;
@@ -55,7 +59,7 @@ public class SYS_ShipController : MonoBehaviour {
 
 			if (handling) {
 				if (speed < maxSpeed) {
-					speed = Mathf.Clamp(speed + accelerate * SYS_SaveManager.Direct.GetMembersAttribute(1) * 0.1f * Time.deltaTime, 0, maxSpeed);
+					speed = Mathf.Clamp(speed + accelerate * SYS_SaveManager.Direct.GetMembersAttribute(1) * 0.1f * Time.deltaTime, 0, maxSpeed);					
 				}
 
 				if (Time.timeSinceLevelLoad - fuelTimer > 1) {
@@ -63,6 +67,8 @@ public class SYS_ShipController : MonoBehaviour {
 					SYS_ResourseManager.Direct.ModifyResource(0,-1);
 				}
 			}
+			
+			dash.SetActive(speed > 3);
 
 			if (Time.timeSinceLevelLoad - foodTimer > 10) {
 				foodTimer = Time.timeSinceLevelLoad;
@@ -113,6 +119,7 @@ public class SYS_ShipController : MonoBehaviour {
 
 		if (stop && SYS_SelfDriving.Direct.tgt == null) {
 			speed = 0;
+			dash.SetActive(false);
 		}
 		
 		handling = false;
@@ -128,6 +135,10 @@ public class SYS_ShipController : MonoBehaviour {
 
 	public void UpdateDirection(Vector3 direction) {
 		OnUpdateDirection(direction);
+	}
+
+	public bool IsHighspeed() {
+		return Vector2.Distance(Vector2.zero , ridgid.velocity) >= 3;
 	}
 
 	public bool DamageAble() {

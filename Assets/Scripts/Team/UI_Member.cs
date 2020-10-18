@@ -13,7 +13,6 @@ public class UI_Member : MonoBehaviour {
 	public Text t_int;
 	public Text t_luk;
 	public Text skill1;
-	public Text skill2;
 
 	public void Init(int slot) {
 		this.slot = slot;
@@ -35,7 +34,6 @@ public class UI_Member : MonoBehaviour {
 				t_luk.text = "luk " + member.attribute[3].ToString();
 
 				skill1.text = "";
-				skill2.text = "";
 			}
 		} else {
 			headIcon.texture = null;
@@ -51,7 +49,6 @@ public class UI_Member : MonoBehaviour {
 				t_luk.text = "luk --";
 
 				skill1.text = "";
-				skill2.text = "";
 			}
 		}
 	}

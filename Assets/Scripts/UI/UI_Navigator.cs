@@ -63,16 +63,19 @@ public class UI_Navigator : MonoBehaviour
 
 			if (SYS_StarmapManager.Direct.route[aIndex].sType == StarType.Check) {
 				foreach (PlanetEntity planet in SYS_SpaceManager.Direct.planets) {
-					if (SYS_StarmapManager.Direct.route[aIndex+1] == planet.info) {
+					if (SYS_StarmapManager.Direct.route[aIndex + 1] == planet.info) {
 						nextPlanet = planet;
+						continue;
 					}
 				}
 
+				SYS_Mission.Direct.SetMSbar(aIndex + 1);
+
 				if (aIndex == SYS_StarmapManager.Direct.route.Count - 2) {
-					SYS_AudioManager.Direct.Play(BGMType.End);
+					SYS_Audio.Direct.Play(BGMType.End);
 
 				} else {
-					SYS_AudioManager.Direct.Play(BGMType.Space);
+					SYS_Audio.Direct.Play(BGMType.Space);
 				}
 			} else {
 				nextPlanet = null;

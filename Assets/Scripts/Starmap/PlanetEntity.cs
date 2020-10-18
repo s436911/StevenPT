@@ -44,6 +44,7 @@ public class PlanetEntity : SpaceEntity {
 
 			} else if (info.sType == StarType.End) {
 				UI_ScoreManager.Direct.Victory();
+				SYS_Mission.Direct.SetMSbar(SYS_StarmapManager.Direct.route.Count);
 			}
 		}
 	}

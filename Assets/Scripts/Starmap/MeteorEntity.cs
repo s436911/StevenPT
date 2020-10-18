@@ -7,9 +7,9 @@ public class MeteorEntity : SpaceEntity {
 	void OnCollisionEnter2D(Collision2D colli) {
 		SYS_ShipController ship = colli.transform.GetComponent<SYS_ShipController>();
 
-		if (ship != null && ship.DamageAble()) {
+		if (ship != null && ship.DamageAble() && ship.IsHighspeed()) {
 			if (Random.Range(0, 100) > SYS_SaveManager.Direct.GetMembersAttribute(3)) {
-				SYS_CameraController.Direct.Shake(0.3f);
+				SYS_Camera.Direct.Shake(0.3f);
 
 				if (!ship.reflecter.activeSelf) {
 					ship.Damage(1, 2);

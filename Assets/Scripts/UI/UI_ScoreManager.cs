@@ -27,21 +27,23 @@ public class UI_ScoreManager : MonoBehaviour
 	}
 	
 	public void Victory() {
+		int difficult = SYS_Mission.Direct.nowMission.difficult;
+
 		SYS_SelfDriving.Direct.Reset();
 		SYS_GameEngine.Direct.SetPause(true);
 		uiPanel.SetActive(true);
 
-		fomulaText.text = Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(0) * getRate[0] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult))) + "+" +
-			Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(2) * getRate[1] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult))) + "+" +
-			Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(3) * getRate[2] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)));
+		fomulaText.text = Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(0) * getRate[0] * (1 + (0.2f * difficult))) + "+" +
+			Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(2) * getRate[1] * (1 + (0.2f * difficult))) + "+" +
+			Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(3) * getRate[2] * (1 + (0.2f * difficult)));
 
-		int score = Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(0) * getRate[0] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult))) +
-			Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(2) * getRate[1] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult))) +
-			Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(3) * getRate[2] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)));
+		int score = Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(0) * getRate[0] * (1 + (0.2f * difficult))) +
+			Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(2) * getRate[1] * (1 + (0.2f * difficult))) +
+			Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(3) * getRate[2] * (1 + (0.2f * difficult)));
 
-		int maxScore = Mathf.RoundToInt(SYS_ResourseManager.Direct.maxFuel * getRate[0] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult))) +
-			Mathf.RoundToInt(SYS_ResourseManager.Direct.maxFood * getRate[1] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult))) +
-			Mathf.RoundToInt(SYS_ResourseManager.Direct.maxMineral * getRate[2] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)));
+		int maxScore = Mathf.RoundToInt(SYS_ResourseManager.Direct.maxFuel * getRate[0] * (1 + (0.2f * difficult))) +
+			Mathf.RoundToInt(SYS_ResourseManager.Direct.maxFood * getRate[1] * (1 + (0.2f * difficult))) +
+			Mathf.RoundToInt(SYS_ResourseManager.Direct.maxMineral * getRate[2] * (1 + (0.2f * difficult)));
 
 		int getCoin = 1;
 
@@ -71,20 +73,20 @@ public class UI_ScoreManager : MonoBehaviour
 		rateText[2].text = "x" + getRate[2].ToString();
 		rateText[3].text = "x" + getRate[3].ToString();
 
-		diffText[0].text = "x" + (1 + (0.2f * SYS_StarmapManager.Direct.difficult)).ToString("f1") + (bonusEnd[0] > 1 ? " x" + bonusEnd[0].ToString("f1") : "");
-		diffText[1].text = "x" + (1 + (0.2f * SYS_StarmapManager.Direct.difficult)).ToString("f1") + (bonusEnd[1] > 1 ? " x" + bonusEnd[1].ToString("f1") : "");
-		diffText[2].text = "x" + (1 + (0.2f * SYS_StarmapManager.Direct.difficult)).ToString("f1") + (bonusEnd[2] > 1 ? " x" + bonusEnd[2].ToString("f1") : "");
-		diffText[3].text = "x" + (1 + (0.2f * SYS_StarmapManager.Direct.difficult)).ToString("f1") + (bonusEnd[3] > 1 ? " x" + bonusEnd[3].ToString("f1") : "");
+		diffText[0].text = "x" + (1 + (0.2f * difficult)).ToString("f1") + (bonusEnd[0] > 1 ? " x" + bonusEnd[0].ToString("f1") : "");
+		diffText[1].text = "x" + (1 + (0.2f * difficult)).ToString("f1") + (bonusEnd[1] > 1 ? " x" + bonusEnd[1].ToString("f1") : "");
+		diffText[2].text = "x" + (1 + (0.2f * difficult)).ToString("f1") + (bonusEnd[2] > 1 ? " x" + bonusEnd[2].ToString("f1") : "");
+		diffText[3].text = "x" + (1 + (0.2f * difficult)).ToString("f1") + (bonusEnd[3] > 1 ? " x" + bonusEnd[3].ToString("f1") : "");
 
-		getText[0].text = "+" + Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(0) * getRate[0] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[0] > 1 ? bonusEnd[0] : 1)).ToString();
-		getText[1].text = "+" + Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(2) * getRate[1] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[1] > 1 ? bonusEnd[1] : 1)).ToString();
-		getText[2].text = "+" + Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(3) * getRate[2] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[2] > 1 ? bonusEnd[2] : 1)).ToString();
-		getText[3].text = "+" + Mathf.RoundToInt(getCoin                                   * getRate[3] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[3] > 1 ? bonusEnd[3] : 1)).ToString();
+		getText[0].text = "+" + Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(0) * getRate[0] * (1 + (0.2f * difficult)) * (bonusEnd[0] > 1 ? bonusEnd[0] : 1)).ToString();
+		getText[1].text = "+" + Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(2) * getRate[1] * (1 + (0.2f * difficult)) * (bonusEnd[1] > 1 ? bonusEnd[1] : 1)).ToString();
+		getText[2].text = "+" + Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(3) * getRate[2] * (1 + (0.2f * difficult)) * (bonusEnd[2] > 1 ? bonusEnd[2] : 1)).ToString();
+		getText[3].text = "+" + Mathf.RoundToInt(getCoin                                   * getRate[3] * (1 + (0.2f * difficult)) * (bonusEnd[3] > 1 ? bonusEnd[3] : 1)).ToString();
 
-		SYS_SaveManager.Direct.ModifyResource(0, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(0) * getRate[0] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[0] > 1 ? bonusEnd[0] : 1)));
-		SYS_SaveManager.Direct.ModifyResource(2, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(2) * getRate[1] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[1] > 1 ? bonusEnd[1] : 1)));
-		SYS_SaveManager.Direct.ModifyResource(3, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(3) * getRate[2] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[2] > 1 ? bonusEnd[2] : 1)));
-		SYS_SaveManager.Direct.ModifyResource(4, Mathf.RoundToInt(getCoin                                   * getRate[3] * (1 + (0.2f * SYS_StarmapManager.Direct.difficult)) * (bonusEnd[3] > 1 ? bonusEnd[3] : 1)));
+		SYS_SaveManager.Direct.ModifyResource(0, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(0) * getRate[0] * (1 + (0.2f * difficult)) * (bonusEnd[0] > 1 ? bonusEnd[0] : 1)));
+		SYS_SaveManager.Direct.ModifyResource(2, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(2) * getRate[1] * (1 + (0.2f * difficult)) * (bonusEnd[1] > 1 ? bonusEnd[1] : 1)));
+		SYS_SaveManager.Direct.ModifyResource(3, Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(3) * getRate[2] * (1 + (0.2f * difficult)) * (bonusEnd[2] > 1 ? bonusEnd[2] : 1)));
+		SYS_SaveManager.Direct.ModifyResource(4, Mathf.RoundToInt(getCoin                                   * getRate[3] * (1 + (0.2f * difficult)) * (bonusEnd[3] > 1 ? bonusEnd[3] : 1)));
 		
 		//顯示結算
 		cargo[0].SetItem(SYS_ResourseManager.Direct.cargos[0]);

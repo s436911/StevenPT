@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpaceEntity : MonoBehaviour
-{
+public class SpaceEntity : MonoBehaviour {
 	public Rigidbody2D ridgid;
 	public MeshRenderer meshRenderer;
 	public StarInfo info;
@@ -19,4 +18,3 @@ public class SpaceEntity : MonoBehaviour
 		transform.localScale = new Vector3(size, size, size);
 	}
 }
- 
