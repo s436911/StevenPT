@@ -5,6 +5,7 @@ using UnityEngine;
 public class UI_Navigator : MonoBehaviour
 {
 	public static UI_Navigator Direct;
+	public PlanetEntity prePlanet;
 	public PlanetEntity nextPlanet;
 	public AnimationCurve hintSizer;
 
@@ -51,6 +52,7 @@ public class UI_Navigator : MonoBehaviour
 	public void Init() {
 		foreach (PlanetEntity planet in SYS_SpaceManager.Direct.planets) {
 			if (SYS_StarmapManager.Direct.route[0] == planet.info) {
+				prePlanet = null;
 				nextPlanet = planet;
 			}
 		}
@@ -62,9 +64,11 @@ public class UI_Navigator : MonoBehaviour
 			int aIndex = SYS_StarmapManager.Direct.route.IndexOf(aInfo);
 
 			if (SYS_StarmapManager.Direct.route[aIndex].sType == StarType.Check) {
-				foreach (PlanetEntity planet in SYS_SpaceManager.Direct.planets) {
-					if (SYS_StarmapManager.Direct.route[aIndex + 1] == planet.info) {
-						nextPlanet = planet;
+				for (int ct = 0; ct < SYS_SpaceManager.Direct.planets.Count; ct++) {
+					//找到下一顆
+					if (SYS_StarmapManager.Direct.route[aIndex + 1] == SYS_SpaceManager.Direct.planets[ct].info) {
+						prePlanet = SYS_SpaceManager.Direct.planets[ct - 1];
+						nextPlanet = SYS_SpaceManager.Direct.planets[ct];
 						continue;
 					}
 				}
@@ -77,8 +81,6 @@ public class UI_Navigator : MonoBehaviour
 				} else {
 					SYS_Audio.Direct.Play(BGMType.Space);
 				}
-			} else {
-				nextPlanet = null;
 			}
 		}
 	}

@@ -22,21 +22,32 @@ public class UI_NavigateHint : MonoBehaviour {
 		if (entity.info.sType == StarType.Check) {
 			float distance = Vector2.Distance(Camera.main.transform.position, entity.transform.position);
 
-			//標記星球
-			if (UI_Navigator.Direct.nextPlanet == entity && distance > UI_Navigator.Direct.closeDis) {
-				ShowHint();
-				UpdatePos();
-				UpdateHint();
-			
-			//一般星球
-			} else if (distance < (UI_Navigator.Direct.detectDisT + SYS_SaveManager.Direct.GetResearch(1)) * SYS_StarmapManager.Direct.avgSpeed && distance > UI_Navigator.Direct.closeDis) {
-				ShowHint();
-				UpdatePos();
-				UpdateHint();
+			if (distance > UI_Navigator.Direct.closeDis) {
+				//標記星球
+				if (UI_Navigator.Direct.nextPlanet == entity) {
+					ShowHint();
+					UpdatePos();
+					UpdateHint();
 
+					//上個星球
+				} else if (UI_Navigator.Direct.prePlanet == entity) {
+					ShowHint();
+					UpdatePos();
+					UpdateHint();
+
+					//一般星球
+				} else if (distance < (UI_Navigator.Direct.detectDisT + SYS_SaveManager.Direct.GetResearch(1)) * SYS_StarmapManager.Direct.avgSpeed) {
+					ShowHint();
+					UpdatePos();
+					UpdateHint();
+
+				} else {
+					CloseHint();
+				}
 			} else {
 				CloseHint();
 			}
+			
 		} else if (entity.info.sType == StarType.End ) {
 			float distance = Vector2.Distance(Camera.main.transform.position, entity.transform.position);
 
@@ -86,7 +97,24 @@ public class UI_NavigateHint : MonoBehaviour {
 		Color hintColor = Color.white;
 
 		if (entity.info.sType == StarType.Check) {
-			if (UI_Navigator.Direct.nextPlanet != entity) {
+			if (UI_Navigator.Direct.nextPlanet == entity) {
+				//hintColor = new Color(0.4F, 0.7F, 0.25F);
+				hintColor = new Color(0.9F, 0.7F, 0.15F);
+				textType.text = "nxt";
+
+				if (SYS_ShipController.Direct.detector.activeSelf) {
+					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+				} else {
+					textDis.text = "";
+				}
+
+			} else if (UI_Navigator.Direct.prePlanet == entity) {
+				//hintColor = new Color(0.4F, 0.7F, 0.25F);
+				hintColor = new Color(0.45F, 0.8F, 0.85F);
+				textType.text = "pre";
+				textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+
+			} else {
 				if (!entity.explored) {
 					hintColor = new Color(0.85F, 0.85F, 0.85F);
 					textType.text = "???";
@@ -102,17 +130,6 @@ public class UI_NavigateHint : MonoBehaviour {
 					textType.text = "SUP";
 					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
 				}
-
-			} else {
-				//hintColor = new Color(0.4F, 0.7F, 0.25F);
-				hintColor = new Color(0.9F, 0.7F, 0.15F);
-				textType.text = "REC";
-
-				if (SYS_ShipController.Direct.detector.activeSelf) {
-					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
-				} else {
-					textDis.text = "";
-				}
 			}
 
 			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 4) * 80;
@@ -125,9 +142,13 @@ public class UI_NavigateHint : MonoBehaviour {
 
 			} else {
 				textType.gameObject.SetActive(true);
-
 				hintColor = new Color(0.9F, 0.7F, 0.15F);
-				textType.text = "TGT";
+
+				if (SYS_Mission.Direct.nowMission.missionType == MissionType.Trip) {
+					textType.text = "TGT";
+				} else {
+					textType.text = "NXT";
+				}
 
 				if (SYS_ShipController.Direct.detector.activeSelf) {
 					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");

@@ -37,8 +37,11 @@ public class SYS_ShipController : MonoBehaviour {
 		Reset();
 	}
 
-	public void Init() {
+	public void Restart() {
 		character.SetActive(true);
+		if (SYS_Mission.Direct.nowMission.missionType == MissionType.Collect) {
+			reflecter.SetActive(true);
+		}
 	}
 
 	public void Reset() {

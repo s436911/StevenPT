@@ -109,7 +109,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 
 				SYS_Audio.Direct.Play(BGMType.Launch);
 
-				SYS_ShipController.Direct.Init();
+				SYS_ShipController.Direct.Restart();
 				SYS_SpaceManager.Direct.Init();
 				SYS_WeatherManager.Direct.Init();
 				SYS_ResourseManager.Direct.Restart();

@@ -41,7 +41,7 @@ public class SYS_SpaceManager : MonoBehaviour {
 		InitResoureces();
 	}
 
-	public void SplitResourece(Vector2 pos, Material mat , int resourceId) {
+	public void SplitResourece(Vector2 pos, Material mat , ResourcesSet resrcSet) {
 		StarInfo init = new StarInfo(StarType.Resoreces, pos);
 
 		ResourecesEntity objGen = Instantiate(pfbResourece).GetComponent<ResourecesEntity>();
@@ -49,7 +49,7 @@ public class SYS_SpaceManager : MonoBehaviour {
 		objGen.transform.position = new Vector3(init.sPos.x, init.sPos.y, 0);
 		objGen.name = init.sName;
 
-		objGen.Regist(init, mat, Random.Range(0.9f, 1.1f), resourceId);
+		objGen.Regist(init, mat, Random.Range(0.9f, 1.1f), resrcSet);
 	}
 
 	public void InitResoureces() {
@@ -79,7 +79,7 @@ public class SYS_SpaceManager : MonoBehaviour {
 			} else {
 				resrcSet = SYS_Mission.Direct.nowMission.mainResrc;
 			}
-			objGen.Regist(starInfo, resrcSet.mat, 0.6f + stack * 0.15f, resrcSet.resourceId, stack);
+			objGen.Regist(starInfo, resrcSet.mat, 0.6f + stack * 0.15f, resrcSet, stack);
 		}
 
 		initList = new List<StarInfo>();
@@ -103,7 +103,7 @@ public class SYS_SpaceManager : MonoBehaviour {
 				resrcSet = SYS_Mission.Direct.nowMission.mainResrc;
 			}
 
-			objGen.Regist(starInfo, resrcSet.mat, Random.Range(0.9f, 1.1f), resrcSet.resourceId);
+			objGen.Regist(starInfo, resrcSet.mat, Random.Range(0.9f, 1.1f), resrcSet);
 		}
 	}
 
@@ -144,9 +144,9 @@ public class SYS_SpaceManager : MonoBehaviour {
 			int eventId = Random.Range(0, matActivities.Count);
 
 			if (starInfo.sType == StarType.Check) {
-				objGen.Regist(starInfo, matPlanets[Random.Range(0, matPlanets.Count)], Random.Range(0.75f, 1.5f), Random.Range(0, 3) == 2 , eventId);
+				objGen.Regist(starInfo, matPlanets[Random.Range(0, matPlanets.Count)], Random.Range(1, 1.5f), Random.Range(0, 3) == 2 , eventId);
 			} else {
-				objGen.Regist(starInfo, matPlanets[Random.Range(0, matPlanets.Count)], Random.Range(1, 1.75f), Random.Range(0, 3) == 2 , eventId);
+				objGen.Regist(starInfo, matPlanets[Random.Range(0, matPlanets.Count)], Random.Range(1.5f, 1.75f), Random.Range(0, 3) == 2 , eventId);
 				tgtPlanet = objGen;
 			}
 

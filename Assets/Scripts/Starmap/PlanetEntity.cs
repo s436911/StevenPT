@@ -16,7 +16,6 @@ public class PlanetEntity : SpaceEntity {
 
 	void OnTriggerEnter2D(Collider2D colli) {
 		if (colli.transform.parent.GetComponent<SYS_ShipController>() != null) {
-
 			if (info.sType == StarType.Check) {
 				SYS_Interactive.Direct.Regist(iEvent);
 				UI_Navigator.Direct.Arrive(info);
@@ -43,8 +42,9 @@ public class PlanetEntity : SpaceEntity {
 				}
 
 			} else if (info.sType == StarType.End) {
-				UI_ScoreManager.Direct.Victory();
-				SYS_Mission.Direct.SetMSbar(SYS_StarmapManager.Direct.route.Count);
+				if (SYS_Mission.Direct.nowMission.missionType == MissionType.Trip) {
+					SYS_Mission.Direct.SetMSbar(SYS_StarmapManager.Direct.route.Count);
+				} 
 			}
 		}
 	}

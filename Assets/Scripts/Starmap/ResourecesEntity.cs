@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class ResourecesEntity : SpaceEntity {
 	public int stack = 0;
-	public int resrcType = 0;
+	public ResourcesSet resrcSet;
 	public MeshRenderer meshRenderer2;
 	public MeshRenderer meshRenderer3;
 	   
-	public void Regist(StarInfo info, Material mat, float size, int resrcType) {
+	public void Regist(StarInfo info, Material mat, float size, ResourcesSet resrcSet) {
 		base.Regist(info, mat, size);
-		this.resrcType = resrcType;
+		this.resrcSet = resrcSet;
 	}
 
-	public void Regist(StarInfo info, Material mat, float size, int resrcType, int stack) {
+	public void Regist(StarInfo info, Material mat, float size, ResourcesSet resrcSet, int stack) {
 		base.Regist(info, mat, size);
 
 		meshRenderer2.material = mat;
 		meshRenderer3.material = mat;
 		this.stack = stack;
-		this.resrcType = resrcType;
+		this.resrcSet = resrcSet;
 	}
 
 	void OnCollisionEnter2D(Collision2D colli) {
@@ -37,7 +37,6 @@ public class ResourecesEntity : SpaceEntity {
 							ship.Damage(1, 2);
 						}
 
-						//ridgid.velocity = ship.ridgid.velocity * 1.25f;
 						ridgid.velocity = Random.insideUnitCircle.normalized * 2f;
 					} else {
 						SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "呼~好險!");
@@ -45,25 +44,29 @@ public class ResourecesEntity : SpaceEntity {
 
 					if (stack > 2) {
 						if (Random.Range(0, 3) == 0) {
-							SYS_SpaceManager.Direct.SplitResourece(transform.position, meshRenderer.material , resrcType);
+							SYS_SpaceManager.Direct.SplitResourece(transform.position, meshRenderer.material , resrcSet);
 							stack = Mathf.Clamp(stack - 1, 2, 10);
 
 						} else {
-							SYS_SpaceManager.Direct.SplitResourece(transform.position, meshRenderer.material, resrcType);
-							SYS_SpaceManager.Direct.SplitResourece(transform.position, meshRenderer.material, resrcType);
+							SYS_SpaceManager.Direct.SplitResourece(transform.position, meshRenderer.material, resrcSet);
+							SYS_SpaceManager.Direct.SplitResourece(transform.position, meshRenderer.material, resrcSet);
 							stack = Mathf.Clamp(stack - 2, 2, 10);
 						}
 
 						transform.localScale = new Vector3(0.6f + stack * 0.15f, 0.6f + stack * 0.15f, 0.6f + stack * 0.15f);
 					} else {
-						SYS_SpaceManager.Direct.SplitResourece(transform.position, meshRenderer.material, resrcType);
-						SYS_SpaceManager.Direct.SplitResourece(transform.position, meshRenderer.material, resrcType);
+						SYS_SpaceManager.Direct.SplitResourece(transform.position, meshRenderer.material, resrcSet);
+						SYS_SpaceManager.Direct.SplitResourece(transform.position, meshRenderer.material, resrcSet);
 						SYS_RadarManager.Direct.Remove(transform);
 						Destroy(gameObject);
 					}
 				}
 			} else {
-				SYS_ResourseManager.Direct.ModifyResource(resrcType, 1);
+				if (SYS_Mission.Direct.nowMission.missionType == MissionType.Collect && SYS_Mission.Direct.nowMission.mainResrc.resourceId == resrcSet.resourceId && !SYS_Mission.Direct.IsComplete()) {
+					SYS_Mission.Direct.ModifyMSbar(1);
+				} else {
+					SYS_ResourseManager.Direct.ModifyResource(resrcSet.resourceType, 1);
+				}
 				SYS_RadarManager.Direct.Remove(transform);
 				Destroy(gameObject);
 			}

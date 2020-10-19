@@ -29,7 +29,7 @@ public class SYS_SideLog : MonoBehaviour {
 			RectTransform objRect = objGen.GetComponent<RectTransform>();
 			objGen.transform.SetParent(uiPanel);
 			objRect.anchoredPosition = objRect.anchoredPosition + new Vector2(0, 0);
-			objGen.Regist(resourceIcon[typeId], text);
+			objGen.Regist(uiPanel.childCount * -20 ,resourceIcon[typeId], text);
 		}
 	}
 }
