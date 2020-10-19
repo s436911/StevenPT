@@ -10,11 +10,13 @@ public class SYS_ShipController : MonoBehaviour {
 	public float speed = 0;
 	public float maxSpeed = 2;
 	public float accelerate = 0.5f;
+	public float decelerate = 1;
 	public float smoothing = 0.5f;
 
 	public GameObject character;
 	public Rigidbody2D ridgid;
 	public Vector2 direction = Vector2.up;
+	public Vector2 force;
 
 	public GameObject reflecter;
 	public GameObject detector;
@@ -62,7 +64,9 @@ public class SYS_ShipController : MonoBehaviour {
 
 			if (handling) {
 				if (speed < maxSpeed) {
-					speed = Mathf.Clamp(speed + accelerate * SYS_SaveManager.Direct.GetMembersAttribute(1) * 0.1f * Time.deltaTime, 0, maxSpeed);					
+					ModifySpeed(accelerate + SYS_SaveManager.Direct.GetMembersAttribute(1) * 0.1f);
+				} else {
+					ModifySpeed(decelerate);
 				}
 
 				if (Time.timeSinceLevelLoad - fuelTimer > 1) {
@@ -72,6 +76,15 @@ public class SYS_ShipController : MonoBehaviour {
 			}
 			
 			dash.SetActive(speed > 3);
+			if (force != Vector2.zero) {
+				force = force.normalized * Mathf.Clamp(force.magnitude - decelerate * Time.deltaTime, 0, 9999);
+			}
+
+			if (!reverse) {
+				ridgid.velocity = this.direction * speed + force;
+			} else {
+				ridgid.velocity = this.direction * -speed + force;
+			}
 
 			if (Time.timeSinceLevelLoad - foodTimer > 10) {
 				foodTimer = Time.timeSinceLevelLoad;
@@ -79,19 +92,28 @@ public class SYS_ShipController : MonoBehaviour {
 			}
 		}
 	}
+	public void ModifyForce(Vector2 value) {
+		force = force + value;
+	}
+	public void ModifySpeed(float value) {
+		speed = Mathf.Clamp( speed + value * Time.deltaTime , 0 , maxSpeed);
+	}
 
 	public float  GetMaxSpeed() {
 		return maxSpeed + SYS_SaveManager.Direct.GetMembersAttribute(0) * 0.05f;
 	}
 
+
 	private IEnumerator Move() {
 
 		while (true) {
 			if (!reverse) {
-				ridgid.velocity = this.direction * speed;
+				ridgid.velocity = this.direction * speed + force;
 			} else {
-				ridgid.velocity = this.direction * -speed;
+				ridgid.velocity = this.direction * -speed + force;
 			}
+
+			//Debug.LogError(speed + "/" + force + "/" + ridgid.velocity);
 			yield return null;
 		}
 	}
@@ -103,7 +125,7 @@ public class SYS_ShipController : MonoBehaviour {
 	}
 
 	public void OnBeginMove() {
-		this.cououtine = StartCoroutine(this.Move());
+		//this.cououtine = StartCoroutine(this.Move());
 		handling = true;
 	}
 
@@ -141,22 +163,27 @@ public class SYS_ShipController : MonoBehaviour {
 	}
 
 	public bool IsHighspeed() {
-		return Vector2.Distance(Vector2.zero , ridgid.velocity) >= 3;
+		return ridgid.velocity.magnitude >= 3;
 	}
 
-	public bool DamageAble() {
+	public bool IsDamageAble() {
 		return (Time.timeSinceLevelLoad - damageTimer) > 0.5f;
 	}
 
-	public void Damage(int damage , int speedDown = 0) {
+
+	public void Damage(int damage) {
 		damageTimer = Time.timeSinceLevelLoad;
 		SYS_ResourseManager.Direct.ModifyResource(1, -damage);
-		speed = Mathf.Clamp(speed - speedDown, 0, maxSpeed);
 
 		if (Random.Range(0, 100) < 50) {
 			SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "好痛!");
 		} else {
 			SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "不能好好開船嗎!");
 		}
+	}
+
+	public void Impact(float mass , Vector2 velocity) {
+		force = (velocity * mass + force) / (mass + 1);
+		speed = speed / (mass + 1);
 	}
 }

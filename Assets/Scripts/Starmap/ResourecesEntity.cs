@@ -26,15 +26,15 @@ public class ResourecesEntity : SpaceEntity {
 		SYS_ShipController ship = colli.transform.GetComponent<SYS_ShipController>();
 
 
-
 		if (ship != null ) {
 			if (stack > 0) {
-				if (ship.DamageAble() && ship.IsHighspeed()) {
+				if (ship.IsDamageAble() && ship.IsHighspeed()) {
 					if (Random.Range(0, 100) > SYS_SaveManager.Direct.GetMembersAttribute(3)) {
 						SYS_Camera.Direct.Shake(0.3f);
 
 						if (!ship.reflecter.activeSelf) {
-							ship.Damage(1, 2);
+							ship.Impact(1, ridgid.velocity);
+							ship.Damage(1);
 						}
 
 						ridgid.velocity = Random.insideUnitCircle.normalized * 2f;

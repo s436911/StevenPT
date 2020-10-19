@@ -7,6 +7,7 @@ public class SYS_Mission : MonoBehaviour {
 	public static SYS_Mission Direct;
 	public MissionSet nowMission;
 
+
 	public List<UI_ButtonBase> areas = new List<UI_ButtonBase>();
 	public List<UI_ButtonBase> searchs = new List<UI_ButtonBase>();
 	public List<UI_ButtonBase> missions = new List<UI_ButtonBase>();
@@ -28,15 +29,20 @@ public class SYS_Mission : MonoBehaviour {
 	public Text misTitle;
 	public Text scopeCostText;
 	public Text scopeLeftText;
+	public GameObject msCountDown;
+	public Text msCountDownText;
+	public Rigidbody2D msStarEater;
 
 	public float[] scopeCosts = { 0, 1, 2, 4 };
 	public Color[] scopeColors = new Color[4];
 	public int scopeLeftMax;
 
+
 	private int nowAreaId = 0; 
 	private int scopeLv;
 	private int scopeLeft;
-	
+	private float msTimeLeft;
+
 	private AreaSet[] areaSets = new AreaSet[3];
 	private MissionSet[] searchedSets = new MissionSet[5];
 	private List<ResourcesSet> resrcSet = new List<ResourcesSet>();
@@ -47,6 +53,16 @@ public class SYS_Mission : MonoBehaviour {
 	void Awake() {
 		Direct = this;
 		scopeLeft = scopeLeftMax;
+	}
+
+	void Update() {
+		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
+			if (msTimeLeft > 0) {
+				SetCountDown(msTimeLeft - Time.deltaTime);
+				msStarEater.velocity = (SYS_ShipController.Direct.transform.position - msStarEater.transform.position).normalized * 2.5f;
+				msStarEater.transform.localScale = (1 + Mathf.Clamp01((300 - msTimeLeft) / 300) * 11) * Vector3.one;
+			}
+		}
 	}
 
 	public void Init() {
@@ -71,6 +87,38 @@ public class SYS_Mission : MonoBehaviour {
 
 		} else if (nowMission.missionType == MissionType.Collect) {
 			RegistMSbar(resourceIcon[nowMission.mainResrc.resourceId], Color.white, 10);
+
+		} else if (nowMission.missionType == MissionType.Escape) {
+			RegistMSbar(tripIcon, new Color(0.9f, 0.7f, 0.15f), SYS_StarmapManager.Direct.route.Count);
+			SetCountDown(300);
+			msStarEater.transform.position = new Vector2(0,-20);
+			msStarEater.gameObject.SetActive(true);
+		}
+	}
+	public void ResetCountDown() {
+		msCountDown.SetActive(false);
+	}
+
+	public void SetCountDown(float ct) {
+		if (ct > 0) {
+			msTimeLeft = ct;
+			UpdateCountDownUI();
+			msCountDown.SetActive(true);
+		} else {
+			SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
+		}
+	}
+
+	public void UpdateCountDownUI (){
+		System.DateTime shower = new System.DateTime();
+		shower = shower.AddSeconds((int)msTimeLeft);
+		msCountDownText.text = shower.Minute.ToString() + ":" + shower.Second.ToString();
+		if (msTimeLeft > 120) {
+			msCountDownText.color = new Color(0.9f, 0.9f, 0.9f);
+		} else if (msTimeLeft > 30) {
+			msCountDownText.color = new Color(0.9f, 0.7f, 0.15f);
+		} else {
+			msCountDownText.color = new Color(0.9f, 0.25f, 0.15f);
 		}
 	}
 
@@ -129,11 +177,19 @@ public class SYS_Mission : MonoBehaviour {
 		DeSelectUI(missions);
 
 		for (int ct = 0; ct < searchedSets.Length; ct++) {
-			if (Random.Range(0, 2) == 0) {
-				searchedSets[ct] = new MissionSet(MissionType.Trip, areaSets[nowAreaId].mainStarNum, slotID * 2 + Random.Range(0, 5), resrcSet[Random.Range(1, resrcSet.Count)], resrcSet[Random.Range(0, resrcSet.Count)]);
+			int rand = Random.Range(0, 3);
+			int difficult = slotID * 2 + Random.Range(0, 5);
+			ResourcesSet mainRsrc = resrcSet[Random.Range(1, resrcSet.Count)];
+			ResourcesSet subRsrc = resrcSet[Random.Range(0, resrcSet.Count)];
 
-			} else {
-				searchedSets[ct] = new MissionSet(MissionType.Collect, areaSets[nowAreaId].mainStarNum - 1, slotID * 2 + Random.Range(0, 5), resrcSet[Random.Range(1, resrcSet.Count)], resrcSet[Random.Range(0, resrcSet.Count)]);
+			if (rand == 0) {
+				searchedSets[ct] = new MissionSet(MissionType.Trip, areaSets[nowAreaId].mainStarNum, difficult, 1, mainRsrc, subRsrc);
+
+			} else if (rand == 1) {
+				searchedSets[ct] = new MissionSet(MissionType.Collect, areaSets[nowAreaId].mainStarNum - 1, difficult, 1, mainRsrc, subRsrc);
+
+			} else if (rand == 2) {
+				searchedSets[ct] = new MissionSet(MissionType.Escape, areaSets[nowAreaId].mainStarNum + 1, difficult, 1.2f, mainRsrc, subRsrc);
 			}
 
 			missions[ct].gameObject.SetActive(true);
@@ -210,8 +266,9 @@ public class SYS_Mission : MonoBehaviour {
 		}
 		DeSelectUI(areas);
 		SetScope(Mathf.Clamp(scopeLv -1, 0, 100));
-
+		ResetCountDown();
 		RegistMSbar(tripIcon , new Color(0.9f, 0.7f, 0.15f));
+		msStarEater.gameObject.SetActive(false);
 	}
 
 	public void RegistMSbar(Texture2D texture , Color color, float value = 1) {
@@ -253,7 +310,7 @@ public class SYS_Mission : MonoBehaviour {
 		msText.text = msNow + "/" + msTGT;
 
 		if (percent != 1) {
-			msCompleteText.text = percent * 100 + "%";
+			msCompleteText.text = (percent * 100).ToString("0") + "%";
 		} else {
 			msCompleteText.text = "complete";
 		}
@@ -290,16 +347,18 @@ public class MissionSet {
 	public MissionType missionType;
 	public int mainStarNum = 4;
 	public int difficult = 0;
+	public float iActRate = 1;
 
 	public ResourcesSet mainResrc;
 	public ResourcesSet subResrc;
 
-	public MissionSet(MissionType missionType , int mainStarNum, int difficult , ResourcesSet mainResrc, ResourcesSet subResrc ) {
+	public MissionSet(MissionType missionType , int mainStarNum, int difficult , float iActRate, ResourcesSet mainResrc, ResourcesSet subResrc ) {
 		this.mainStarNum = mainStarNum;
 		this.missionType = missionType;
 		this.difficult = difficult;
 		this.mainResrc = mainResrc;
 		this.subResrc = subResrc;
+		this.iActRate = iActRate;
 	}
 }
 

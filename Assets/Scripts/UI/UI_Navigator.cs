@@ -75,7 +75,7 @@ public class UI_Navigator : MonoBehaviour
 
 				SYS_Mission.Direct.SetMSbar(aIndex + 1);
 
-				if (aIndex == SYS_StarmapManager.Direct.route.Count - 2) {
+				if (aIndex == SYS_StarmapManager.Direct.route.Count - 2 && (SYS_Mission.Direct.nowMission.missionType == MissionType.Trip || SYS_Mission.Direct.nowMission.missionType == MissionType.Escape)) {
 					SYS_Audio.Direct.Play(BGMType.End);
 
 				} else {

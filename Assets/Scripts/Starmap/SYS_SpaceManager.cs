@@ -109,10 +109,10 @@ public class SYS_SpaceManager : MonoBehaviour {
 
 	public void InitActivity() {
 		List<StarInfo> initList = new List<StarInfo>();
-		for (int ct = 0; ct < activityNum; ct++) {
+		for (int ct = 0; ct < activityNum * SYS_Mission.Direct.nowMission.iActRate; ct++) {
 			initList.Add(new StarInfo(StarType.Activity, SYS_StarmapManager.Direct.starInfos[Random.Range(0, SYS_StarmapManager.Direct.starInfos.Count)].sPos + Random.insideUnitCircle.normalized * SYS_StarmapManager.Direct.avgSpeed * Random.Range(activityMin, activityMax)));
 		}
-
+		
 		foreach (StarInfo starInfo in initList) {
 			ActivityEntity objGen = Instantiate(pfbActivity).GetComponent<ActivityEntity>();
 			objGen.transform.SetParent(entityGroup);

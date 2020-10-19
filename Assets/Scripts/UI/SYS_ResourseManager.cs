@@ -33,10 +33,6 @@ public class SYS_ResourseManager : MonoBehaviour {
 	public UI_ItemSlot[] inventory = new UI_ItemSlot[9];
 
 	//-------------------------------home
-	public int startFuel_Home = 0;
-	public int startFood_Home = 0;
-	public int startMineral_Home = 0;
-	public int startCoin_Home = 0;
 		
 	public Text[] lvText = new Text[4];
 	public Text[] needText = new Text[4];

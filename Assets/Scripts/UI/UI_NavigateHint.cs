@@ -144,7 +144,7 @@ public class UI_NavigateHint : MonoBehaviour {
 				textType.gameObject.SetActive(true);
 				hintColor = new Color(0.9F, 0.7F, 0.15F);
 
-				if (SYS_Mission.Direct.nowMission.missionType == MissionType.Trip) {
+				if (SYS_Mission.Direct.nowMission.missionType == MissionType.Trip || SYS_Mission.Direct.nowMission.missionType == MissionType.Escape) {
 					textType.text = "TGT";
 				} else {
 					textType.text = "NXT";

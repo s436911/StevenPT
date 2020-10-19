@@ -42,7 +42,7 @@ public class PlanetEntity : SpaceEntity {
 				}
 
 			} else if (info.sType == StarType.End) {
-				if (SYS_Mission.Direct.nowMission.missionType == MissionType.Trip) {
+				if (SYS_Mission.Direct.nowMission.missionType == MissionType.Trip  || SYS_Mission.Direct.nowMission.missionType == MissionType.Escape) {
 					SYS_Mission.Direct.SetMSbar(SYS_StarmapManager.Direct.route.Count);
 				} 
 			}
