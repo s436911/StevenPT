@@ -4,8 +4,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SYS_StarmapManager : MonoBehaviour {
-	public static SYS_StarmapManager Direct;
+public class SYS_Starmap : MonoBehaviour {
+	public static SYS_Starmap Direct;
+	public Transform uiPanel;
+
 	public GameObject starPfb;
 	public ParticleSystem backNarblua;
 	public Vector2 backColor;
@@ -30,10 +32,11 @@ public class SYS_StarmapManager : MonoBehaviour {
 	public int planetSideMax = 2;
 
 	public LineRenderer line;
+	public LineRenderer preline;
 
-	public List<StarInfo> starInfos = new List<StarInfo>();
+	public List<StarInfo> stars = new List<StarInfo>();
 	public List<StarInfo> route = new List<StarInfo>();
-
+	public List<StarInfo> preroute = new List<StarInfo>();
 	//星球座標X-250,250 Y0,750
 
 	void Awake() {
@@ -44,13 +47,12 @@ public class SYS_StarmapManager : MonoBehaviour {
 		return (p1.x - p.x) * (p2.x - p.x) <= 0 && (p1.y - p.y) * (p2.y - p.y) <= 0;
 	}
 
-
 	private Vector2 GenRandPlanetPos() {
 		Vector2 genOffset = Vector2.zero;
 
 		int couter = 0;
 		while (genOffset == Vector2.zero) {
-			genOffset = CheckPlanetPos(new Vector2(Random.Range(-250,250) , Random.Range(0, 750)) , planetOtherDisT);
+			genOffset = CheckPlanetPos(new Vector2(Random.Range(-250, 250), Random.Range(0, 750)), planetOtherDisT);
 
 			if (couter > 1000) {
 				Debug.LogError("GenPlanetPos:" + genOffset + " 無限迴圈");
@@ -64,17 +66,13 @@ public class SYS_StarmapManager : MonoBehaviour {
 		return genOffset;
 	}
 
-	private Vector2 GenGoalPos(int difficult , Vector2 starter, int starNum = 0, int starNumLeft = 0 ) {
+	private Vector2 GenGoalPos(int difficult, Vector2 starter, int starNum = 0, int starNumLeft = 0) {
 		Vector2 genOffset = Vector2.zero;
 
 		int couter = 0;
 		while (genOffset == Vector2.zero) {
 			Vector2 routeDirect = Vector2.zero;
 			Vector2 randOffset = Vector2.zero;
-			/*
-			foreach (StarInfo starInfo in starInfos) {
-				routeDirect += starInfo.sPos.normalized;
-			}*/
 
 			routeDirect = starter.normalized;
 
@@ -83,10 +81,9 @@ public class SYS_StarmapManager : MonoBehaviour {
 			} else {
 				randOffset = new Vector2(routeDirect.x > 0 ? -Random.Range(0, 0.5f) : Random.Range(0, 0.5f), Random.Range(0, 0.5f)).normalized;
 			}
-			
-			randOffset = randOffset * Random.Range(goalDisMinT, goalDisMaxT + (difficult - SYS_SaveManager.Direct.GetResearch(0)) * 2) * avgSpeed; //向量 * 時間 * 期望速度
 
-			genOffset = CheckPlanetPos(starter + randOffset , planetMainDisT, starter.y, starNum, starNumLeft);
+			randOffset = randOffset * Random.Range(goalDisMinT, goalDisMaxT + (difficult - SYS_Save.Direct.GetResearch(0)) * 2) * avgSpeed; //向量 * 時間 * 期望速度
+			genOffset = CheckPlanetPos(starter + randOffset, planetMainDisT, starter.y, starNum, starNumLeft);
 
 			if (couter > 1000) {
 				Debug.LogError("GenPlanetPos:" + starNum + " 無限迴圈");
@@ -96,7 +93,6 @@ public class SYS_StarmapManager : MonoBehaviour {
 				couter++;
 			}
 		}
-
 		return genOffset;
 	}
 
@@ -105,12 +101,12 @@ public class SYS_StarmapManager : MonoBehaviour {
 
 		int couter = 0;
 		while (genOffset == Vector2.zero) {
-			Vector2 randOffset = Random.insideUnitCircle.normalized * Random.Range(planetDisMinT, planetDisMaxT + (difficult - SYS_SaveManager.Direct.GetResearch(0)) * 2) * avgSpeed; //向量 * 時間 * 期望速度
+			Vector2 randOffset = Random.insideUnitCircle.normalized * Random.Range(planetDisMinT, planetDisMaxT + (difficult - SYS_Save.Direct.GetResearch(0)) * 2) * avgSpeed; //向量 * 時間 * 期望速度
 			if (randOffset.y < 0 && starNum != 0) {
 				randOffset.y = randOffset.y * -1;
 
 			}
-			genOffset = CheckPlanetPos(starter + randOffset , planetMainDisT, starter.y, starNum , starNumLeft);
+			genOffset = CheckPlanetPos(starter + randOffset, planetMainDisT, starter.y, starNum, starNumLeft);
 
 			if (couter > 1000) {
 				Debug.LogError("GenPlanetPos:" + starNum + " 無限迴圈");
@@ -120,7 +116,6 @@ public class SYS_StarmapManager : MonoBehaviour {
 				couter++;
 			}
 		}
-
 		return genOffset;
 	}
 
@@ -128,61 +123,73 @@ public class SYS_StarmapManager : MonoBehaviour {
 		Reset();
 		//init starinfo
 		int planetNum = misSet.mainStarNum + 1;
+		int base1 = Random.Range(0, 2);
+		int base2 = Random.Range(2, misSet.mainStarNum);
+		int iact1 = Random.Range(0, misSet.mainStarNum);
+		int iact2;
 
+		//生成完一般星球後生成目標星球
 		for (int ct = 0; ct < planetNum; ct++) {
 			Vector2 randPos = Vector2.zero;
 
 			if (ct < misSet.mainStarNum) {
 				if (ct == 0) {
-					randPos = GenPlanetPos(misSet.difficult , Vector2.zero, ct + 1, planetNum - ct - 1);
+					randPos = GenPlanetPos(misSet.difficult, Vector2.zero, ct + 1, planetNum - ct - 1);
 				} else {
-					randPos = GenPlanetPos(misSet.difficult, starInfos[ct - 1].sPos, ct + 1, planetNum - ct - 1);
+					randPos = GenPlanetPos(misSet.difficult, stars[ct - 1].sPos, ct + 1, planetNum - ct - 1);
 				}
-				starInfos.Add(new StarInfo(StarType.Check, randPos));
+				stars.Add(new StarInfo((ct == base1 || ct == base2) ? SubType.Base : SubType.None, NaviType.Check , (Affinity)Random.Range(0, 4), randPos, ct == iact1 ? 1 : 0));
 
 			} else {
-				randPos = GenGoalPos(misSet.difficult, starInfos[ct - 1].sPos, ct + 1, planetNum - ct - 1);
-				starInfos.Add(new StarInfo(StarType.End, randPos));
-
-			} 
+				randPos = GenGoalPos(misSet.difficult, stars[ct - 1].sPos, ct + 1, planetNum - ct - 1);
+				stars.Add(new StarInfo(SubType.None, NaviType.End , Affinity.None, randPos));
+			}
 		}
-		
+
 		//支線星球生成
 		planetNum = Random.Range(planetSideMin, planetSideMax + 1);
+		iact2 = Random.Range(0, planetNum);
 
 		for (int ct = 0; ct < planetNum; ct++) {
-			starInfos.Add(new StarInfo(StarType.Check, GenPlanetPos(misSet.difficult, starInfos[Random.Range(0, starInfos.Count)].sPos)));
+			stars.Add(new StarInfo(ct == 0 ? SubType.Base : SubType.None, NaviType.Check , (Affinity)Random.Range(0, 4), GenPlanetPos(misSet.difficult, stars[Random.Range(0, stars.Count)].sPos), ct == iact2 ? 1 : 0));
 		}
 
 		//亂數星球生成
-		planetNum = otherStarNum - planetNum + (Random.Range(0 , 100) < (SYS_SaveManager.Direct.GetResearch(3) * 10) ? 1 : 0);//
+		planetNum = otherStarNum - planetNum + (Random.Range(0, 100) < (SYS_Save.Direct.GetResearch(3) * 10) ? 1 : 0);//
 
 		for (int ct = 0; ct < planetNum; ct++) {
-			starInfos.Add(new StarInfo(StarType.Check, GenRandPlanetPos()));
+			stars.Add(new StarInfo(ct == 0 ? SubType.Base : SubType.None, NaviType.Check, (Affinity)Random.Range(0, 4), GenRandPlanetPos()));
 		}
 
 
 		//init log
 		if (SYS_Logger.Direct.logging) {
-			foreach (StarInfo starInfo in starInfos) {
-				Debug.LogWarning("[Gen]BayerID : " + starInfo.sID + " , BayerName : " + starInfo.sName + " , Type : " + starInfo.sType.ToString() + " , Location : " + starInfo.sPos);
+			foreach (StarInfo starInfo in stars) {
+				Debug.LogWarning("[Gen]BayerID : " + starInfo.sID + " , BayerName : " + starInfo.subType + " , Type : " + starInfo.subType.ToString() + " , Location : " + starInfo.sPos);
 			}
 		}
 
 		//gen star
-		foreach (StarInfo starInfo in starInfos) {
+		foreach (StarInfo starInfo in stars) {
 			StarObject objGen = Instantiate(starPfb).GetComponent<StarObject>();
 			RectTransform objRect = objGen.GetComponent<RectTransform>();
-			objGen.transform.SetParent(transform);
+			objGen.transform.SetParent(uiPanel);
 			objGen.Regist(starInfo);
 			objRect.anchoredPosition3D = starInfo.sPos;
-			if (starInfo.sType != StarType.End) {
+
+			if (starInfo.nvType != NaviType.End) {
 				objGen.sRawImage.GetComponent<RectTransform>().sizeDelta = new Vector2(60, 60);
+				objGen.halo.GetComponent<RectTransform>().sizeDelta = new Vector2(90, 90);
 			} else {
 				objGen.sRawImage.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
+				objGen.halo.GetComponent<RectTransform>().sizeDelta = new Vector2(150, 150);
 			}
 
+			objGen.halo.gameObject.SetActive(starInfo.subType == SubType.Base);
+			objGen.halo.color = new Color(starInfo.sColor.r , starInfo.sColor.g , starInfo.sColor.b , objGen.halo.color.a);
 			objGen.sRawImage.color = starInfo.sColor;
+			objGen.iactive.color = starInfo.sColor;
+			objGen.iactive.gameObject.SetActive(starInfo.iactNum > 0);
 			objRect.localScale = Vector3.one;
 		}
 
@@ -196,42 +203,41 @@ public class SYS_StarmapManager : MonoBehaviour {
 		}
 		backNarblua.gameObject.SetActive(false);
 		backNarblua.gameObject.SetActive(true);
+
+		ResetPreRoute();
+		AutoRoute(preline, preroute);
 	}
 
 	public bool IsRouteComplete() {
-		return route.Count > 0 && route[route.Count - 1].sType == StarType.End;
+		return route.Count > 0 && route[route.Count - 1].nvType == NaviType.End;
 	}
 
-	// Update is called once per frame
-	public void UpdateLine() {
-
-		if (route.Count > 0) {
-
+	public void UpdateLine(LineRenderer lineValue, List<StarInfo> routeValue) {
+		if (routeValue.Count > 0) {
 			List<Vector3> linePos = new List<Vector3>();
-
 			linePos.Add(Vector3.zero);
 
-			foreach (StarInfo routePos in route) {
+			foreach (StarInfo routePos in routeValue) {
 				linePos.Add(new Vector3(routePos.sPos.x, routePos.sPos.y, 0));
 			}
 
 			Vector3[] tempV3 = linePos.ToArray();
 
-			line.gameObject.SetActive(true);
-			line.positionCount = tempV3.Length;
-			line.SetPositions(tempV3);
+			lineValue.gameObject.SetActive(true);
+			lineValue.positionCount = tempV3.Length;
+			lineValue.SetPositions(tempV3);
 
 		} else {
-			line.gameObject.SetActive(false);
-		} 
+			lineValue.gameObject.SetActive(false);
+		}
 	}
 
-	public Vector2 CheckPlanetPos(Vector2 checkPos , float checkDis, float startHigh = 0, int starNum = 0, int starNumLeft = 0) {
+	public Vector2 CheckPlanetPos(Vector2 checkPos, float checkDis, float startHigh = 0, int starNum = 0, int starNumLeft = 0) {
 		if (Mathf.Abs(checkPos.x) > 250 || checkPos.y > 750 || checkPos.y < 0) {
 			checkPos = Vector2.zero;
 
 		} else {
-			foreach (StarInfo starInfo in starInfos) {
+			foreach (StarInfo starInfo in stars) {
 				if (Vector2.Distance(checkPos, starInfo.sPos) < checkDis * avgSpeed) { //時間 * 期望速度
 					checkPos = Vector2.zero;
 					break;
@@ -250,7 +256,7 @@ public class SYS_StarmapManager : MonoBehaviour {
 					if (checkPos.y > 750 - starNumLeft * planetPerHighT * avgSpeed) {
 						checkPos = Vector2.zero;
 
-					} 
+					}
 				}
 			}
 		}
@@ -259,19 +265,28 @@ public class SYS_StarmapManager : MonoBehaviour {
 	}
 
 	public void Reset() {
-		foreach (Transform child in transform) {
+		ResetStars();
+		ResetRoute();
+		ResetPreRoute();
+	}
+
+	public void ResetStars() {
+		foreach (Transform child in uiPanel) {
 			Destroy(child.gameObject);
 		}
-		
-		starInfos = new List<StarInfo>();
-		ResetRoute();
+
+		stars = new List<StarInfo>();
 	}
-	
+
 	public void AutoRoute() {
 		ResetRoute();
-		foreach (StarInfo info in starInfos) {
-			ClickRoute(info);
-			if (info.sType == StarType.End) {
+		AutoRoute(line, route);
+	}
+
+	public void AutoRoute(LineRenderer lineValue, List<StarInfo> routeValue) {
+		foreach (StarInfo info in stars) {
+			ClickRoute(info , lineValue, routeValue);
+			if (info.nvType == NaviType.End) {
 				break;
 			}
 		}
@@ -282,27 +297,35 @@ public class SYS_StarmapManager : MonoBehaviour {
 		line.positionCount = 0;
 	}
 
+	public void ResetPreRoute() {
+		preroute = new List<StarInfo>();
+		preline.positionCount = 0;
+	}
 
 	public void ClickRoute(StarInfo sInfo) {
-		if (route.Count > 0) {
-			if (route[route.Count - 1].sType != StarType.End) {
-				if (route[route.Count - 1] != sInfo) {
-					if (!route.Contains(sInfo)) {
-						route.Add(sInfo);
-						UpdateLine();
+		ClickRoute(sInfo, line, route);
+	}
+
+	public void ClickRoute(StarInfo sInfo , LineRenderer lineValue, List<StarInfo> routeValue) {
+		if (routeValue.Count > 0) {
+			if (routeValue[routeValue.Count - 1].nvType != NaviType.End) {
+				if (routeValue[routeValue.Count - 1] != sInfo) {
+					if (!routeValue.Contains(sInfo)) {
+						routeValue.Add(sInfo);
+						UpdateLine(lineValue , routeValue);
 					} else {
 						SYS_Logger.Direct.SetSystemMsg("無法註冊已存的目標");
 					}
 
 				} else {
-					route.Remove(sInfo);
-					UpdateLine();
+					routeValue.Remove(sInfo);
+					UpdateLine(lineValue, routeValue);
 				}
 
 			} else {
-				if (route[route.Count - 1] == sInfo) {
-					route.Remove(sInfo);
-					UpdateLine();
+				if (routeValue[routeValue.Count - 1] == sInfo) {
+					routeValue.Remove(sInfo);
+					UpdateLine(lineValue, routeValue);
 
 				} else {
 					SYS_Logger.Direct.SetSystemMsg("無法註冊在終點之後");
@@ -310,38 +333,59 @@ public class SYS_StarmapManager : MonoBehaviour {
 			}
 
 		} else {
-			route.Add(sInfo);
-			UpdateLine();
+			routeValue.Add(sInfo);
+			UpdateLine(lineValue, routeValue);
 		}
+	}
+
+	public StarInfo GetInfoTGT() {
+		foreach (StarInfo star in stars) {
+			if (star.nvType == NaviType.End) {
+				return star;
+			}
+		}
+		return null;
 	}
 }
 
 public class StarInfo {
-	public StarType sType;
-	public string sName;
+	public SubType subType;
+	public NaviType nvType;
+	public Affinity affinity;
+	public string name;
 	public int sID;
+	public int iactNum;
 	public Vector2 sPos;
 	public Color sColor;
-
-	public StarInfo(StarType type, Vector2 sPos) {
-		sType = type;
+	 
+	public StarInfo(SubType subType, NaviType nvType , Affinity affinity, Vector2 sPos , int iactNum = 0) {
+		this.subType = subType;
+		this.nvType = nvType;
 		this.sPos = sPos;
-
-		if (type == StarType.Check) {
+		this.affinity = affinity;
+		this.iactNum = iactNum;
+		
+		if (nvType == NaviType.Check) {
 			BayerCreater();
-			if (Random.Range(0, 100) >= 20) {
+			if (affinity == Affinity.None) {
 				sColor = new Color(0.9f, 0.9f, 0.9f);
 
-			} else {
-				sColor = new Color(Random.Range(0.5f, 1), Random.Range(0.5f, 1), Random.Range(0.5f, 1));
+			} else if(affinity == Affinity.Fight) {
+				sColor = new Color(0.9f, 0.5f, 0.4f);
+
+			} else if (affinity == Affinity.Trade) {
+				sColor = new Color(0.9f, 0.8f, 0.4f);
+
+			} else if (affinity == Affinity.Explore) {
+				sColor = new Color(0.7f, 0.9f, 0.4f);
+
 			}
 
-		} else if (type == StarType.End) {
+		} else if (nvType == NaviType.End) {
 			BayerCreater();
 			sColor = new Color(1, 0.85f, 0);
-		} 
+		}
 	}
-
 
 	private void BayerCreater() {
 		//星座
@@ -445,28 +489,33 @@ public class StarInfo {
 		int planetNum = Random.Range(0, planetName.Length);
 		int satelliteNum = ((Random.Range(0, 100) >= 90) ? 1 : 0) + ((Random.Range(0, 100) >= 95) ? 1 : 0) + ((Random.Range(0, 100) >= 97) ? 1 : 0) + ((Random.Range(0, 100) >= 99) ? 1 : 0);
 
-		sName = bayerSubName[bayerSub] + (bayerMutiStar > 0 ? bayerMutiStar.ToString() : "") + " " + bayerMainName[bayerMain] + " " + planetName[planetNum] + (bayerMutiStar > 0 ? " " + bayerMutiStar.ToString() : "");
+		name = bayerSubName[bayerSub] + (bayerMutiStar > 0 ? bayerMutiStar.ToString() : "") + " " + bayerMainName[bayerMain] + " " + planetName[planetNum] + (bayerMutiStar > 0 ? " " + bayerMutiStar.ToString() : "");
 		sID = bayerMain * 100000 + bayerSub * 1000 + bayerMutiStar * 100 + planetNum * 10 + satelliteNum;
 	}
-
-
-
-
 
 	private Vector2 GenPos() {
 		return new Vector2(Random.Range(-360, 360), Random.Range(0, 1280));
 	}
 }
 
-public enum StarType {
-	//planet
+public enum SubType {
+	None,
+
+	//Planet
+	Base,
+
+	//Meteor
+	Meteor,
+	Resoreces
+}
+
+public enum NaviType {
+	None,
+
+	//Planet
 	Check,
 	End,
-	Activity,
 
-	//weather
-	Meteor,
-	
-	//Resoreces
-	Resoreces
+	//Interactive
+	Activity,
 }

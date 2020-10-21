@@ -12,14 +12,13 @@ public class UI_NavigateHint : MonoBehaviour {
 	public SpaceEntity entity;
 	public bool navigating = false;
 
-
 	void Awake() {
 		rect = this.GetComponent<RectTransform>();
 	}
 
 	// Update is called once per frame
 	void Update() {
-		if (entity.info.sType == StarType.Check) {
+		if (entity.info.nvType == NaviType.Check) {
 			float distance = Vector2.Distance(Camera.main.transform.position, entity.transform.position);
 
 			if (distance > UI_Navigator.Direct.closeDis) {
@@ -36,7 +35,7 @@ public class UI_NavigateHint : MonoBehaviour {
 					UpdateHint();
 
 					//一般星球
-				} else if (distance < (UI_Navigator.Direct.detectDisT + SYS_SaveManager.Direct.GetResearch(1)) * SYS_StarmapManager.Direct.avgSpeed) {
+				} else if (distance < (UI_Navigator.Direct.detectDisT + SYS_Save.Direct.GetResearch(1)) * SYS_Starmap.Direct.avgSpeed) {
 					ShowHint();
 					UpdatePos();
 					UpdateHint();
@@ -48,7 +47,7 @@ public class UI_NavigateHint : MonoBehaviour {
 				CloseHint();
 			}
 			
-		} else if (entity.info.sType == StarType.End ) {
+		} else if (entity.info.nvType == NaviType.End ) {
 			float distance = Vector2.Distance(Camera.main.transform.position, entity.transform.position);
 
 			if (distance > UI_Navigator.Direct.closeDis) {
@@ -59,11 +58,11 @@ public class UI_NavigateHint : MonoBehaviour {
 			}  else {
 				CloseHint();
 			}
-		} else if (entity.info.sType == StarType.Activity) {
+		} else if (entity.info.nvType == NaviType.Activity) {
 			float distance = Vector2.Distance(Camera.main.transform.position, entity.transform.position);
 
 			//一般星球
-			if (distance < (UI_Navigator.Direct.detectDisT + SYS_SaveManager.Direct.GetResearch(1)) * SYS_StarmapManager.Direct.avgSpeed && distance > UI_Navigator.Direct.closeDis) {
+			if (distance < (UI_Navigator.Direct.detectDisT + SYS_Save.Direct.GetResearch(1)) * SYS_Starmap.Direct.avgSpeed && distance > UI_Navigator.Direct.closeDis) {
 				ShowHint();
 				UpdatePos();
 				UpdateHint();
@@ -96,7 +95,7 @@ public class UI_NavigateHint : MonoBehaviour {
 	private void UpdateHint() {
 		Color hintColor = Color.white;
 
-		if (entity.info.sType == StarType.Check) {
+		if (entity.info.nvType == NaviType.Check) {
 			if (UI_Navigator.Direct.nextPlanet == entity) {
 				//hintColor = new Color(0.4F, 0.7F, 0.25F);
 				hintColor = new Color(0.9F, 0.7F, 0.15F);
@@ -135,7 +134,7 @@ public class UI_NavigateHint : MonoBehaviour {
 			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 4) * 80;
 			star.GetComponent<RectTransform>().sizeDelta = new Vector2(nowSize, nowSize);
 
-		} else if (entity.info.sType == StarType.End) {
+		} else if (entity.info.nvType == NaviType.End) {
 			if (UI_Navigator.Direct.nextPlanet != entity) {
 				hintColor = new Color(0.9F, 0.7F, 0.15F);
 				textType.gameObject.SetActive(false);
@@ -160,7 +159,7 @@ public class UI_NavigateHint : MonoBehaviour {
 			float nowSize = UI_Navigator.Direct.hintSizer.Evaluate(Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / 4) * 80;
 			star.GetComponent<RectTransform>().sizeDelta = new Vector2(nowSize, nowSize);
 
-		} else if (entity.info.sType == StarType.Activity) {
+		} else if (entity.info.nvType == NaviType.Activity) {
 			if (UI_Navigator.Direct.nextPlanet != entity) {
 				if (!entity.explored) {
 					hintColor = new Color(0.85F, 0.85F, 0.85F);

@@ -50,6 +50,8 @@ public class SYS_ShipController : MonoBehaviour {
 		transform.localPosition = Vector2.zero;
 		fuelTimer = 0;
 		foodTimer = 0;
+		speed = 0;
+		force = Vector2.zero;
 		character.SetActive(false);
 		detector.SetActive(false);
 		reflecter.SetActive(false);
@@ -64,7 +66,7 @@ public class SYS_ShipController : MonoBehaviour {
 
 			if (handling) {
 				if (speed < maxSpeed) {
-					ModifySpeed(accelerate + SYS_SaveManager.Direct.GetMembersAttribute(1) * 0.1f);
+					ModifySpeed(accelerate + SYS_Save.Direct.GetMembersAttribute(1) * 0.1f);
 				} else {
 					ModifySpeed(decelerate);
 				}
@@ -100,7 +102,7 @@ public class SYS_ShipController : MonoBehaviour {
 	}
 
 	public float  GetMaxSpeed() {
-		return maxSpeed + SYS_SaveManager.Direct.GetMembersAttribute(0) * 0.05f;
+		return maxSpeed + SYS_Save.Direct.GetMembersAttribute(0) * 0.05f;
 	}
 
 
@@ -176,9 +178,9 @@ public class SYS_ShipController : MonoBehaviour {
 		SYS_ResourseManager.Direct.ModifyResource(1, -damage);
 
 		if (Random.Range(0, 100) < 50) {
-			SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "好痛!");
+			SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "好痛!");
 		} else {
-			SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "不能好好開船嗎!");
+			SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "不能好好開船嗎!");
 		}
 	}
 

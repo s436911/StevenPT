@@ -10,13 +10,13 @@ public class PlanetEntity : SpaceEntity {
 	public void Regist(StarInfo info, Material mat, float size, bool haveHalo, int eventId) {
 		Regist(info, mat, size);
 		halo.SetActive(haveHalo);
-		text.text = info.sName;
-		iEvent = TMP_InteractEvent.GetPlanetEvent(info.sName, eventId);
+		text.text = info.name;
+		iEvent = TMP_InteractEvent.GetPlanetEvent(info.name, eventId);
 	}
 
 	void OnTriggerEnter2D(Collider2D colli) {
 		if (colli.transform.parent.GetComponent<SYS_ShipController>() != null) {
-			if (info.sType == StarType.Check) {
+			if (info.nvType == NaviType.Check) {
 				SYS_Interactive.Direct.Regist(iEvent);
 				UI_Navigator.Direct.Arrive(info);
 				if (!explored) {
@@ -25,25 +25,25 @@ public class PlanetEntity : SpaceEntity {
 
 					if (randomResource == 0) {
 						SYS_ResourseManager.Direct.ModifyResource(0, 5);
-						SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "好多好多的燃料!");
+						SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "好多好多的燃料!");
 
 					} else if(randomResource == 1) {
 						SYS_ResourseManager.Direct.ModifyResource(1, 1);
-						SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "裝甲升級!");
+						SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "裝甲升級!");
 
 					} else if (randomResource == 2) {
 						SYS_ResourseManager.Direct.ModifyResource(2, 1);
-						SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "BUFFET!");
+						SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "BUFFET!");
 
 					} else if (randomResource == 3) {
 						SYS_ResourseManager.Direct.ModifyResource(3, 1);
-						SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "我好餓RRRRR!");
+						SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "我好餓RRRRR!");
 					}
 				}
 
-			} else if (info.sType == StarType.End) {
+			} else if (info.nvType == NaviType.End) {
 				if (SYS_Mission.Direct.nowMission.missionType == MissionType.Trip  || SYS_Mission.Direct.nowMission.missionType == MissionType.Escape) {
-					SYS_Mission.Direct.SetMSbar(SYS_StarmapManager.Direct.route.Count);
+					SYS_Mission.Direct.SetMSbar(SYS_Starmap.Direct.route.Count);
 				} 
 			}
 		}

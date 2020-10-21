@@ -43,27 +43,27 @@ public class SYS_TeamManager : MonoBehaviour {
 	}
 
 	public void UseMember(int slot) {
-		if (!SYS_SaveManager.Direct.GetMember(slot).isNull) {
+		if (!SYS_Save.Direct.GetMember(slot).isNull) {
 			if (!deleteMode) {
-				if (!SYS_SaveManager.Direct.IsBullpenFull()) {
-					SYS_SaveManager.Direct.AddBullpen(SYS_SaveManager.Direct.GetMember(slot));
-					SYS_SaveManager.Direct.SetMembers(slot);
+				if (!SYS_Save.Direct.IsBullpenFull()) {
+					SYS_Save.Direct.AddBullpen(SYS_Save.Direct.GetMember(slot));
+					SYS_Save.Direct.SetMembers(slot);
 				}
 			} else {
-				SYS_SaveManager.Direct.SetMembers(slot);
+				SYS_Save.Direct.SetMembers(slot);
 			}
 		}
 	}
 
 	public void UseBullpen(int slot) {
-		if (!SYS_SaveManager.Direct.GetBullpen(slot).isNull) {
+		if (!SYS_Save.Direct.GetBullpen(slot).isNull) {
 			if (!deleteMode) {
-				if (!SYS_SaveManager.Direct.IsMembersFull()) {
-					SYS_SaveManager.Direct.AddMembers(SYS_SaveManager.Direct.GetBullpen(slot));
-					SYS_SaveManager.Direct.SetBullpen(slot);
+				if (!SYS_Save.Direct.IsMembersFull()) {
+					SYS_Save.Direct.AddMembers(SYS_Save.Direct.GetBullpen(slot));
+					SYS_Save.Direct.SetBullpen(slot);
 				}
 			} else {
-				SYS_SaveManager.Direct.SetBullpen(slot);
+				SYS_Save.Direct.SetBullpen(slot);
 			}
 		}
 	}

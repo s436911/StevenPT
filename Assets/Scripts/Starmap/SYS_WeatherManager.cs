@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SYS_WeatherManager : MonoBehaviour {
-	public static SYS_WeatherManager Direct;
+public class SYS_Weather : MonoBehaviour {
+	public static SYS_Weather Direct;
 
 	public List<Material> matBackMeteor = new List<Material>();
 	public GameObject pfbBackMeteor;
@@ -34,7 +34,7 @@ public class SYS_WeatherManager : MonoBehaviour {
 	}
 	
 	public void spawnBack(Vector2 dePos) {
-		StarInfo starInfo = new StarInfo(StarType.Meteor, dePos);
+		StarInfo starInfo = new StarInfo(SubType.Meteor , NaviType.None, Affinity.None, dePos);
 
 		SpaceEntity objGen = Instantiate(pfbBackMeteor).GetComponent<SpaceEntity>();
 		objGen.transform.SetParent(backGroup);
@@ -44,7 +44,7 @@ public class SYS_WeatherManager : MonoBehaviour {
 	}
 
 	public void spawnFront(Vector2 dePos) {
-		StarInfo starInfo = new StarInfo(StarType.Meteor, dePos);
+		StarInfo starInfo = new StarInfo(SubType.Meteor, NaviType.None, Affinity.None, dePos);
 
 		MeteorEntity objGen = Instantiate(pfbFrontMeteor).GetComponent<MeteorEntity>();
 		objGen.transform.SetParent(frontGroup);

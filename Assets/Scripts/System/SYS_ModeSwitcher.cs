@@ -22,8 +22,9 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 	}
 
 	void Start() {
+		DB.Init();
 		SYS_ResourseManager.Direct.Init();
-		SYS_SaveManager.Direct.Init();
+		SYS_Save.Direct.Init();
 		SYS_Mission.Direct.Init();
 
 		SetMode(GameMode.Home);
@@ -31,10 +32,10 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 	}
 
 	public void Stub() {
-		SYS_SaveManager.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
-		SYS_SaveManager.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
-		SYS_SaveManager.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
-		SYS_SaveManager.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
+		SYS_Save.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
+		SYS_Save.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
+		SYS_Save.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
+		SYS_Save.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
 	}
 
 	// Update is called once per frame
@@ -83,10 +84,10 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 
 				SYS_Audio.Direct.Play(BGMType.Home);
 				SYS_RadarManager.Direct.Reset();
-				SYS_SpaceManager.Direct.Reset();
-				SYS_WeatherManager.Direct.Reset();
+				SYS_Space.Direct.Reset();
+				SYS_Weather.Direct.Reset();
 				UI_Navigator.Direct.Reset();
-				SYS_StarmapManager.Direct.Reset();
+				SYS_Starmap.Direct.Reset();
 				SYS_SelfDriving.Direct.Reset();
 				SYS_ShipController.Direct.Reset();
 				SYS_PopupManager.Direct.Reset();
@@ -95,11 +96,11 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				SYS_Mission.Direct.Reset();
 
 			} else if ((GameMode)gameMode == GameMode.Space) {//出任務
-				if (!SYS_StarmapManager.Direct.IsRouteComplete()) {
-					SYS_StarmapManager.Direct.AutoRoute();
+				if (!SYS_Starmap.Direct.IsRouteComplete()) {
+					SYS_Starmap.Direct.AutoRoute();
 					SYS_Logger.Direct.SetSystemMsg("自動生成路徑");
 					return;
-				} else if (!SYS_SaveManager.Direct.IsMembersComplete()) {
+				} else if (!SYS_Save.Direct.IsMembersComplete()) {
 					SYS_Logger.Direct.SetSystemMsg("請將船塞滿人再出發");
 					return;
 				}
@@ -108,15 +109,15 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				animing = Time.timeSinceLevelLoad;
 
 				SYS_Audio.Direct.Play(BGMType.Launch);
-
 				SYS_ShipController.Direct.Restart();
-				SYS_SpaceManager.Direct.Init();
-				SYS_WeatherManager.Direct.Init();
+				SYS_Space.Direct.Init();
+				SYS_Weather.Direct.Init();
 				SYS_ResourseManager.Direct.Restart();
 				UI_Navigator.Direct.Init();
 				SYS_Mission.Direct.Restart();
+				SYS_Starmap.Direct.ResetStars();
 
-				SYS_PopupManager.Direct.Regist(SYS_SaveManager.Direct.GetMember().name, "相信會是一場愉快的冒險");
+				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "相信會是一場愉快的冒險");
 			}
 		}
 	}

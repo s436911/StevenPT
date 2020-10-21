@@ -38,7 +38,7 @@ public class SYS_RadarManager : MonoBehaviour {
 
 					} else {
 						RawImage objGen = Instantiate(hintObj).GetComponent<RawImage>();
-						if (tmpEntity.info.sType == StarType.Resoreces) {
+						if (tmpEntity.info.subType == SubType.Resoreces) {
 							objGen.color = new Color(0.9f, 0.9f, 0.9f, 0.65f);
 
 						} else {

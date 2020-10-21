@@ -13,13 +13,13 @@ public class ActivityEntity : SpaceEntity {
 
 	public void Regist(StarInfo info, Material mat, float size , int eventId) {
 		base.Regist(info, mat, size);
-		text.text = info.sName;
-		iEvent = TMP_InteractEvent.GetActivityEvent(info.sName , eventId);
+		text.text = info.name;
+		iEvent = TMP_InteractEvent.GetActivityEvent(info.name, eventId);
 	}
 
 	void OnTriggerEnter2D(Collider2D colli) {
 		if (colli.transform.parent.GetComponent<SYS_ShipController>() != null) {
-			if (info.sType == StarType.Activity) {
+			if (info.nvType == NaviType.Activity) {
 				SYS_Interactive.Direct.Regist(iEvent);
 				explored = true;
 

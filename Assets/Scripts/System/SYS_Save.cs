@@ -4,8 +4,8 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-public class SYS_SaveManager : MonoBehaviour {
-	public static SYS_SaveManager Direct;
+public class SYS_Save : MonoBehaviour {
+	public static SYS_Save Direct;
 	public PlayerData gameData;
 
 	public int[] researchNeed = new int[4];
@@ -67,6 +67,8 @@ public class SYS_SaveManager : MonoBehaviour {
 		for (int ct = 0; ct < gameData.inventory.Length; ct++) {
 			SetInventory(ct, gameData.inventory[ct], false);
 		}
+
+		SYS_ResourseManager.Direct.UpdateCargobayUI();
 	}
 
 	public bool HadFile(string fileName = "playerSave.dat") {
@@ -92,6 +94,30 @@ public class SYS_SaveManager : MonoBehaviour {
 		} catch (System.IO.FileNotFoundException) {
 			return default(T);
 		}
+	}
+
+	//CargoBay
+	public void AddCargobay(Item item) {
+		if (item.stackAble && gameData.cargobay.Count < SYS_ResourseManager.Direct.cargobay.Count) {
+			for (int ct = 0; ct < gameData.cargobay.Count; ct++) {
+				//已存在
+				if (gameData.cargobay[ct].iconID == item.iconID) {
+					gameData.cargobay[ct].stackNum += item.stackNum;
+					SYS_ResourseManager.Direct.UpdateCargobayUI();
+					SaveBTN();
+					return;
+				}
+			}
+			//不存在
+			gameData.cargobay.Add(item);
+			SYS_ResourseManager.Direct.UpdateCargobayUI();
+			SaveBTN();
+		}
+	}
+
+	public void ResetCargobay() {
+		gameData.cargobay = new List<Item>();
+		SYS_ResourseManager.Direct.UpdateCargobayUI();
 	}
 
 	//Research
@@ -319,6 +345,7 @@ public class PlayerData  {
 
 	public Item[] precargo = new Item[2];
 	public Item[] inventory = new Item[9];
+	public List<Item> cargobay = new List<Item>();
 
 	public Member[] members = new Member[4];
 	public Member[] bullpen = new Member[9];

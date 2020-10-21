@@ -16,7 +16,7 @@ public class UI_ItemSlot : MonoBehaviour {
 
 	public void SetItem(Item item) {
 		if (!item.isNull) {
-			icon.texture = SYS_ResourseManager.Direct.itemIcon[item.iconID];
+			icon.texture = Resources.Load<Texture2D>("Arts/" + item.iconID.ToString("00000"));
 			icon.color = new Color(1, 1, 1, 1);
 
 			//1主動使用效果型、2主動使用buff型、3家中使

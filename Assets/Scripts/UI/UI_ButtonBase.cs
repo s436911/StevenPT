@@ -16,7 +16,7 @@ public class UI_ButtonBase : MonoBehaviour {
 		}
 	}
 
-	public void Regist(Texture texture , string value, string valueSub = "") {
+	public void Regist(Texture2D texture , string value, string valueSub = "") {
 		imageIcon.texture = texture;
 		Regist(value, valueSub);
 	}

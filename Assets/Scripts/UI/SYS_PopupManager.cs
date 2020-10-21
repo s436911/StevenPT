@@ -61,11 +61,11 @@ public class SYS_PopupManager : MonoBehaviour
 			if (Time.unscaledTime - timer > 10) {
 				timer = Time.unscaledTime;
 				if (SYS_ResourseManager.Direct.GetResource(2) < 10) {
-					Regist(SYS_SaveManager.Direct.GetMember().name, "我好餓喔..");
+					Regist(SYS_Save.Direct.GetMember().name, "我好餓喔..");
 				}
 
 				if (SYS_ResourseManager.Direct.GetResource(0) < 15) {
-					Regist(SYS_SaveManager.Direct.GetMember().name, "好像快沒油了..");
+					Regist(SYS_Save.Direct.GetMember().name, "好像快沒油了..");
 				}
 			}
 		}

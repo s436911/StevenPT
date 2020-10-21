@@ -7,7 +7,6 @@ public class SYS_Mission : MonoBehaviour {
 	public static SYS_Mission Direct;
 	public MissionSet nowMission;
 
-
 	public List<UI_ButtonBase> areas = new List<UI_ButtonBase>();
 	public List<UI_ButtonBase> searchs = new List<UI_ButtonBase>();
 	public List<UI_ButtonBase> missions = new List<UI_ButtonBase>();
@@ -23,7 +22,6 @@ public class SYS_Mission : MonoBehaviour {
 
 	public List<Texture2D> missionIcon = new List<Texture2D>();
 	public Texture2D tripIcon;
-	public List<Texture2D> resourceIcon = new List<Texture2D>();
 
 	public Image scopeIcon;
 	public Text misTitle;
@@ -45,7 +43,7 @@ public class SYS_Mission : MonoBehaviour {
 
 	private AreaSet[] areaSets = new AreaSet[3];
 	private MissionSet[] searchedSets = new MissionSet[5];
-	private List<ResourcesSet> resrcSet = new List<ResourcesSet>();
+	private List<int> resrcSet = new List<int>();
 
 	private MissionType missionType;
 	private int difficult = 0;
@@ -72,24 +70,31 @@ public class SYS_Mission : MonoBehaviour {
 		areaSets[1] = new AreaSet("花椰菜星系", 5);
 		areaSets[2] = new AreaSet("磁鐵星系", 4);
 
-		resrcSet.Add(null);
-		resrcSet.Add(new ResourcesSet(missionIcon[0], SYS_SpaceManager.Direct.matResoureces[0], 0, 3));
-		resrcSet.Add(new ResourcesSet(missionIcon[0], SYS_SpaceManager.Direct.matResoureces[1], 1, 3));
-		resrcSet.Add(new ResourcesSet(missionIcon[0], SYS_SpaceManager.Direct.matResoureces[2], 2, 3));
+		resrcSet.Add(0);
 
-		resrcSet.Add(new ResourcesSet(missionIcon[1], SYS_SpaceManager.Direct.matResoureces[5], 5, 2));
-		resrcSet.Add(new ResourcesSet(missionIcon[1], SYS_SpaceManager.Direct.matResoureces[6], 6, 2));
+		resrcSet.Add(1);
+		resrcSet.Add(2);
+		resrcSet.Add(3);
+		resrcSet.Add(4);
+		resrcSet.Add(5);
+		resrcSet.Add(6);
+		resrcSet.Add(7);
+		resrcSet.Add(8);
+		resrcSet.Add(9);
+
+		resrcSet.Add(1001);
+		resrcSet.Add(1002);
 	}
 
 	public void Restart() {
 		if (nowMission.missionType == MissionType.Trip) {
-			RegistMSbar(tripIcon, new Color(0.9f, 0.7f, 0.15f), SYS_StarmapManager.Direct.route.Count);
+			RegistMSbar(tripIcon, new Color(0.9f, 0.7f, 0.15f), SYS_Starmap.Direct.route.Count);
 
 		} else if (nowMission.missionType == MissionType.Collect) {
-			RegistMSbar(resourceIcon[nowMission.mainResrc.resourceId], Color.white, 10);
+			RegistMSbar(DB.GetItemTexture(nowMission.mainResrc), Color.white, 10);
 
 		} else if (nowMission.missionType == MissionType.Escape) {
-			RegistMSbar(tripIcon, new Color(0.9f, 0.7f, 0.15f), SYS_StarmapManager.Direct.route.Count);
+			RegistMSbar(tripIcon, new Color(0.9f, 0.7f, 0.15f), SYS_Starmap.Direct.route.Count);
 			SetCountDown(300);
 			msStarEater.transform.position = new Vector2(0,-20);
 			msStarEater.gameObject.SetActive(true);
@@ -144,8 +149,8 @@ public class SYS_Mission : MonoBehaviour {
 	public void SetDifficult(InputField value) {
 		int tmpDifficult = int.Parse(value.text);
 
-		if (tmpDifficult > 5 + SYS_SaveManager.Direct.GetResearch(2)) {
-			tmpDifficult = 5 + SYS_SaveManager.Direct.GetResearch(2);
+		if (tmpDifficult > 5 + SYS_Save.Direct.GetResearch(2)) {
+			tmpDifficult = 5 + SYS_Save.Direct.GetResearch(2);
 			value.text = tmpDifficult.ToString();
 
 		} else if (tmpDifficult < 0) {
@@ -162,7 +167,7 @@ public class SYS_Mission : MonoBehaviour {
 		DeSelectUI(searchs);
 
 		for (int ct = 0; ct < searchs.Count; ct++) {
-			if (SYS_SaveManager.Direct.gameData.researchs[2] > ct) {
+			if (SYS_Save.Direct.gameData.researchs[2] > ct) {
 				searchs[ct].gameObject.SetActive(true);
 				searchs[ct].Regist((ct * 2).ToString() + "~" + (ct * 2 + 4).ToString(), (ct / 2 + 1).ToString());
 
@@ -179,25 +184,25 @@ public class SYS_Mission : MonoBehaviour {
 		for (int ct = 0; ct < searchedSets.Length; ct++) {
 			int rand = Random.Range(0, 3);
 			int difficult = slotID * 2 + Random.Range(0, 5);
-			ResourcesSet mainRsrc = resrcSet[Random.Range(1, resrcSet.Count)];
-			ResourcesSet subRsrc = resrcSet[Random.Range(0, resrcSet.Count)];
+			int mainRsrc = resrcSet[Random.Range(1, resrcSet.Count)];
+			int subRsrc = resrcSet[Random.Range(0, resrcSet.Count)];
 
 			if (rand == 0) {
 				searchedSets[ct] = new MissionSet(MissionType.Trip, areaSets[nowAreaId].mainStarNum, difficult, 1, mainRsrc, subRsrc);
 
 			} else if (rand == 1) {
-				searchedSets[ct] = new MissionSet(MissionType.Collect, areaSets[nowAreaId].mainStarNum - 1, difficult, 1, mainRsrc, subRsrc);
+				searchedSets[ct] = new MissionSet(MissionType.Collect, areaSets[nowAreaId].mainStarNum - 1, difficult, 1.2f, mainRsrc, subRsrc);
 
 			} else if (rand == 2) {
-				searchedSets[ct] = new MissionSet(MissionType.Escape, areaSets[nowAreaId].mainStarNum + 1, difficult, 1.2f, mainRsrc, subRsrc);
+				searchedSets[ct] = new MissionSet(MissionType.Escape, areaSets[nowAreaId].mainStarNum + 1, difficult, 1, mainRsrc, subRsrc);
 			}
 
 			missions[ct].gameObject.SetActive(true);
-			missions[ct].Regist(searchedSets[ct].mainResrc.icon, GetMissionString(searchedSets[ct].missionType) + " lv " + searchedSets[ct].difficult.ToString());
+			missions[ct].Regist(DB.GetItemTexture(searchedSets[ct].mainResrc), GetMissionString(searchedSets[ct].missionType) + " lv " + searchedSets[ct].difficult.ToString());
 			missions[ct].DeClick();
 		}
 
-		SYS_SaveManager.Direct.ModifyResource(0, -(int)((slotID / 2 + 1) * scopeCosts[scopeLv]));
+		SYS_Save.Direct.ModifyResource(0, -(int)((slotID / 2 + 1) * scopeCosts[scopeLv]));
 
 		if (scopeLv != scopeCosts.Length - 1) {
 			scopeLeft = Mathf.Clamp(scopeLeft - 1, 0, scopeLeftMax);
@@ -220,7 +225,7 @@ public class SYS_Mission : MonoBehaviour {
 	public void SetMission(int slotID) {
 		nowMission = searchedSets[slotID];
 		misTitle.text = GetMissionString(nowMission.missionType) + " lv " + nowMission.difficult.ToString();
-		SYS_StarmapManager.Direct.GenStarmap(nowMission);
+		SYS_Starmap.Direct.GenStarmap(nowMission);
 
 		SelectUI(slotID, missions);
 
@@ -349,30 +354,16 @@ public class MissionSet {
 	public int difficult = 0;
 	public float iActRate = 1;
 
-	public ResourcesSet mainResrc;
-	public ResourcesSet subResrc;
+	public int mainResrc;
+	public int subResrc;
 
-	public MissionSet(MissionType missionType , int mainStarNum, int difficult , float iActRate, ResourcesSet mainResrc, ResourcesSet subResrc ) {
+	public MissionSet(MissionType missionType , int mainStarNum, int difficult , float iActRate, int mainResrc, int subResrc ) {
 		this.mainStarNum = mainStarNum;
 		this.missionType = missionType;
 		this.difficult = difficult;
 		this.mainResrc = mainResrc;
 		this.subResrc = subResrc;
 		this.iActRate = iActRate;
-	}
-}
-
-public class ResourcesSet {
-	public Texture2D icon;
-	public Material mat;
-	public int resourceId;
-	public int resourceType;
-
-	public ResourcesSet(Texture2D icon , Material mat, int resourceId , int resourceType) {
-		this.icon = icon;
-		this.mat = mat;
-		this.resourceId = resourceId;
-		this.resourceType = resourceType;
 	}
 }
 

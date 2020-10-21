@@ -8,6 +8,8 @@ public class StarObject : MonoBehaviour {
 	public Text sName;
 	public Text sPos;
 	public RawImage sRawImage;
+	public Image halo;
+	public Text iactive;
 	public float hintTime;
 	public bool hinting = false;
 
@@ -15,25 +17,20 @@ public class StarObject : MonoBehaviour {
 		sInfo = info;
 	}
 
-	// Start is called before the first frame update
-	void Start() {
-
-	}
-
 	// Update is called once per frame
 	void Update() {
-		if (hinting && Time.timeSinceLevelLoad - hintTime > 5) {
+		if (hinting && Time.timeSinceLevelLoad - hintTime > 2) {
 			CloseHint();
 		}
 	}
 
 	public void ShowHint() {
-		sName.text = sInfo.sName;
-		sPos.text = sInfo.sPos.ToString();
+		sName.text = sInfo.name;
+		sPos.text = sInfo.sPos.ToString("f0");
 		hintTime = Time.timeSinceLevelLoad;
 		hinting = true;
 
-		SYS_StarmapManager.Direct.ClickRoute(sInfo);
+		SYS_Starmap.Direct.ClickRoute(sInfo);
 	}
 
 	public void CloseHint() {
