@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SYS_ShipController : MonoBehaviour {
 	public static SYS_ShipController Direct;
@@ -24,6 +25,14 @@ public class SYS_ShipController : MonoBehaviour {
 	public GameObject dash;
 	public GameObject drill;
 
+	public AnimationCurve iceSize;
+	public AnimationCurve iceAlpha;
+	public AnimationCurve iceAlphaMask;
+	public GameObject icePanel;
+	public Image iceImage;
+	public Image iceMask;
+	private float iceValue;
+
 	private Coroutine cououtine;
 	private float fuelTimer;
 	private float foodTimer;
@@ -44,6 +53,26 @@ public class SYS_ShipController : MonoBehaviour {
 		if (SYS_Mission.Direct.nowMission.missionType == MissionType.Collect) {
 			reflecter.SetActive(true);
 		}
+
+		
+	}
+
+	void FixedUpdate() {
+		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
+			if (iceValue >= 0) {
+				ModifyIce(-Time.fixedDeltaTime);
+			}
+		}
+	}
+
+	public void ModifyIce(float value) {
+		iceValue = Mathf.Clamp(iceValue + value, 0, 15);
+		iceImage.gameObject.SetActive(iceValue > 0);
+		iceMask.gameObject.SetActive(iceValue > 0);
+		iceImage.color = new Color(iceImage.color.r, iceImage.color.g, iceImage.color.b, iceAlpha.Evaluate(iceValue));
+		iceMask.color = new Color(iceMask.color.r, iceMask.color.g, iceMask.color.b, iceAlphaMask.Evaluate(iceValue));
+		iceImage.transform.localScale = Vector2.one * iceSize.Evaluate(iceValue);
+		
 	}
 
 	public void Reset() {
@@ -65,7 +94,7 @@ public class SYS_ShipController : MonoBehaviour {
 			}
 
 			if (handling) {
-				if (speed < maxSpeed) {
+				if (speed < GetMaxSpeed()) {
 					ModifySpeed(accelerate + SYS_Save.Direct.GetMembersAttribute(1) * 0.1f);
 				} else {
 					ModifySpeed(decelerate);
@@ -98,13 +127,12 @@ public class SYS_ShipController : MonoBehaviour {
 		force = force + value;
 	}
 	public void ModifySpeed(float value) {
-		speed = Mathf.Clamp( speed + value * Time.deltaTime , 0 , maxSpeed);
+		speed = Mathf.Clamp( speed + value * Time.deltaTime , 0 , GetMaxSpeed());
 	}
 
-	public float  GetMaxSpeed() {
-		return maxSpeed + SYS_Save.Direct.GetMembersAttribute(0) * 0.05f;
+	public float GetMaxSpeed() {
+		return (maxSpeed + SYS_Save.Direct.GetMembersAttribute(0) * 0.05f) * Mathf.Clamp01((15 - iceValue) / 15);
 	}
-
 
 	private IEnumerator Move() {
 

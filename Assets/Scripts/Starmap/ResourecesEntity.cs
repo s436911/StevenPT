@@ -65,9 +65,9 @@ public class ResourecesEntity : SpaceEntity {
 				if (SYS_Mission.Direct.nowMission.missionType == MissionType.Collect && SYS_Mission.Direct.nowMission.mainResrc == resrcSet && !SYS_Mission.Direct.IsComplete()) {
 					SYS_Mission.Direct.ModifyMSbar(1);
 				} else {
-					SYS_ResourseManager.Direct.ModifyResource(DB.GetItem(resrcSet).typeID, 1);
+					SYS_ResourseManager.Direct.ModifyResource(DB.GetItem(resrcSet).effectID, 1);
 				}
-				SYS_Save.Direct.AddCargobay(DB.NewItem(resrcSet, 1));
+				SYS_Save.Direct.ModifyCargobay(DB.NewItem(resrcSet, 1));
 				SYS_RadarManager.Direct.Remove(transform);
 				Destroy(gameObject);
 			}

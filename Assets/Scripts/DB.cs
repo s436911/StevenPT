@@ -8,8 +8,8 @@ public class DB : MonoBehaviour {
 	public static void Init() {
 		items.Add(1, new Item(1, 0, 3, true, "石礦"));
 		items.Add(2, new Item(2, 0, 3, true, "銀礦"));
-		items.Add(3, new Item(3, 0, 3, true, "銅礦"));
-		items.Add(4, new Item(4, 0, 3, true, "金礦"));
+		items.Add(3, new Item(3, 0, 3, true, "金礦"));
+		items.Add(4, new Item(4, 0, 3, true, "銅礦"));
 		items.Add(5, new Item(5, 0, 3, true, "鐵礦"));
 		items.Add(6, new Item(6, 0, 3, true, "綠寶石"));
 		items.Add(7, new Item(7, 0, 3, true, "藍寶石"));
@@ -32,11 +32,7 @@ public class DB : MonoBehaviour {
 	public static Item NewItem(int id, int stackNum = 0, int valueID = 0) {
 		if (items.ContainsKey(id)) {
 			if (items[id].stackAble) {
-				if (stackNum > 0) {
-					return new Item(items[id], stackNum, 0);
-				} else {
-					return new Item();
-				}
+				return new Item(items[id], stackNum, 0);
 			} else {
 				return new Item(items[id], 0, valueID);
 			}

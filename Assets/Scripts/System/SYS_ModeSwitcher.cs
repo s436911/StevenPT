@@ -26,6 +26,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 		SYS_ResourseManager.Direct.Init();
 		SYS_Save.Direct.Init();
 		SYS_Mission.Direct.Init();
+		SYS_Gacha.Direct.Init();
 
 		SetMode(GameMode.Home);
 		//Stub();
@@ -111,7 +112,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				SYS_Audio.Direct.Play(BGMType.Launch);
 				SYS_ShipController.Direct.Restart();
 				SYS_Space.Direct.Init();
-				SYS_Weather.Direct.Init();
+				SYS_Weather.Direct.Restart();
 				SYS_ResourseManager.Direct.Restart();
 				UI_Navigator.Direct.Init();
 				SYS_Mission.Direct.Restart();

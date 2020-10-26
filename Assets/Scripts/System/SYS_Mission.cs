@@ -101,6 +101,7 @@ public class SYS_Mission : MonoBehaviour {
 		}
 	}
 	public void ResetCountDown() {
+		msTimeLeft = 0;
 		msCountDown.SetActive(false);
 	}
 

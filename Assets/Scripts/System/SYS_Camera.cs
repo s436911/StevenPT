@@ -26,7 +26,7 @@ public class SYS_Camera : MonoBehaviour
 	void Update() {
 		Vector2 offset = Vector2.Lerp(transform.position, (Vector2)objFollowed.position + followOffset, lerpTime);
 
-		float tgtPosZ = (objFollowed.position.z + followDis) * speedCurve.Evaluate(SYS_ShipController.Direct.speed / 4);
+		float tgtPosZ = (objFollowed.position.z + followDis) * GetZoomrate();
 		float offsetZ = Mathf.Lerp(transform.position.z, tgtPosZ, lerpTimeZ);
 
 		//簡易震動區
@@ -46,5 +46,9 @@ public class SYS_Camera : MonoBehaviour
 	public void Shake(float shakeTime) {
 		shakeStart = Time.timeSinceLevelLoad;
 		this.shakeTime = shakeTime;
+	}
+
+	public float GetZoomrate() {
+		return speedCurve.Evaluate(SYS_ShipController.Direct.speed / 4);
 	}
 }

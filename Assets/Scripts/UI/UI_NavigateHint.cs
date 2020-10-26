@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UI_NavigateHint : MonoBehaviour {
 	public RectTransform rect;
 	public Image board;
+	public Image boardBack;
 	public Text textType;
 	public Text textDis;
 	public Image star;
@@ -75,11 +76,22 @@ public class UI_NavigateHint : MonoBehaviour {
 
 	public void Regist(SpaceEntity entity) {
 		this.entity = entity;
+		if (entity.info.nvType == NaviType.Check) {
+			board.transform.localScale = Vector2.one;
+
+		} else if (entity.info.nvType == NaviType.End) {
+			board.transform.localScale = Vector2.one;
+
+		} else if (entity.info.nvType == NaviType.Activity) {
+			board.transform.localScale = Vector2.one * 0.85f;
+		}
+
 		UpdateHint();
 	}
 
 	public void ShowHint() {
 		board.gameObject.SetActive(true);
+		boardBack.gameObject.SetActive(true);
 		star.gameObject.SetActive(true);
 		textType.gameObject.SetActive(true);
 		textDis.gameObject.SetActive(true);
@@ -87,6 +99,7 @@ public class UI_NavigateHint : MonoBehaviour {
 
 	public void CloseHint() {
 		board.gameObject.SetActive(false);
+		boardBack.gameObject.SetActive(false);
 		star.gameObject.SetActive(false);
 		textType.gameObject.SetActive(false);
 		textDis.gameObject.SetActive(false);
@@ -102,7 +115,7 @@ public class UI_NavigateHint : MonoBehaviour {
 				textType.text = "nxt";
 
 				if (SYS_ShipController.Direct.detector.activeSelf) {
-					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.GetMaxSpeed()).ToString("f0");
 				} else {
 					textDis.text = "";
 				}
@@ -111,7 +124,7 @@ public class UI_NavigateHint : MonoBehaviour {
 				//hintColor = new Color(0.4F, 0.7F, 0.25F);
 				hintColor = new Color(0.45F, 0.8F, 0.85F);
 				textType.text = "pre";
-				textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+				textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.GetMaxSpeed()).ToString("f0");
 
 			} else {
 				if (!entity.explored) {
@@ -119,7 +132,7 @@ public class UI_NavigateHint : MonoBehaviour {
 					textType.text = "???";
 
 					if (SYS_ShipController.Direct.detector.activeSelf) {
-						textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+						textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.GetMaxSpeed()).ToString("f0");
 					} else {
 						textDis.text = "";
 					}
@@ -127,7 +140,7 @@ public class UI_NavigateHint : MonoBehaviour {
 				} else {
 					hintColor = new Color(0.45F, 0.8F, 0.85F);
 					textType.text = "SUP";
-					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.GetMaxSpeed()).ToString("f0");
 				}
 			}
 
@@ -138,6 +151,7 @@ public class UI_NavigateHint : MonoBehaviour {
 			if (UI_Navigator.Direct.nextPlanet != entity) {
 				hintColor = new Color(0.9F, 0.7F, 0.15F);
 				textType.gameObject.SetActive(false);
+				textDis.text = "";
 
 			} else {
 				textType.gameObject.SetActive(true);
@@ -150,7 +164,7 @@ public class UI_NavigateHint : MonoBehaviour {
 				}
 
 				if (SYS_ShipController.Direct.detector.activeSelf) {
-					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.GetMaxSpeed()).ToString("f0");
 				} else {
 					textDis.text = "";
 				}
@@ -166,7 +180,7 @@ public class UI_NavigateHint : MonoBehaviour {
 					textType.text = "???";
 
 					if (SYS_ShipController.Direct.detector.activeSelf) {
-						textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+						textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.GetMaxSpeed()).ToString("f0");
 					} else {
 						textDis.text = "";
 					}
@@ -174,7 +188,7 @@ public class UI_NavigateHint : MonoBehaviour {
 				} else {
 					hintColor = new Color(0.45F, 0.8F, 0.85F);
 					textType.text = "ACT";
-					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.maxSpeed).ToString("f0");
+					textDis.text = (Vector2.Distance(entity.transform.position, SYS_ShipController.Direct.transform.position) / SYS_ShipController.Direct.GetMaxSpeed()).ToString("f0");
 				}
 			}
 
@@ -186,7 +200,9 @@ public class UI_NavigateHint : MonoBehaviour {
 		textType.color = hintColor;
 		star.color = hintColor;
 		board.color = hintColor;
+		//board.color = new Color(hintColor.r , hintColor.g , hintColor.b , 0.5f);
 	}
+
 
 	private void UpdatePos() {
 		Vector2 offset = (entity.transform.position - SYS_ShipController.Direct.transform.position);
@@ -204,6 +220,7 @@ public class UI_NavigateHint : MonoBehaviour {
 		rect.eulerAngles = new Vector3(0, 0, Angle(-offset));//※  將Vector3型別轉換四元數型別
 	}
 
+
 	public float Angle(Vector2 p_vector2) {
 		if (p_vector2.x < 0) {
 			return 360 - (Mathf.Atan2(-p_vector2.x, p_vector2.y) * Mathf.Rad2Deg * -1);
@@ -211,6 +228,7 @@ public class UI_NavigateHint : MonoBehaviour {
 			return Mathf.Atan2(-p_vector2.x, p_vector2.y) * Mathf.Rad2Deg;
 		}
 	}
+
 
 	public void SelfDrive() {
 		if (SYS_SelfDriving.Direct.GetTGT() == null || SYS_SelfDriving.Direct.GetTGT().tgtTrans != entity.transform) {

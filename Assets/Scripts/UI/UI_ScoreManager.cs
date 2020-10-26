@@ -103,6 +103,8 @@ public class UI_ScoreManager : MonoBehaviour
 		//清除攜帶副本道具
 		SYS_Save.Direct.SetPrecargo(0);
 		SYS_Save.Direct.SetPrecargo(1);
+
+		SYS_Gacha.Direct.Reset();
 	}
 
 	public void Confirm() {

@@ -26,7 +26,7 @@ public class UI_Home : MonoBehaviour, IBeginDragHandler , IEndDragHandler {
 					contenter.anchoredPosition = new Vector2(0, -720);
 					scrollRect.velocity = Vector2.zero;
 					onPos = true;
-					SYS_Logger.Direct.SetSystemMsg("設定完導航路徑後點擊望遠鏡出發");
+					SYS_Logger.Direct.SetSystemMsg("選擇任務後點Play");
 				}
 
 
@@ -36,7 +36,7 @@ public class UI_Home : MonoBehaviour, IBeginDragHandler , IEndDragHandler {
 					contenter.anchoredPosition = new Vector2(0, 720);
 					scrollRect.velocity = Vector2.zero;
 					onPos = true;
-					SYS_Logger.Direct.SetSystemMsg("可自訂船隻和船員");
+					SYS_Logger.Direct.SetSystemMsg("花費資源可升級飛船或太空站");
 				}
 
 			} else if (contenter.anchoredPosition.y > 1080) {
@@ -45,7 +45,7 @@ public class UI_Home : MonoBehaviour, IBeginDragHandler , IEndDragHandler {
 					contenter.anchoredPosition = new Vector2(0, 1440);
 					scrollRect.velocity = Vector2.zero;
 					onPos = true;
-					SYS_Logger.Direct.SetSystemMsg("花費資源可升級飛船或太空站");
+					SYS_Logger.Direct.SetSystemMsg("點擊push扭出全新駕駛員");
 				}
 
 			} else if (contenter.anchoredPosition.y < -1080) {
@@ -54,7 +54,7 @@ public class UI_Home : MonoBehaviour, IBeginDragHandler , IEndDragHandler {
 					contenter.anchoredPosition = new Vector2(0, -1440);
 					scrollRect.velocity = Vector2.zero;
 					onPos = true;
-					SYS_Logger.Direct.SetSystemMsg("施工中");
+					SYS_Logger.Direct.SetSystemMsg("可自訂船隻和船員");
 				}
 
 			} else {

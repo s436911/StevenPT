@@ -97,12 +97,16 @@ public class SYS_Save : MonoBehaviour {
 	}
 
 	//CargoBay
-	public void AddCargobay(Item item) {
+	public void ModifyCargobay(Item item) {
 		if (item.stackAble && gameData.cargobay.Count < SYS_ResourseManager.Direct.cargobay.Count) {
 			for (int ct = 0; ct < gameData.cargobay.Count; ct++) {
 				//已存在
 				if (gameData.cargobay[ct].iconID == item.iconID) {
 					gameData.cargobay[ct].stackNum += item.stackNum;
+					if (gameData.cargobay[ct].stackNum <= 0) {
+						gameData.cargobay.RemoveAt(ct);
+					}
+
 					SYS_ResourseManager.Direct.UpdateCargobayUI();
 					SaveBTN();
 					return;
@@ -120,35 +124,49 @@ public class SYS_Save : MonoBehaviour {
 		SYS_ResourseManager.Direct.UpdateCargobayUI();
 	}
 
-	//Research
-	public int GetResearch(int type) {
-		return gameData.researchs[type];
+	public Item GetCargobay(int itemID) {
+		for (int ct = 0; ct < gameData.cargobay.Count; ct++) {
+			//已存在
+			if (gameData.cargobay[ct].iconID == itemID) {
+				return gameData.cargobay[ct];
+			}
+		}
+		return new Item();
 	}
 
-	public void SetResearch(int type, int value , bool save = true) {
-		SYS_ResourseManager.Direct.lvText[type].text = value.ToString();
-		SYS_ResourseManager.Direct.needText[type].text = (value * researchNeed[type]).ToString();
-		gameData.researchs[type] = value;
+	//Research
+	public int GetResearch(int rdType) {
+		return gameData.researchs[rdType];
+	}
+
+	public void SetResearch(int rdType, int value , bool save = true) {
+		SYS_ResourseManager.Direct.lvText[rdType].text = value.ToString();
+		SYS_ResourseManager.Direct.needText[rdType].text = (value * researchNeed[rdType]).ToString();
+		gameData.researchs[rdType] = value;
 
 		if (save) {
 			SaveBTN();
 		}
 	}
 
-	public void ModifyResearch(int type, int value) {
-		SetResearch(type, GetResearch(type) + value);
+	public void ModifyResearch(int rdType , int value) {
+		SetResearch(rdType, GetResearch(rdType) + value);
 	}
 
 	public void UpgradeResearch(int type) {
+		
+
 		if (type == 0) {
 			if (GetResource(type) >= gameData.researchs[type] * researchNeed[type] && gameData.researchs[type] < 5) {
-				ModifyResource(type, -gameData.researchs[type] * researchNeed[type]);
-				SetResearch(type, gameData.researchs[type] + 1);
+				int cost = gameData.researchs[type] * researchNeed[type];
+				SetResearch(type , gameData.researchs[type] + 1);
+				ModifyResource(type, -cost);
 			}
 		} else {
 			if (GetResource(type + 1) >= gameData.researchs[type] * researchNeed[type] && gameData.researchs[type] < 5) {
-				ModifyResource(type + 1, -gameData.researchs[type] * researchNeed[type]);
-				SetResearch(type, gameData.researchs[type] + 1);
+				int cost = gameData.researchs[type] * researchNeed[type];
+				SetResearch(type , gameData.researchs[type] + 1);
+				ModifyResource(type + 1, -cost);
 			}
 		}
 	}
@@ -232,6 +250,13 @@ public class SYS_Save : MonoBehaviour {
 		if (type == 0 || type == 2 || type == 3 || type == 4) {
 			gameData.resources[type] = Mathf.Clamp(value, 0, 9999);
 			SYS_ResourseManager.Direct.resourceText_Home[type].text = GetResource(type).ToString();
+
+			if (GetResource(type) < gameData.researchs[type != 0 ? type - 1 : type] * researchNeed[type != 0 ? type - 1 : type]) {
+				SYS_ResourseManager.Direct.resourceText_Home[type].color = Color.red;
+			} else {
+				SYS_ResourseManager.Direct.resourceText_Home[type].color = Color.white;
+			}
+
 
 			if (save) {
 				SaveBTN();

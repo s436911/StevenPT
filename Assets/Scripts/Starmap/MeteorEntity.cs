@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class MeteorEntity : SpaceEntity {
 	public bool boss = false;
+	public bool ice = false;
 
 	void OnCollisionEnter2D(Collision2D colli) {
 		SYS_ShipController ship = colli.transform.GetComponent<SYS_ShipController>();
 
 		if (ship != null && ship.IsDamageAble() ) {
+			if (ice) {
+				ship.ModifyIce(5);
+			}
+
 			if (boss) {
 				SYS_Camera.Direct.Shake(0.45f);
 				ship.Impact(50 , ridgid.velocity);
