@@ -17,39 +17,41 @@ public class PlanetEntity : SpaceEntity {
 	void OnTriggerEnter2D(Collider2D colli) {
 		if (colli.transform.parent.GetComponent<SYS_ShipController>() != null) {
 			if (info.nvType == NaviType.Check) {
-				SYS_Interactive.Direct.Regist(iEvent);
-				UI_Navigator.Direct.Arrive(info);
-				if (!explored) {
-					explored = true;
-					int randomResource = Random.Range(0, 4);
-
-					if (randomResource == 0) {
-						SYS_ResourseManager.Direct.ModifyResource(0, 5);
-						SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "好多好多的燃料!");
-
-					} else if(randomResource == 1) {
-						SYS_ResourseManager.Direct.ModifyResource(1, 1);
-						SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "裝甲升級!");
-
-					} else if (randomResource == 2) {
-						SYS_ResourseManager.Direct.ModifyResource(2, 1);
-						SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "BUFFET!");
-
-					} else if (randomResource == 3) {
-						SYS_ResourseManager.Direct.ModifyResource(3, 1);
-						SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "我好餓RRRRR!");
-					}
-				}
+				EnterPlanet();
 
 			} else if (info.nvType == NaviType.End) {
-				if (SYS_Mission.Direct.nowMission.missionType == MissionType.Trip  || SYS_Mission.Direct.nowMission.missionType == MissionType.Escape) {
+				if (SYS_Mission.Direct.nowMission.missionType == MissionType.Trip || SYS_Mission.Direct.nowMission.missionType == MissionType.Escape) {
 					SYS_Mission.Direct.SetMSbar(SYS_Starmap.Direct.route.Count);
-				} 
+				} else {
+					EnterPlanet();
+				}
 			}
 		}
 	}
 
-	void OnTriggerExit2D(Collider2D colli) {
+	public void EnterPlanet() {
+		SYS_Interactive.Direct.Regist(iEvent);
+		UI_Navigator.Direct.Arrive(this);
+		if (!explored) {
+			explored = true;
+			int randomResource = Random.Range(0, 4);
 
+			if (randomResource == 0) {
+				SYS_ResourseManager.Direct.ModifyResource(0, 5);
+				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "好多好多的燃料!");
+
+			} else if (randomResource == 1) {
+				SYS_ResourseManager.Direct.ModifyResource(1, 1);
+				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "裝甲升級!");
+
+			} else if (randomResource == 2) {
+				SYS_ResourseManager.Direct.ModifyResource(2, 1);
+				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "BUFFET!");
+
+			} else if (randomResource == 3) {
+				SYS_ResourseManager.Direct.ModifyResource(3, 1);
+				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "我好餓RRRRR!");
+			}
+		}
 	}
 }

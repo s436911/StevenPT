@@ -40,7 +40,7 @@ public class SYS_Space : MonoBehaviour {
 		InitResoureces();
 	}
 
-	public void SplitResourece(Vector2 pos, Material mat , int resrcSet) {
+	public void SplitResourece(Vector2 pos, Material mat , int resrcId) {
 		StarInfo init = new StarInfo(SubType.Resoreces , NaviType.None , Affinity.None , pos);
 
 		ResourecesEntity objGen = Instantiate(pfbResourece).GetComponent<ResourecesEntity>();
@@ -48,19 +48,36 @@ public class SYS_Space : MonoBehaviour {
 		objGen.transform.position = new Vector3(init.sPos.x, init.sPos.y, 0);
 		objGen.name = init.name;
 
-		objGen.Regist(init, mat, Random.Range(0.9f, 1.1f), resrcSet);
+		objGen.Regist(init, mat, Random.Range(0.9f, 1.1f), resrcId);
 	}
 
 	public void InitResoureces() {
 		//Side Resoureces
 		List<StarInfo> initList = new List<StarInfo>();
-		int resrcSet;
+		int resrcId;
 
+		//Random內圈 Resoureces
 		for (int ct = 0; ct < planets.Count * resrcInNum; ct++) {
 			initList.Add(new StarInfo(SubType.Resoreces, NaviType.None, Affinity.None, SYS_Starmap.Direct.stars[Random.Range(0, SYS_Starmap.Direct.stars.Count)].sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(resrcInMinT, resrcInMaxT)));
 		}
 
-		//Random Resoureces
+		foreach (StarInfo starInfo in initList) {
+			ResourecesEntity objGen = Instantiate(pfbResoureces).GetComponent<ResourecesEntity>();
+			objGen.transform.SetParent(entityGroup);
+			objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, 0);
+			objGen.name = starInfo.name;
+
+			int stack = Random.Range(3, 5);
+			resrcId = (SYS_Mission.Direct.nowMission.subResrc != 0 && Random.Range(0, 4) == 0) ? SYS_Mission.Direct.nowMission.subResrc : SYS_Mission.Direct.nowMission.mainResrc;
+			objGen.Regist(starInfo, DB.GetItemMaterial(resrcId), 0.6f + stack * 0.15f, resrcId, stack);
+
+			if (SYS_Mission.Direct.nowMission.missionType == MissionType.Collect && resrcId == SYS_Mission.Direct.nowMission.mainResrc) {
+				UI_Navigator.Direct.Regist(objGen);
+			}
+		}
+
+		initList = new List<StarInfo>();
+		//Random外圈 Resoureces
 		for (int ct = 0; ct < planets.Count * resrcOutNum; ct++) {
 			initList.Add(new StarInfo(SubType.Resoreces, NaviType.None, Affinity.None, SYS_Starmap.Direct.stars[Random.Range(0, SYS_Starmap.Direct.stars.Count)].sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(resrcOutMinT, resrcOutMaxT)));
 		}
@@ -72,13 +89,8 @@ public class SYS_Space : MonoBehaviour {
 			objGen.name = starInfo.name;
 
 			int stack = Random.Range(3, 5);
-
-			if (SYS_Mission.Direct.nowMission.subResrc != 0 && Random.Range(0,4) == 0) {
-				resrcSet = SYS_Mission.Direct.nowMission.subResrc;
-			} else {
-				resrcSet = SYS_Mission.Direct.nowMission.mainResrc;
-			}
-			objGen.Regist(starInfo, DB.GetItemMaterial(resrcSet), 0.6f + stack * 0.15f, resrcSet, stack);
+			resrcId = (SYS_Mission.Direct.nowMission.subResrc != 0 && Random.Range(0, 4) == 0) ? SYS_Mission.Direct.nowMission.subResrc : SYS_Mission.Direct.nowMission.mainResrc;
+			objGen.Regist(starInfo, DB.GetItemMaterial(resrcId), 0.6f + stack * 0.15f, resrcId, stack);
 		}
 
 		initList = new List<StarInfo>();
@@ -93,14 +105,9 @@ public class SYS_Space : MonoBehaviour {
 			objGen.transform.SetParent(entityGroup);
 			objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, 0);
 			objGen.name = starInfo.name;
-			
-			if (SYS_Mission.Direct.nowMission.subResrc != 0 && Random.Range(0, 3) == 0) {
-				resrcSet = SYS_Mission.Direct.nowMission.subResrc;
-			} else {
-				resrcSet = SYS_Mission.Direct.nowMission.mainResrc;
-			}
 
-			objGen.Regist(starInfo, DB.GetItemMaterial(resrcSet), Random.Range(0.9f, 1.1f), resrcSet);
+			resrcId = (SYS_Mission.Direct.nowMission.subResrc != 0 && Random.Range(0, 3) == 0) ? SYS_Mission.Direct.nowMission.subResrc : SYS_Mission.Direct.nowMission.mainResrc;
+			objGen.Regist(starInfo, DB.GetItemMaterial(resrcId), Random.Range(0.9f, 1.1f), resrcId);
 		}
 		
 		//Random goal

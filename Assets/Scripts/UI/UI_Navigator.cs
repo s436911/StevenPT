@@ -40,9 +40,9 @@ public class UI_Navigator : MonoBehaviour {
 	}
 
 	//到達星球
-	public void Arrive(StarInfo aInfo) {
-		if (SYS_Starmap.Direct.route.Contains(aInfo)) {
-			int aIndex = SYS_Starmap.Direct.route.IndexOf(aInfo);
+	public void Arrive(PlanetEntity arrived) {
+		if (SYS_Starmap.Direct.route.Contains(arrived.info)) {
+			int aIndex = SYS_Starmap.Direct.route.IndexOf(arrived.info);
 
 			if (SYS_Starmap.Direct.route[aIndex].nvType == NaviType.Check) {
 				for (int ct = 0; ct < SYS_Space.Direct.planets.Count; ct++) {
@@ -63,6 +63,14 @@ public class UI_Navigator : MonoBehaviour {
 				} else {
 					SYS_Audio.Direct.Play(BGMType.Space);
 				}
+			} else {
+				for (int ct = 0; ct < SYS_Space.Direct.planets.Count; ct++) {
+					//找到前一顆
+					if (SYS_Starmap.Direct.route[aIndex - 1] == SYS_Space.Direct.planets[ct].info) {
+						SetNavigate(SYS_Space.Direct.planets[ct], SYS_Space.Direct.planets[ct + 1]);
+						continue;
+					}
+				}
 			}
 		}
 	}
@@ -70,8 +78,6 @@ public class UI_Navigator : MonoBehaviour {
 	public void SetNavigate(PlanetEntity nextValue, PlanetEntity preValue) {
 		prePlanet = preValue;
 		nextPlanet = nextValue;
-
-		SetBacker(preValue);
 	}
 
 	public void SetBacker(PlanetEntity value) {
@@ -126,6 +132,13 @@ public class UI_Navigator : MonoBehaviour {
 			return Mathf.Atan2(-p_vector2.x, p_vector2.y) * Mathf.Rad2Deg;
 		}
 	}
+
+	public void Regist(ResourecesEntity entity) {
+		UI_NavigateHint objGen = Instantiate(nvPfb).GetComponent<UI_NavigateHint>();
+		objGen.transform.SetParent(uiPanel.transform);
+		objGen.Regist(entity);
+	}
+
 	public void Regist(SpaceEntity entity) {
 		UI_NavigateHint objGen = Instantiate(nvPfb).GetComponent<UI_NavigateHint>();
 		objGen.transform.SetParent(uiPanel.transform);
@@ -136,5 +149,7 @@ public class UI_Navigator : MonoBehaviour {
 		foreach (Transform child in uiPanel.transform) {
 			Destroy(child.gameObject);
 		}
+
+		SetBacker(null);
 	}
 }

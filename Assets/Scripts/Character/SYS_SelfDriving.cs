@@ -16,6 +16,10 @@ public class SYS_SelfDriving : MonoBehaviour {
 	// Update is called once per frame
 	void Update() {
 		if (tgt != null && !pause) {
+			if (tgt.IsNull()) {
+				tgt = null;
+			}
+
 			SYS_ShipController.Direct.OnUpdateDirection((tgt.GetPos() - (Vector2)SYS_ShipController.Direct.transform.position));
 			if (Vector2.Distance(tgt.GetPos(),SYS_ShipController.Direct.transform.position) < stopDis) {
 				Reset();
@@ -67,6 +71,10 @@ public class SelfDriveTGT {
 	public Vector2 tgtPos;
 	public Transform tgtTrans;
 	public bool posTGT = false;
+
+	public bool IsNull() {
+		return !posTGT && tgtTrans == null;
+	}
 
 	public SelfDriveTGT(Vector2 tgtPos) {
 		this.tgtPos = tgtPos;
