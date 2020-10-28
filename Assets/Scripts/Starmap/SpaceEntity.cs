@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpaceEntity : MonoBehaviour {
 	public Rigidbody2D ridgid;
 	public MeshRenderer meshRenderer;
-	public StarInfo info;
+	public StarInfo info ;
 	public bool explored = false;
 
 	public virtual void Awake() {

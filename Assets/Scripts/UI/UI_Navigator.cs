@@ -96,8 +96,8 @@ public class UI_Navigator : MonoBehaviour {
 			float scale = Mathf.Abs(offset.x) / 360;
 			offset = offset / scale;
 
-			if (Mathf.Abs(offset.y) > 560) {//640
-				scale = Mathf.Abs(offset.y) / 560;//640
+			if (Mathf.Abs(offset.y) > 540) {//1280 / 2 = 640
+				scale = Mathf.Abs(offset.y) / 540;//640
 				offset = offset / scale;
 			}
 
@@ -133,10 +133,10 @@ public class UI_Navigator : MonoBehaviour {
 		}
 	}
 
-	public void Regist(ResourecesEntity entity) {
+	public void Regist(SpaceEntity entity, NaviMode valueNV, Texture valueTexture) {
 		UI_NavigateHint objGen = Instantiate(nvPfb).GetComponent<UI_NavigateHint>();
 		objGen.transform.SetParent(uiPanel.transform);
-		objGen.Regist(entity);
+		objGen.Regist(entity , valueNV, valueTexture);
 	}
 
 	public void Regist(SpaceEntity entity) {

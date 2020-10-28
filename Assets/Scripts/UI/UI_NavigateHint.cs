@@ -13,6 +13,7 @@ public class UI_NavigateHint : MonoBehaviour {
 	public SpaceEntity entity;
 	public bool navigating = false;
 	private bool isStar = true;
+	private NaviMode naviMode = NaviMode.None;
 
 	void Awake() {
 		rect = this.GetComponent<RectTransform>();
@@ -78,7 +79,7 @@ public class UI_NavigateHint : MonoBehaviour {
 
 			CloseHint();
 
-		} else if (entity.info.nvType == NaviType.Activity || entity.info.subType == SubType.Resoreces) {
+		} else if (entity.info.nvType == NaviType.Activity || entity.info.subType == SubType.Resoreces || entity.info.subType == SubType.Meteor) {
 			//一般星球 || 一般資源
 			if (distance < (UI_Navigator.Direct.detectDisT + SYS_Save.Direct.GetResearch(1)) * SYS_Starmap.Direct.avgSpeed ) {
 				ShowHint();
@@ -90,15 +91,13 @@ public class UI_NavigateHint : MonoBehaviour {
 			CloseHint();
 		}
 	}
-
-	public void Regist(ResourecesEntity value) {
+	
+	public void Regist(SpaceEntity value, NaviMode valueNV, Texture valueTexture) {
 		entity = value;
+		naviMode = valueNV;
 		isStar = false;
-		if (value.info.subType == SubType.Resoreces) {
-			star.texture = DB.GetItemTexture(value.resrcId);
-			star.GetComponent<Animator>().enabled = false;
-		}
-
+		star.texture = valueTexture;
+		star.GetComponent<Animator>().enabled = false;
 		UpdateHint();
 	}
 
@@ -139,6 +138,10 @@ public class UI_NavigateHint : MonoBehaviour {
 			} else if (UI_Navigator.Direct.prePlanet == entity) {
 				textType.text = "PRE";
 
+			} else if (naviMode == NaviMode.Alert) {
+				hintTGT = 2;
+				textType.text = "";
+
 			} else if (entity.explored) {
 				textType.text = entity.info.nvType == NaviType.Activity ? "ACT" : "SUP";
 
@@ -163,9 +166,12 @@ public class UI_NavigateHint : MonoBehaviour {
 			} else {
 				textType.text = "???";
 			}
-		} 
+		}
 
-		if (hintTGT > 0) {
+		if (naviMode == NaviMode.Alert) {
+			hintColor = new Color(1, 0, 0);
+
+		} else if (hintTGT > 0) {
 			hintColor = new Color(0.9F, 0.7F, 0.15F);
 
 		} else if (entity.explored) {
@@ -174,7 +180,7 @@ public class UI_NavigateHint : MonoBehaviour {
 		} else {
 			hintColor = new Color(0.85F, 0.85F, 0.85F);
 		}
-				
+
 		textDis.text = SYS_ShipController.Direct.detector.activeSelf || entity.explored ? GetTimeLeft().ToString("f0") : "";
 		textDis.color = hintColor;
 		textType.color = hintColor;
@@ -236,4 +242,10 @@ public class UI_NavigateHint : MonoBehaviour {
 			SYS_SelfDriving.Direct.Reset();
 		}
 	}
+}
+
+public enum NaviMode {
+	None,
+	Target,
+	Alert,
 }

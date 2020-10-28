@@ -12,11 +12,8 @@ public class SYS_Mission : MonoBehaviour {
 	public List<UI_ButtonBase> missions = new List<UI_ButtonBase>();
 	public List<GameObject> missionUI;
 
-	public List<Image> msBars = new List<Image>();
-	public RectTransform msPos;
 	public RawImage msIcon;
 	public Text msText;
-	public Text msCompleteText;
 	public float msNow;
 	public float msTGT;
 
@@ -30,6 +27,7 @@ public class SYS_Mission : MonoBehaviour {
 	public GameObject msCountDown;
 	public Text msCountDownText;
 	public Rigidbody2D msStarEater;
+	public Texture msStarEaterTexture;
 
 	public float[] scopeCosts = { 0, 1, 2, 4 };
 	public Color[] scopeColors = new Color[4];
@@ -51,6 +49,7 @@ public class SYS_Mission : MonoBehaviour {
 	void Awake() {
 		Direct = this;
 		scopeLeft = scopeLeftMax;
+		msStarEater.GetComponent<MeteorEntity>().info = new StarInfo(SubType.Meteor, NaviType.None, Affinity.None, Vector2.zero);
 	}
 
 	void Update() {
@@ -98,6 +97,7 @@ public class SYS_Mission : MonoBehaviour {
 			SetCountDown(300);
 			msStarEater.transform.position = new Vector2(0,-20);
 			msStarEater.gameObject.SetActive(true);
+			UI_Navigator.Direct.Regist(msStarEater.gameObject.GetComponent<MeteorEntity>() , NaviMode.Alert, msStarEaterTexture);
 		}
 	}
 	public void ResetCountDown() {
@@ -302,23 +302,12 @@ public class SYS_Mission : MonoBehaviour {
 	}
 
 	public void UpdateMSbarUI() {
-		float percent = Mathf.Clamp01( msNow / msTGT);
-
-		for (int ct = 0; ct < msBars.Count; ct++) {
-			if ((ct + 1) * 0.125f <= percent) {
-				msBars[ct].color = new Color(0.9f, 0.7f, 0.15f);
-			} else {
-				msBars[ct].color = new Color(0.8f, 0.8f, 0.8f);
-			}
-		}
-
-		msPos.anchoredPosition = new Vector2(720 * percent, msPos.anchoredPosition.y);
-		msText.text = msNow + "/" + msTGT;
+		float percent = Mathf.Clamp01( msNow / msTGT);		
 
 		if (percent != 1) {
-			msCompleteText.text = (percent * 100).ToString("0") + "%";
+			msText.text = msNow + "/" + msTGT + " (" +(percent * 100).ToString("0") + "%)";
 		} else {
-			msCompleteText.text = "complete";
+			msText.text = "complete";
 		}
 	}
 

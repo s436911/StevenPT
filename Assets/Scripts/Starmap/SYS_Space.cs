@@ -72,7 +72,7 @@ public class SYS_Space : MonoBehaviour {
 			objGen.Regist(starInfo, DB.GetItemMaterial(resrcId), 0.6f + stack * 0.15f, resrcId, stack);
 
 			if (SYS_Mission.Direct.nowMission.missionType == MissionType.Collect && resrcId == SYS_Mission.Direct.nowMission.mainResrc) {
-				UI_Navigator.Direct.Regist(objGen);
+				UI_Navigator.Direct.Regist(objGen , NaviMode.Target , DB.GetItemTexture(resrcId));
 			}
 		}
 
