@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class PlanetEntity : SpaceEntity {
 	public GameObject halo;
-	public InteractEvent iEvent;
+	public InteractEvent story;
 	public TextMesh text;
 		
 	public void Regist(StarInfo info, Material mat, float size, bool haveHalo, int eventId) {
 		Regist(info, mat, size);
 		halo.SetActive(haveHalo);
 		text.text = info.name;
-		iEvent = TMP_InteractEvent.GetPlanetEvent(info.name, eventId);
+		story = TMP_InteractEvent.GetPlanetEvent(info.name, eventId);
 	}
 
 	void OnTriggerEnter2D(Collider2D colli) {
@@ -30,7 +30,8 @@ public class PlanetEntity : SpaceEntity {
 	}
 
 	public void EnterPlanet() {
-		SYS_Interactive.Direct.Regist(iEvent);
+		//SYS_Interactive.Direct.Regist(iEvent);
+		SYS_Interactive.Direct.RegistTalker(this, story);
 		UI_Navigator.Direct.Arrive(this);
 		if (!explored) {
 			explored = true;

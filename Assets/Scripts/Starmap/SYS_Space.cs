@@ -41,7 +41,7 @@ public class SYS_Space : MonoBehaviour {
 	}
 
 	public void SplitResourece(Vector2 pos, Material mat , int resrcId) {
-		StarInfo init = new StarInfo(SubType.Resoreces , NaviType.None , Affinity.None , pos);
+		StarInfo init = new StarInfo(MainType.Drift, SubType.Resoreces , NaviType.None , Affinity.None , pos);
 
 		ResourecesEntity objGen = Instantiate(pfbResourece).GetComponent<ResourecesEntity>();
 		objGen.transform.SetParent(entityGroup);
@@ -58,7 +58,7 @@ public class SYS_Space : MonoBehaviour {
 
 		//Random內圈 Resoureces
 		for (int ct = 0; ct < planets.Count * resrcInNum; ct++) {
-			initList.Add(new StarInfo(SubType.Resoreces, NaviType.None, Affinity.None, SYS_Starmap.Direct.stars[Random.Range(0, SYS_Starmap.Direct.stars.Count)].sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(resrcInMinT, resrcInMaxT)));
+			initList.Add(new StarInfo(MainType.Drift, SubType.Resoreces, NaviType.None, Affinity.None, SYS_Starmap.Direct.stars[Random.Range(0, SYS_Starmap.Direct.stars.Count)].sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(resrcInMinT, resrcInMaxT)));
 		}
 
 		foreach (StarInfo starInfo in initList) {
@@ -79,7 +79,7 @@ public class SYS_Space : MonoBehaviour {
 		initList = new List<StarInfo>();
 		//Random外圈 Resoureces
 		for (int ct = 0; ct < planets.Count * resrcOutNum; ct++) {
-			initList.Add(new StarInfo(SubType.Resoreces, NaviType.None, Affinity.None, SYS_Starmap.Direct.stars[Random.Range(0, SYS_Starmap.Direct.stars.Count)].sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(resrcOutMinT, resrcOutMaxT)));
+			initList.Add(new StarInfo(MainType.Drift, SubType.Resoreces, NaviType.None, Affinity.None, SYS_Starmap.Direct.stars[Random.Range(0, SYS_Starmap.Direct.stars.Count)].sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(resrcOutMinT, resrcOutMaxT)));
 		}
 
 		foreach (StarInfo starInfo in initList) {
@@ -97,7 +97,7 @@ public class SYS_Space : MonoBehaviour {
 
 		//Random Resourece
 		for (int ct = 0; ct < planets.Count * resrcNum; ct++) {
-			initList.Add(new StarInfo(SubType.Resoreces, NaviType.None, Affinity.None, SYS_Starmap.Direct.stars[Random.Range(0, SYS_Starmap.Direct.stars.Count)].sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(resrcMinT, resrcMaxT)));
+			initList.Add(new StarInfo(MainType.Drift, SubType.Resoreces, NaviType.None, Affinity.None, SYS_Starmap.Direct.stars[Random.Range(0, SYS_Starmap.Direct.stars.Count)].sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(resrcMinT, resrcMaxT)));
 		}
 
 		foreach (StarInfo starInfo in initList) {
@@ -115,7 +115,7 @@ public class SYS_Space : MonoBehaviour {
 			initList = new List<StarInfo>();
 
 			for (int ct = 0; ct < Random.Range(8,13); ct++) {
-				initList.Add(new StarInfo(SubType.Resoreces, NaviType.None, Affinity.None, SYS_Starmap.Direct.GetInfoTGT().sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(1.5f, 2.5f)));
+				initList.Add(new StarInfo(MainType.Drift, SubType.Resoreces, NaviType.None, Affinity.None, SYS_Starmap.Direct.GetInfoTGT().sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(1.5f, 2.5f)));
 			}
 
 			foreach (StarInfo starInfo in initList) {
@@ -131,12 +131,12 @@ public class SYS_Space : MonoBehaviour {
 	public void InitActivity() {
 		List<StarInfo> initList = new List<StarInfo>();
 		for (int ct = 0; ct < activityNum * SYS_Mission.Direct.nowMission.iActRate; ct++) {
-			initList.Add(new StarInfo(SubType.None, NaviType.Activity, Affinity.None, SYS_Starmap.Direct.stars[Random.Range(0, SYS_Starmap.Direct.stars.Count)].sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(activityMin, activityMax)));
+			initList.Add(new StarInfo(MainType.InterAct, SubType.None, NaviType.Activity, Affinity.None, SYS_Starmap.Direct.stars[Random.Range(0, SYS_Starmap.Direct.stars.Count)].sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(activityMin, activityMax)));
 		}
 
 		foreach (StarInfo star in SYS_Starmap.Direct.stars) {
 			for (int ct = 0; ct < star.iactNum; ct++) {
-				initList.Add(new StarInfo(SubType.None, NaviType.Activity, Affinity.None, star.sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(activityMin, activityMax)));
+				initList.Add(new StarInfo(MainType.InterAct, SubType.None, NaviType.Activity, Affinity.None, star.sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(activityMin, activityMax)));
 			}
 		}
 
@@ -157,7 +157,7 @@ public class SYS_Space : MonoBehaviour {
 			initList = new List<StarInfo>();
 
 			for (int ct = 0; ct < 2; ct++) {
-				initList.Add(new StarInfo(SubType.None, NaviType.Activity, Affinity.None, SYS_Starmap.Direct.stars[Random.Range(0, 2)].sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(2, 6)));
+				initList.Add(new StarInfo(MainType.InterAct, SubType.None, NaviType.Activity, Affinity.None, SYS_Starmap.Direct.stars[Random.Range(0, 2)].sPos + Random.insideUnitCircle.normalized * SYS_Starmap.Direct.avgSpeed * Random.Range(2, 6)));
 			}
 
 			foreach (StarInfo starInfo in initList) {

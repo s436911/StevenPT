@@ -29,6 +29,7 @@ public class SYS_Save : MonoBehaviour {
 	public void Clear() {
 		gameData = new PlayerData();
 		SYS_ModeSwitcher.Direct.Stub();
+		SYS_Gacha.Direct.Reset();
 		Save(gameData);
 		UpdateUI();
 	}
@@ -69,6 +70,7 @@ public class SYS_Save : MonoBehaviour {
 		}
 
 		SYS_ResourseManager.Direct.UpdateCargobayUI();
+		SYS_Gacha.Direct.UpdateGachaUI();
 	}
 
 	public bool HadFile(string fileName = "playerSave.dat") {
@@ -154,8 +156,6 @@ public class SYS_Save : MonoBehaviour {
 	}
 
 	public void UpgradeResearch(int type) {
-		
-
 		if (type == 0) {
 			if (GetResource(type) >= gameData.researchs[type] * researchNeed[type] && gameData.researchs[type] < 5) {
 				int cost = gameData.researchs[type] * researchNeed[type];
@@ -167,6 +167,34 @@ public class SYS_Save : MonoBehaviour {
 				int cost = gameData.researchs[type] * researchNeed[type];
 				SetResearch(type , gameData.researchs[type] + 1);
 				ModifyResource(type + 1, -cost);
+			}
+		}
+	}
+
+	//Date
+	public string GetDate() {
+		return gameData.date;
+	}
+
+	public void SetDate(string value, bool save = true) {
+		gameData.date = value;
+
+		if (save) {
+			SaveBTN();
+		}
+	}
+
+	//Date
+	public int GetGacha(int slotValue) {
+		return gameData.gachas[slotValue];
+	}
+
+	public void SetGacha(int slotValue, int value, bool save = true) {
+		if (value > 0) {
+			gameData.gachas[slotValue] = value;
+			SYS_Gacha.Direct.UpdateGachaUI();
+			if (save) {
+				SaveBTN();
 			}
 		}
 	}
@@ -365,6 +393,9 @@ public class SYS_Save : MonoBehaviour {
 
 [System.Serializable]
 public class PlayerData  {
+	public string date = "";
+	public int[] gachas = new int[3];
+
 	public int[] resources = new int[5];
 	public int[] researchs = new int[4];
 

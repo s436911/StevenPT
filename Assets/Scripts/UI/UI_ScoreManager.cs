@@ -104,7 +104,7 @@ public class UI_ScoreManager : MonoBehaviour
 		SYS_Save.Direct.SetPrecargo(0);
 		SYS_Save.Direct.SetPrecargo(1);
 
-		SYS_Gacha.Direct.Reset();
+		SYS_Gacha.Direct.CheckDate();
 	}
 
 	public void Confirm() {

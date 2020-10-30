@@ -74,6 +74,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 				UI_ButtonBase objTmp = Instantiate(pfbItem).GetComponent<UI_ButtonBase>();
 				objTmp.transform.SetParent(panelItem);
 				objTmp.GetComponent<RectTransform>().anchoredPosition = new Vector2(widthItem * x, highItem * -y);
+				objTmp.transform.localScale = Vector2.one;
 				cargobay.Add(objTmp);
 			}
 		}

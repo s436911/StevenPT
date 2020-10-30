@@ -9,23 +9,20 @@ public class SYS_Gacha : MonoBehaviour {
 	public GameObject pfbEgg;
 	public Vector2 force;
 
-	public List<int> itemIds = new List<int>();
 	public List<RawImage> itemIcons = new List<RawImage>();
 	public List<Text> itemNeeds = new List<Text>();
 	public List<Text> itemHaves = new List<Text>();
 	public List<Texture2D> eggTexture = new List<Texture2D>();
 
 	public List<int> randList = new List<int>();
+	public bool changeDate = false;
 
 	void Awake() {
 		Direct = this;
 	}
 	
 	public void Init() {
-		itemIds.Add(0);
-		itemIds.Add(0);
-		itemIds.Add(0);
-		Reset();
+
 		/*
 		SYS_Save.Direct.ModifyCargobay(DB.NewItem(randList[Random.Range(0, randList.Count)] , 10));
 		SYS_Save.Direct.ModifyCargobay(DB.NewItem(randList[Random.Range(0, randList.Count)], 10));
@@ -37,6 +34,22 @@ public class SYS_Gacha : MonoBehaviour {
 		SYS_Save.Direct.ModifyCargobay(DB.NewItem(randList[Random.Range(0, randList.Count)], 10));
 		SYS_Save.Direct.ModifyCargobay(DB.NewItem(randList[Random.Range(0, randList.Count)], 10));
 		*/
+
+		CheckDate();
+	}
+
+	public void CheckDate() {
+		string date = System.DateTime.UtcNow.ToShortDateString().ToString();
+		if (SYS_Save.Direct.GetDate() != date || changeDate) {
+			SYS_Save.Direct.SetDate(date);
+			ReQuest(0);
+			ReQuest(1);
+			ReQuest(2);
+			Debug.LogWarning("ChangeDate:" + date);
+
+		} else {
+			Debug.LogWarning("NonChangeDate:" + date);
+		}
 	}
 
 	public void Reset() {
@@ -46,29 +59,17 @@ public class SYS_Gacha : MonoBehaviour {
 	}
 
 	public void ReQuest(int slot) {
-		SetQuest(slot, randList[Random.Range(0,randList.Count)]);
+		SYS_Save.Direct.SetGacha(slot, randList[Random.Range(0, randList.Count)]);
 	}
 
-	public void SetQuest(int slot , int itemId = 0) {
-		if (itemId != 0) {
-			itemIds[slot] = itemId;
-		}
-	
-		itemIcons[slot].texture = DB.GetItemTexture(itemIds[slot]);
-		itemNeeds[slot].text = ((slot * 4) + 2).ToString();
-		itemHaves[slot].text = SYS_Save.Direct.GetCargobay(itemIds[slot]).stackNum.ToString();
-		if (SYS_Save.Direct.GetCargobay(itemIds[slot]).stackNum < ((slot * 4) + 2)) {
-			itemHaves[slot].color = Color.red;
-		} else {
-			itemHaves[slot].color = Color.white;
-		}
-	}
 
 	public void ReturnQuest(int slot) {
-		if (SYS_Save.Direct.GetCargobay(itemIds[slot]).stackNum >= ((slot * 4) + 2)) {
+		int itemId = SYS_Save.Direct.GetGacha(slot);
+
+		if (SYS_Save.Direct.GetCargobay(itemId).stackNum >= ((slot * 4) + 2)) {
 			Gacha(slot);
-			SYS_Save.Direct.ModifyCargobay(DB.NewItem(itemIds[slot], -((slot * 4) + 2)));
-			SetQuest(slot);
+			SYS_Save.Direct.ModifyCargobay(DB.NewItem(itemId, -((slot * 4) + 2)));
+			//SetQuest(slot);
 		}
 	}
 
@@ -80,6 +81,8 @@ public class SYS_Gacha : MonoBehaviour {
 		egg.SetParent(entityGroup);
 		egg.anchoredPosition = new Vector2(0, 0);
 		egg.GetComponent<UI_Gacha>().Regist(new Vector2(Random.Range(-force.x , force.x) ,Random.Range(force.y, force.y * 1.2f)));
+		egg.transform.localScale = Vector2.one;
+
 		foreach (Transform tran in egg.transform) {
 			if (tran.name == "head") {
 				tran.GetComponent<RawImage>().texture = SYS_TeamManager.Direct.headIcons[newHero.headID];
@@ -87,6 +90,22 @@ public class SYS_Gacha : MonoBehaviour {
 				tran.GetComponent<RawImage>().texture = SYS_TeamManager.Direct.bodyIcons[newHero.bodyID];
 			} else if (tran.name == "shield") {
 				tran.GetComponent<RawImage>().texture = eggTexture[slot];
+			}
+		}
+	}
+
+	public void UpdateGachaUI() {
+		for (int ct = 0; ct < itemIcons.Count; ct++) {
+			int itemId = SYS_Save.Direct.GetGacha(ct);
+
+			itemIcons[ct].texture = DB.GetItemTexture(itemId);
+			itemNeeds[ct].text = ((ct * 4) + 2).ToString();
+			itemHaves[ct].text = SYS_Save.Direct.GetCargobay(itemId).stackNum.ToString();
+
+			if (SYS_Save.Direct.GetCargobay(itemId).stackNum < ((ct * 4) + 2)) {
+				itemHaves[ct].color = Color.red;
+			} else {
+				itemHaves[ct].color = Color.white;
 			}
 		}
 	}

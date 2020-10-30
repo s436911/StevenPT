@@ -127,7 +127,7 @@ public class SYS_Weather : MonoBehaviour {
 	}
 
 	public void SpawnBack(Vector2 dePos) {
-		StarInfo starInfo = new StarInfo(SubType.Meteor, NaviType.None, Affinity.None, dePos);
+		StarInfo starInfo = new StarInfo(MainType.Drift , SubType.Meteor, NaviType.None, Affinity.None, dePos);
 
 		SpaceEntity objGen = Instantiate(pfbBackMeteor).GetComponent<SpaceEntity>();
 		objGen.transform.SetParent(backGroup);
@@ -137,7 +137,7 @@ public class SYS_Weather : MonoBehaviour {
 	}
 
 	public void SpawnFront(Vector2 dePos , Transform group) {
-		StarInfo starInfo = new StarInfo(SubType.Meteor, NaviType.None, Affinity.None, dePos);
+		StarInfo starInfo = new StarInfo(MainType.Drift, SubType.Meteor, NaviType.None, Affinity.None, dePos);
 
 		MeteorEntity objGen = Instantiate(pfbFrontMeteor).GetComponent<MeteorEntity>();
 		objGen.transform.SetParent(group);

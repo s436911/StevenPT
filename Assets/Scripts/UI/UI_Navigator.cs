@@ -80,7 +80,7 @@ public class UI_Navigator : MonoBehaviour {
 		nextPlanet = nextValue;
 	}
 
-	public void SetBacker(PlanetEntity value) {
+	public void SetBacker(SpaceEntity value) {
 		if (value != null) {
 			Color hintColor = Color.white;
 			Vector2 offset = (value.transform.position - SYS_ShipController.Direct.transform.position);
@@ -136,12 +136,14 @@ public class UI_Navigator : MonoBehaviour {
 	public void Regist(SpaceEntity entity, NaviMode valueNV, Texture valueTexture) {
 		UI_NavigateHint objGen = Instantiate(nvPfb).GetComponent<UI_NavigateHint>();
 		objGen.transform.SetParent(uiPanel.transform);
+		objGen.transform.localScale = Vector2.one;
 		objGen.Regist(entity , valueNV, valueTexture);
 	}
 
 	public void Regist(SpaceEntity entity) {
 		UI_NavigateHint objGen = Instantiate(nvPfb).GetComponent<UI_NavigateHint>();
 		objGen.transform.SetParent(uiPanel.transform);
+		objGen.transform.localScale = Vector2.one;
 		objGen.Regist(entity);
 	}
 

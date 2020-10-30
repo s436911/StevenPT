@@ -14,7 +14,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 	public AnimationCurve switchAnim;
 	public float animing = 0;
 	public float animTime = 3;
-	
+
 	public GameMode gameMode;
 
 	void Awake() {

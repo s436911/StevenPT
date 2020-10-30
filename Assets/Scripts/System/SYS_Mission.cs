@@ -49,7 +49,7 @@ public class SYS_Mission : MonoBehaviour {
 	void Awake() {
 		Direct = this;
 		scopeLeft = scopeLeftMax;
-		msStarEater.GetComponent<MeteorEntity>().info = new StarInfo(SubType.Meteor, NaviType.None, Affinity.None, Vector2.zero);
+		msStarEater.GetComponent<MeteorEntity>().info = new StarInfo(MainType.Drift, SubType.Meteor, NaviType.None, Affinity.None, Vector2.zero);
 	}
 
 	void Update() {

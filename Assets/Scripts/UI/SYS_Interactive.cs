@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SYS_Interactive : MonoBehaviour
-{
+public class SYS_Interactive : MonoBehaviour {
 	public static SYS_Interactive Direct;
 	private InteractEvent nowEvent;
-	public GameObject uiPanel;
+	public GameObject uiPanelAnswer;
+	public RectTransform uiPanelTalker;
+	public SpaceEntity talker;
+	public InteractEvent story;
+	public float talkerDis = 12;
+	public float talkerUIOffset = 120;
+
 
 	public Text textFrom;
 	public Text textMsg;
@@ -26,19 +31,15 @@ public class SYS_Interactive : MonoBehaviour
 	void Awake() {
 		Direct = this;
 	}
-	
-	public void Regist(InteractEvent value) {
-		if (Time.timeSinceLevelLoad - intaTimer < 3) {
-			return;
-		}
 
+	public void Regist(InteractEvent value) {
 		intaTimer = Time.timeSinceLevelLoad;
 		SYS_SelfDriving.Direct.Reset();
 		SYS_GameEngine.Direct.SetPause(true);
 
 		nowEvent = value;
 
-		uiPanel.SetActive(true);
+		uiPanelAnswer.SetActive(true);
 		textFrom.text = nowEvent.from;
 		textMsg.text = nowEvent.msg;
 		textPs.text = nowEvent.ps;
@@ -82,8 +83,24 @@ public class SYS_Interactive : MonoBehaviour
 		}
 	}
 
+	public void Reset() {
+		Clear();
+		RegistTalker();
+	}
+
+	public void RegistTalker(SpaceEntity value = null, InteractEvent valueEvent = null) {
+		talker = value;
+		story = valueEvent;
+	}
+
+	void FixedUpdate() {
+		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
+			SetTalker(talker);
+		}
+	}
+
 	public void Clear() {
-		uiPanel.SetActive(false);
+		uiPanelAnswer.SetActive(false);
 
 		foreach (RectTransform rect in rectBTNs) {
 			rect.gameObject.SetActive(false);
@@ -95,6 +112,35 @@ public class SYS_Interactive : MonoBehaviour
 		nowEvent.answers[value].Interact();
 		Clear();
 	}
+
+	public void SetTalker(SpaceEntity value) {
+		if (value != null) {
+			Vector2 offset = (value.transform.position - SYS_ShipController.Direct.transform.position);
+
+			if (value.info.mainType == MainType.Planet && offset.magnitude <= talkerDis * value.transform.localScale.x) {
+				uiPanelTalker.gameObject.SetActive(true);
+				uiPanelTalker.anchoredPosition = -offset.normalized * talkerUIOffset;
+
+			} else if (value.info.mainType == MainType.InterAct && offset.magnitude <= talkerDis * 0.5f * value.transform.localScale.x) {
+				uiPanelTalker.gameObject.SetActive(true);
+				uiPanelTalker.anchoredPosition = -offset.normalized * talkerUIOffset;
+
+			} else {
+				RegistTalker();
+			}
+
+		} else {
+			uiPanelTalker.gameObject.SetActive(false);
+		}
+	}
+
+	public void TalkQuest() {
+		if (Time.timeSinceLevelLoad - intaTimer < 3) {
+			return;
+		}
+		Regist(story);
+		uiPanelTalker.gameObject.SetActive(false);
+	}
 }
 
 
@@ -103,8 +149,8 @@ public class InteractEvent {
 	public string msg;
 	public string ps;
 	public List<InteractOption> answers;
-	
-	public InteractEvent(string from, string msg , List<InteractOption> answers , string ps = null) {
+
+	public InteractEvent(string from, string msg, List<InteractOption> answers, string ps = null) {
 		this.from = from;
 		this.msg = msg;
 		this.answers = answers;
@@ -129,7 +175,7 @@ public class InteractOption {
 
 	public Item getItem;
 
-	public InteractOption(Affinity affinity , float successRate, int costType , int costNum  , int getType , int getNum , string text , Item getItem = null) {
+	public InteractOption(Affinity affinity, float successRate, int costType, int costNum, int getType, int getNum, string text, Item getItem = null) {
 		if (getItem == null) {
 			getItem = new Item();
 		}
@@ -147,7 +193,7 @@ public class InteractOption {
 	public bool InteractAble() {
 		return SYS_ResourseManager.Direct.resources[costType] >= costNum;
 	}
-	
+
 	public void Interact() {
 		if (InteractAble()) {
 			SYS_ResourseManager.Direct.ModifyResource(costType, -costNum);

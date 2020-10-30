@@ -53,8 +53,6 @@ public class SYS_ShipController : MonoBehaviour {
 		if (SYS_Mission.Direct.nowMission.missionType == MissionType.Collect) {
 			reflecter.SetActive(true);
 		}
-
-		
 	}
 
 	void FixedUpdate() {
@@ -84,6 +82,7 @@ public class SYS_ShipController : MonoBehaviour {
 		character.SetActive(false);
 		detector.SetActive(false);
 		reflecter.SetActive(false);
+		iceValue = 0;
 	}
 
 	void Update() {

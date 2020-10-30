@@ -138,11 +138,11 @@ public class SYS_Starmap : MonoBehaviour {
 				} else {
 					randPos = GenPlanetPos(misSet.difficult, stars[ct - 1].sPos, ct + 1, planetNum - ct - 1);
 				}
-				stars.Add(new StarInfo((ct == base1 || ct == base2) ? SubType.Base : SubType.None, NaviType.Check , (Affinity)Random.Range(0, 4), randPos, ct == iact1 ? 1 : 0));
+				stars.Add(new StarInfo(MainType.Planet, (ct == base1 || ct == base2) ? SubType.Base : SubType.None, NaviType.Check , (Affinity)Random.Range(0, 4), randPos, ct == iact1 ? 1 : 0));
 
 			} else {
 				randPos = GenGoalPos(misSet.difficult, stars[ct - 1].sPos, ct + 1, planetNum - ct - 1);
-				stars.Add(new StarInfo(SubType.None, NaviType.End , Affinity.None, randPos));
+				stars.Add(new StarInfo(MainType.Planet, SubType.None, NaviType.End , Affinity.None, randPos));
 			}
 		}
 
@@ -151,14 +151,14 @@ public class SYS_Starmap : MonoBehaviour {
 		iact2 = Random.Range(0, planetNum);
 
 		for (int ct = 0; ct < planetNum; ct++) {
-			stars.Add(new StarInfo(ct == 0 ? SubType.Base : SubType.None, NaviType.Check , (Affinity)Random.Range(0, 4), GenPlanetPos(misSet.difficult, stars[Random.Range(0, stars.Count)].sPos), ct == iact2 ? 1 : 0));
+			stars.Add(new StarInfo(MainType.Planet, ct == 0 ? SubType.Base : SubType.None, NaviType.Check , (Affinity)Random.Range(0, 4), GenPlanetPos(misSet.difficult, stars[Random.Range(0, stars.Count)].sPos), ct == iact2 ? 1 : 0));
 		}
 
 		//亂數星球生成
 		planetNum = otherStarNum - planetNum + (Random.Range(0, 100) < (SYS_Save.Direct.GetResearch(3) * 10) ? 1 : 0);//
 
 		for (int ct = 0; ct < planetNum; ct++) {
-			stars.Add(new StarInfo(ct == 0 ? SubType.Base : SubType.None, NaviType.Check, (Affinity)Random.Range(0, 4), GenRandPlanetPos()));
+			stars.Add(new StarInfo(MainType.Planet, ct == 0 ? SubType.Base : SubType.None, NaviType.Check, (Affinity)Random.Range(0, 4), GenRandPlanetPos()));
 		}
 
 
@@ -349,6 +349,7 @@ public class SYS_Starmap : MonoBehaviour {
 }
 
 public class StarInfo {
+	public MainType mainType;
 	public SubType subType;
 	public NaviType nvType;
 	public Affinity affinity;
@@ -358,7 +359,8 @@ public class StarInfo {
 	public Vector2 sPos;
 	public Color sColor;
 	 
-	public StarInfo(SubType subType, NaviType nvType , Affinity affinity, Vector2 sPos , int iactNum = 0) {
+	public StarInfo(MainType mainType , SubType subType, NaviType nvType , Affinity affinity, Vector2 sPos , int iactNum = 0) {
+		this.mainType = mainType;
 		this.subType = subType;
 		this.nvType = nvType;
 		this.sPos = sPos;
@@ -496,6 +498,14 @@ public class StarInfo {
 	private Vector2 GenPos() {
 		return new Vector2(Random.Range(-360, 360), Random.Range(0, 1280));
 	}
+}
+
+public enum MainType {
+	None,
+
+	Planet,
+	InterAct,
+	Drift,
 }
 
 public enum SubType {
