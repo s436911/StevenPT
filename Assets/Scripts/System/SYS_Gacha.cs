@@ -34,7 +34,7 @@ public class SYS_Gacha : MonoBehaviour {
 		SYS_Save.Direct.ModifyCargobay(DB.NewItem(randList[Random.Range(0, randList.Count)], 10));
 		SYS_Save.Direct.ModifyCargobay(DB.NewItem(randList[Random.Range(0, randList.Count)], 10));
 		*/
-
+	
 		CheckDate();
 	}
 

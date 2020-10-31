@@ -111,7 +111,7 @@ public class SYS_Mission : MonoBehaviour {
 			UpdateCountDownUI();
 			msCountDown.SetActive(true);
 		} else {
-			SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
+			UI_ScoreManager.Direct.Lose();
 		}
 	}
 

@@ -110,6 +110,7 @@ public class SYS_Save : MonoBehaviour {
 					}
 
 					SYS_ResourseManager.Direct.UpdateCargobayUI();
+					SYS_Gacha.Direct.UpdateGachaUI();
 					SaveBTN();
 					return;
 				}
@@ -117,6 +118,7 @@ public class SYS_Save : MonoBehaviour {
 			//不存在
 			gameData.cargobay.Add(item);
 			SYS_ResourseManager.Direct.UpdateCargobayUI();
+			SYS_Gacha.Direct.UpdateGachaUI();
 			SaveBTN();
 		}
 	}
@@ -404,7 +406,7 @@ public class PlayerData  {
 	public List<Item> cargobay = new List<Item>();
 
 	public Member[] members = new Member[4];
-	public Member[] bullpen = new Member[9];
+	public Member[] bullpen = new Member[15];
 
 	public PlayerData() {
 		for (int ct = 0; ct < resources.Length; ct++) {

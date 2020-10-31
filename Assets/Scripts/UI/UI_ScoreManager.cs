@@ -25,11 +25,28 @@ public class UI_ScoreManager : MonoBehaviour
 		Direct = this;
 		Reset();
 	}
-	
+
+	private void EndGame() {
+		SYS_SelfDriving.Direct.Reset();
+
+		//清除副本道具
+		SYS_ResourseManager.Direct.SetCargo(0);
+		SYS_ResourseManager.Direct.SetCargo(1);
+
+		//清除攜帶副本道具
+		SYS_Save.Direct.SetPrecargo(0);
+		SYS_Save.Direct.SetPrecargo(1);
+
+		SYS_Gacha.Direct.CheckDate();
+	}
+
+	public void Lose() {
+		EndGame();
+		SYS_ModeSwitcher.Direct.SetMode(1);
+	}
+
 	public void Victory() {
 		int difficult = SYS_Mission.Direct.nowMission.difficult;
-
-		SYS_SelfDriving.Direct.Reset();
 		SYS_GameEngine.Direct.SetPause(true);
 		uiPanel.SetActive(true);
 
@@ -96,15 +113,7 @@ public class UI_ScoreManager : MonoBehaviour
 		SYS_Save.Direct.AddInventory(SYS_ResourseManager.Direct.cargos[0]);
 		SYS_Save.Direct.AddInventory(SYS_ResourseManager.Direct.cargos[1]);
 
-		//清除副本道具
-		SYS_ResourseManager.Direct.SetCargo(0);
-		SYS_ResourseManager.Direct.SetCargo(1);
-		
-		//清除攜帶副本道具
-		SYS_Save.Direct.SetPrecargo(0);
-		SYS_Save.Direct.SetPrecargo(1);
-
-		SYS_Gacha.Direct.CheckDate();
+		EndGame();
 	}
 
 	public void Confirm() {

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class UI_Navigator : MonoBehaviour {
 	public static UI_Navigator Direct;
+
+	public PlanetEntity nowPlanet;
 	public PlanetEntity prePlanet;
 	public PlanetEntity nextPlanet;
 	public AnimationCurve hintSizer;
@@ -27,7 +29,7 @@ public class UI_Navigator : MonoBehaviour {
 
 	void FixedUpdate() {
 		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
-			SetBacker(prePlanet);
+			SetBacker(nowPlanet);
 		}
 	}
 
@@ -41,6 +43,8 @@ public class UI_Navigator : MonoBehaviour {
 
 	//到達星球
 	public void Arrive(PlanetEntity arrived) {
+		nowPlanet = arrived;
+
 		if (SYS_Starmap.Direct.route.Contains(arrived.info)) {
 			int aIndex = SYS_Starmap.Direct.route.IndexOf(arrived.info);
 
@@ -153,5 +157,6 @@ public class UI_Navigator : MonoBehaviour {
 		}
 
 		SetBacker(null);
+		nowPlanet = null;
 	}
 }

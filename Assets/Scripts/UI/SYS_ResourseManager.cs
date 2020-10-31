@@ -47,7 +47,6 @@ public class SYS_ResourseManager : MonoBehaviour {
 
 	void Awake() {
 		Direct = this;
-
 		baseColor = back.color;
 	}
 
@@ -141,7 +140,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 		if (type == 0) {
 			if (resources[type] <= 0) {
 				resources[type] = 0;
-				SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
+				UI_ScoreManager.Direct.Lose();
 
 			} else if (resources[type] >= maxFuel) {
 				resources[type] = maxFuel;
@@ -153,7 +152,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 		} else if (type == 1) {
 			if (resources[type] <= 0) {
 				resources[type] = 0;
-				SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
+				UI_ScoreManager.Direct.Lose();
 
 			} else if (resources[type] >= maxArmor) {
 				resources[type] = maxArmor;
@@ -163,7 +162,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 		} else if (type == 2) {
 			if (resources[type] <= 0) {
 				resources[type] = 0;
-				SYS_ModeSwitcher.Direct.SetMode(GameMode.Home);
+				UI_ScoreManager.Direct.Lose();
 
 			} else if (resources[type] >= maxFood) {
 				resources[type] = maxFood;
