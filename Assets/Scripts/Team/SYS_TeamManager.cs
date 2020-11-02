@@ -65,10 +65,10 @@ public class SYS_TeamManager : MonoBehaviour {
 			if (!deleteMode) {
 				if (!SYS_Save.Direct.IsBullpenFull()) {
 					SYS_Save.Direct.AddBullpen(SYS_Save.Direct.GetMember(slot));
-					SYS_Save.Direct.SetMembers(slot);
+					SYS_Save.Direct.SetMember(slot);
 				}
 			} else {
-				SYS_Save.Direct.SetMembers(slot);
+				SYS_Save.Direct.SetMember(slot);
 			}
 		}
 	}

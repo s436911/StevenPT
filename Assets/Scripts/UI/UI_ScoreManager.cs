@@ -113,6 +113,13 @@ public class UI_ScoreManager : MonoBehaviour
 		SYS_Save.Direct.AddInventory(SYS_ResourseManager.Direct.cargos[0]);
 		SYS_Save.Direct.AddInventory(SYS_ResourseManager.Direct.cargos[1]);
 
+		for (int ct = 0; ct < SYS_Save.Direct.GetMembers().Length; ct++) {
+			Member tp = SYS_Save.Direct.GetMember(ct);
+			if (!tp.isNull) {
+				SYS_Save.Direct.ModifyMemberAge(ct , 1);
+			}
+		}
+
 		EndGame();
 	}
 

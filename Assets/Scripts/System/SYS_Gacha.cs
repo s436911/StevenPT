@@ -66,7 +66,7 @@ public class SYS_Gacha : MonoBehaviour {
 	public void ReturnQuest(int slot) {
 		int itemId = SYS_Save.Direct.GetGacha(slot);
 
-		if (SYS_Save.Direct.GetCargobay(itemId).stackNum >= ((slot * 4) + 2)) {
+		if (SYS_Save.Direct.GetCargobayID(itemId).stackNum >= ((slot * 4) + 2)) {
 			Gacha(slot);
 			SYS_Save.Direct.ModifyCargobay(DB.NewItem(itemId, -((slot * 4) + 2)));
 			//SetQuest(slot);
@@ -100,9 +100,9 @@ public class SYS_Gacha : MonoBehaviour {
 
 			itemIcons[ct].texture = DB.GetItemTexture(itemId);
 			itemNeeds[ct].text = ((ct * 4) + 2).ToString();
-			itemHaves[ct].text = SYS_Save.Direct.GetCargobay(itemId).stackNum.ToString();
+			itemHaves[ct].text = SYS_Save.Direct.GetCargobayID(itemId).stackNum.ToString();
 
-			if (SYS_Save.Direct.GetCargobay(itemId).stackNum < ((ct * 4) + 2)) {
+			if (SYS_Save.Direct.GetCargobayID(itemId).stackNum < ((ct * 4) + 2)) {
 				itemHaves[ct].color = Color.red;
 			} else {
 				itemHaves[ct].color = Color.white;

@@ -15,6 +15,7 @@ public class SYS_ShipController : MonoBehaviour {
 	public float smoothing = 0.5f;
 
 	public GameObject character;
+	public GameObject characterJet;
 	public Rigidbody2D ridgid;
 	public Vector2 direction = Vector2.up;
 	public Vector2 force;
@@ -50,6 +51,7 @@ public class SYS_ShipController : MonoBehaviour {
 
 	public void Restart() {
 		character.SetActive(true);
+		characterJet.SetActive(true);
 		if (SYS_Mission.Direct.nowMission.missionType == MissionType.Collect) {
 			reflecter.SetActive(true);
 		}
@@ -80,6 +82,7 @@ public class SYS_ShipController : MonoBehaviour {
 		speed = 0;
 		force = Vector2.zero;
 		character.SetActive(false);
+		characterJet.SetActive(false);
 		detector.SetActive(false);
 		reflecter.SetActive(false);
 		iceValue = 0;

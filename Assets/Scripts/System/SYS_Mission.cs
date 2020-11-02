@@ -168,7 +168,7 @@ public class SYS_Mission : MonoBehaviour {
 		DeSelectUI(searchs);
 
 		for (int ct = 0; ct < searchs.Count; ct++) {
-			if (SYS_Save.Direct.gameData.researchs[2] > ct) {
+			if (SYS_Save.Direct.GetResearch(2) > ct) {
 				searchs[ct].gameObject.SetActive(true);
 				searchs[ct].Regist((ct * 2).ToString() + "~" + (ct * 2 + 4).ToString(), (ct / 2 + 1).ToString());
 

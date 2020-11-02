@@ -39,7 +39,7 @@ Material:
     - Vector1_23E530DB: -1
     - Vector1_BBFE1747: -2.5
     m_Colors:
-    - Color_81F56A4E: {r: 2, g: 2, b: 2, a: 1}
+    - Color_81F56A4E: {r: 0.41884813, g: 3.9999995, b: 1.0261779, a: 1}
     - Color_94ADBDD4: {r: 0, g: 5.6127124, b: 71.46854, a: 1}
     - Vector2_34114626: {r: 1, g: 1, b: 0, a: 0}
     - Vector2_CF81FBAE: {r: 1, g: 1, b: 0, a: 0}

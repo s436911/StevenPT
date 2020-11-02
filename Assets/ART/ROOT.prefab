@@ -220,9 +220,9 @@ ParticleSystem:
         m_RotationOrder: 4
     startColor:
       serializedVersion: 2
-      minMaxState: 0
-      minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      minMaxState: 2
+      minColor: {r: 1, g: 0.9822052, b: 0.6273585, a: 1}
+      maxColor: {r: 0.30903727, g: 1, b: 0.27058828, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -284,7 +284,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.4
+      scalar: 0.15
       minScalar: 0.2
       maxCurve:
         serializedVersion: 2
@@ -4767,8 +4767,8 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22e5bcba8dfc3d46a82b6e92ca66c66, type: 2}
-  - {fileID: 0}
+  - {fileID: 2100000, guid: c372ef7838bec004daf2f406463960b7, type: 2}
+  - {fileID: 2100000, guid: c372ef7838bec004daf2f406463960b7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4884,7 +4884,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.5
+  m_Time: 0.7
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -4901,8 +4901,8 @@ TrailRenderer:
         inWeight: 0
         outWeight: 0.7254991
       - serializedVersion: 3
-        time: 0.15223694
-        value: 1
+        time: 0.19189453
+        value: 0.64102554
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -5082,7 +5082,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.5
+  m_Time: 0.7
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -5091,7 +5091,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.3716274
+        value: 0
         inSlope: 5.385535
         outSlope: 5.385535
         tangentMode: 0
@@ -5099,8 +5099,8 @@ TrailRenderer:
         inWeight: 0
         outWeight: 0.52726436
       - serializedVersion: 3
-        time: 0.16418171
-        value: 1
+        time: 0.21233845
+        value: 0.44230843
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -5110,7 +5110,7 @@ TrailRenderer:
       - serializedVersion: 3
         time: 0.6895447
         value: 0
-        inSlope: -1.903446
+        inSlope: -0.9268706
         outSlope: -0.67423797
         tangentMode: 69
         weightedMode: 0

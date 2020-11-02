@@ -506,6 +506,7 @@ public enum MainType {
 	Planet,
 	InterAct,
 	Drift,
+	Animal,
 }
 
 public enum SubType {

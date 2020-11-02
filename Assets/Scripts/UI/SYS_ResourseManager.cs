@@ -91,8 +91,8 @@ public class SYS_ResourseManager : MonoBehaviour {
 
 	public void UpdateCargobayUI() {
 		for (int ct = 0; ct < cargobay.Count; ct++) { 
-			if (ct < SYS_Save.Direct.gameData.cargobay.Count) {
-				Item tmp = SYS_Save.Direct.gameData.cargobay[ct];
+			if (ct < SYS_Save.Direct.GetCargobay().Count) {
+				Item tmp = SYS_Save.Direct.GetCargobaySlot(ct);
 				cargobay[ct].Regist(DB.GetItemTexture(tmp.iconID), tmp.text , tmp.stackNum.ToString());
 			} else {
 				cargobay[ct].Regist(DB.GetItemTexture(0), "" , "");

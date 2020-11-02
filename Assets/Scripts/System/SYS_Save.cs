@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class SYS_Save : MonoBehaviour {
 	public static SYS_Save Direct;
-	public PlayerData gameData;
+	private PlayerData gameData;
 
 	public int[] researchNeed = new int[4];
 
@@ -58,7 +58,7 @@ public class SYS_Save : MonoBehaviour {
 		}
 
 		for (int ct = 0; ct < gameData.members.Length; ct++) {
-			SetMembers(ct, gameData.members[ct], false);
+			SetMember(ct, gameData.members[ct], false);
 		}
 
 		for (int ct = 0; ct < gameData.precargo.Length; ct++) {
@@ -128,11 +128,22 @@ public class SYS_Save : MonoBehaviour {
 		SYS_ResourseManager.Direct.UpdateCargobayUI();
 	}
 
-	public Item GetCargobay(int itemID) {
+	public List<Item> GetCargobay() {
+		return gameData.cargobay;
+	}
+
+	public Item GetCargobaySlot(int slotID) {
+		if (!gameData.cargobay[slotID].isNull) {
+			return new Item(gameData.cargobay[slotID], gameData.cargobay[slotID].stackNum, gameData.cargobay[slotID].valueID);
+		}
+		return new Item();
+	}
+
+	public Item GetCargobayID(int itemID) {
 		for (int ct = 0; ct < gameData.cargobay.Count; ct++) {
 			//已存在
 			if (gameData.cargobay[ct].iconID == itemID) {
-				return gameData.cargobay[ct];
+				return new Item(gameData.cargobay[ct] , gameData.cargobay[ct].stackNum , gameData.cargobay[ct].valueID) ;
 			}
 		}
 		return new Item();
@@ -141,6 +152,10 @@ public class SYS_Save : MonoBehaviour {
 	//Research
 	public int GetResearch(int rdType) {
 		return gameData.researchs[rdType];
+	}
+
+	public int[] GetResearchs() {
+		return gameData.researchs;
 	}
 
 	public void SetResearch(int rdType, int value , bool save = true) {
@@ -336,7 +351,7 @@ public class SYS_Save : MonoBehaviour {
 	public void AddMembers(Member member) {
 		for (int ct = 0; ct < gameData.members.Length; ct++) {
 			if (gameData.members[ct].isNull) {
-				SetMembers(ct, member);
+				SetMember(ct, member);
 				return;
 			} 
 		}
@@ -347,6 +362,10 @@ public class SYS_Save : MonoBehaviour {
 		return IsSlotFull(gameData.members);
 	}
 
+	public Member[] GetMembers() {
+		return gameData.members;
+	}
+
 	public Member GetMember() {
 		return gameData.members[Random.Range(0,4)];
 	}
@@ -355,13 +374,26 @@ public class SYS_Save : MonoBehaviour {
 		return gameData.members[slot];
 	}
 
-	public void SetMembers(int slot, Member member = null, bool save = true) {
+	public void SetMember(int slot, Member member = null, bool save = true) {
 		if (member == null) {
 			member = new Member();
 		}
 
 		gameData.members[slot] = member;
 		SYS_TeamManager.Direct.SetMemberSlot(slot, member);
+
+		if (save) {
+			SaveBTN();
+		}
+	}
+
+	public void ModifyMemberAge(int slot, int value , bool save = true) {
+		if (gameData.members[slot].isNull) {
+			return;
+		}
+
+		gameData.members[slot].age += value;
+		SYS_TeamManager.Direct.SetMemberSlot(slot, gameData.members[slot]);
 
 		if (save) {
 			SaveBTN();

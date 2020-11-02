@@ -8,9 +8,11 @@ public class SYS_Weather : MonoBehaviour {
 	public List<Material> matBackMeteor = new List<Material>();
 	public GameObject pfbBackMeteor;
 
-	public List<Material> matMeteor = new List<Material>();
-	public List<Material> matMeteorIce = new List<Material>();
-	public GameObject pfbFrontMeteor;
+	public List<GameObject> pfbMeteor;
+	public List<GameObject> pfbCloud;
+	public List<GameObject> pfbMeteorIce;
+
+	public GameObject pfbBeetle;
 
 	public ParticleSystem ptcIce;
 
@@ -75,11 +77,13 @@ public class SYS_Weather : MonoBehaviour {
 					SpawnBack(reVextor);
 				}
 
-				//前景清除
+				//前景清除一般層
 				reVextors = new List<Vector2>();
 				foreach (Transform child in frontGroup) {
 					if (Vector2.Distance(SYS_ShipController.Direct.transform.position, child.position) > meteorRadiusT * 4) {
-						reVextors.Add(2 * SYS_ShipController.Direct.transform.position - child.position);
+						if (!child.GetComponent<MeteorEntity>().nonRespawn) {
+							reVextors.Add(2 * SYS_ShipController.Direct.transform.position - child.position);
+						}
 						Destroy(child.gameObject);
 					}
 				}
@@ -88,7 +92,7 @@ public class SYS_Weather : MonoBehaviour {
 					SpawnFront(reVextor, frontGroup);
 				}
 
-				//前景清除
+				//前景清除天氣層
 				reVextors = new List<Vector2>();
 				foreach (Transform child in weatherGroup) {
 					if (Vector2.Distance(SYS_ShipController.Direct.transform.position, child.position) > meteorRadiusT * 4) {
@@ -138,18 +142,38 @@ public class SYS_Weather : MonoBehaviour {
 
 	public void SpawnFront(Vector2 dePos , Transform group) {
 		StarInfo starInfo = new StarInfo(MainType.Drift, SubType.Meteor, NaviType.None, Affinity.None, dePos);
-
-		MeteorEntity objGen = Instantiate(pfbFrontMeteor).GetComponent<MeteorEntity>();
-		objGen.transform.SetParent(group);
-
-		objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, group.transform.position.z);
-
+		
 		if (weather == WeatherType.None) {
-			objGen.Regist(starInfo, matMeteor[Random.Range(0, matMeteor.Count)], Random.Range(1f, 1.5F));
+			if (Random.Range(0, 7) != 0) {
+				MeteorEntity objGen = Instantiate(pfbMeteor[Random.Range(0, pfbMeteor.Count)]).GetComponent<MeteorEntity>();
+				objGen.transform.SetParent(group);
+				objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, group.transform.position.z);
+				objGen.Regist(starInfo, Random.Range(1f, 1.5F));
+
+				if (Random.Range(0, 21) == 0) {
+					SpawnEntity(dePos, group, objGen.transform);
+				}
+			} else {
+				MeteorEntity objGen = Instantiate(pfbCloud[Random.Range(0, pfbCloud.Count)]).GetComponent<MeteorEntity>();
+				objGen.transform.SetParent(group);
+				objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, group.transform.position.z);
+				objGen.Regist(starInfo, Random.Range(1f, 1.5F));
+			}
+
 		} else {
-			objGen.Regist(starInfo, matMeteorIce[Random.Range(0, matMeteorIce.Count)], Random.Range(1f, 1.5F));
-			objGen.ice = true;
+			MeteorEntity objGen = Instantiate(pfbMeteorIce[Random.Range(0, pfbMeteorIce.Count)]).GetComponent<MeteorEntity>();
+			objGen.transform.SetParent(group);
+			objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, group.transform.position.z);
+			objGen.Regist(starInfo , Random.Range(1f, 1.5F));
 		}
+	}
+
+	public void SpawnEntity(Vector2 dePos, Transform group , Transform tgt = null) {
+		StarInfo starInfo = new StarInfo(MainType.Animal, SubType.None, NaviType.None, Affinity.None, dePos);
+		MeteorEntity objGen = Instantiate(pfbBeetle).GetComponent<MeteorEntity>();
+		objGen.transform.SetParent(group);
+		objGen.tgt = tgt;
+		objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, group.transform.position.z - 1);
 	}
 
 	public void Reset() {

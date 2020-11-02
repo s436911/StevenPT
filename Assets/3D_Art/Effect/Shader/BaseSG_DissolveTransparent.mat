@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: BaseSG_DissolveTransparent
+  m_Shader: {fileID: 4800000, guid: 3009c4b8c916a4a42a36bf2c6f22f31f, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_16611CD3: 10
+    - Vector1_3A9C0162: 0
+    - Vector1_469B8CD7: 1
+    - Vector1_6F21E6F1: 0.5
+    - Vector1_7047649B: 2.5
+    - Vector1_D1455B61: 1.7
+    - Vector1_F50BFD67: 0
+    m_Colors:
+    - Color_1008328D: {r: 1.72016, g: 0.3332247, b: 0, a: 1}
+    - Color_D4E35D9A: {r: 3.594052, g: 1.915366, b: 0, a: 1}
+    - Color_D953CE9E: {r: 1, g: 0, b: 0, a: 1}
+    - Color_F6076DE5: {r: 0.8471797, g: 0.8471797, b: 0.8471797, a: 1}
+    - Vector4_36CDFBAF: {r: 0, g: 0, b: 0.5, a: 0.5}
+    - Vector4_D5DCB4CC: {r: 1, g: 1, b: 0, a: 0}
+    - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}

@@ -148,6 +148,13 @@ MonoBehaviour:
   ridgid: {fileID: 0}
   meshRenderer: {fileID: 2245220859913259176}
   explored: 0
+  boss: 0
+  ice: 0
+  beetle: 0
+  nonRespawn: 0
+  atkDis: 5
+  enemy: 0
+  tgt: {fileID: 0}
 --- !u!58 &7978940974195986950
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -177,7 +184,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0.5
+  m_LinearDrag: 0.4
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -245,7 +252,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ebf8cbf8e78b240479e2b84363a8a456, type: 2}
+  - {fileID: 2100000, guid: 3ff0ebe18769cce458f2d66fb533298c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
