@@ -17,4 +17,9 @@ public class SpaceEntity : MonoBehaviour {
 		meshRenderer.material = mat;
 		transform.localScale = new Vector3(size, size, size);
 	}
+
+	public virtual void Regist(StarInfo info, float size) {
+		this.info = info;
+		transform.localScale = new Vector3(size, size, size);
+	}
 }

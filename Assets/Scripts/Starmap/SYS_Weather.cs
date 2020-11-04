@@ -13,6 +13,7 @@ public class SYS_Weather : MonoBehaviour {
 	public List<GameObject> pfbMeteorIce;
 
 	public GameObject pfbBeetle;
+	public GameObject pfbWhale;
 
 	public ParticleSystem ptcIce;
 
@@ -81,7 +82,7 @@ public class SYS_Weather : MonoBehaviour {
 				reVextors = new List<Vector2>();
 				foreach (Transform child in frontGroup) {
 					if (Vector2.Distance(SYS_ShipController.Direct.transform.position, child.position) > meteorRadiusT * 4) {
-						if (!child.GetComponent<MeteorEntity>().nonRespawn) {
+						if (child.GetComponent<MeteorEntity>() && !child.GetComponent<MeteorEntity>().nonRespawn) {
 							reVextors.Add(2 * SYS_ShipController.Direct.transform.position - child.position);
 						}
 						Destroy(child.gameObject);
@@ -144,20 +145,28 @@ public class SYS_Weather : MonoBehaviour {
 		StarInfo starInfo = new StarInfo(MainType.Drift, SubType.Meteor, NaviType.None, Affinity.None, dePos);
 		
 		if (weather == WeatherType.None) {
-			if (Random.Range(0, 7) != 0) {
+			//隕石生成
+			if (Random.Range(0, 7) != 0) {//7
 				MeteorEntity objGen = Instantiate(pfbMeteor[Random.Range(0, pfbMeteor.Count)]).GetComponent<MeteorEntity>();
 				objGen.transform.SetParent(group);
 				objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, group.transform.position.z);
 				objGen.Regist(starInfo, Random.Range(1f, 1.5F));
 
 				if (Random.Range(0, 21) == 0) {
-					SpawnEntity(dePos, group, objGen.transform);
+					SpawnBeetle(dePos, group, objGen.transform);
 				}
 			} else {
-				MeteorEntity objGen = Instantiate(pfbCloud[Random.Range(0, pfbCloud.Count)]).GetComponent<MeteorEntity>();
+				//雲生成
+				int randID = Random.Range(0, pfbCloud.Count);
+
+				MeteorEntity objGen = Instantiate(pfbCloud[randID]).GetComponent<MeteorEntity>();
 				objGen.transform.SetParent(group);
 				objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, group.transform.position.z);
 				objGen.Regist(starInfo, Random.Range(1f, 1.5F));
+
+				if (randID == 2 && Random.Range(0, 3) == 0) {
+					SpawnWhale(dePos, group, objGen.transform);
+				}
 			}
 
 		} else {
@@ -168,9 +177,18 @@ public class SYS_Weather : MonoBehaviour {
 		}
 	}
 
-	public void SpawnEntity(Vector2 dePos, Transform group , Transform tgt = null) {
+	public void SpawnBeetle(Vector2 dePos, Transform group , Transform tgt = null) {
 		StarInfo starInfo = new StarInfo(MainType.Animal, SubType.None, NaviType.None, Affinity.None, dePos);
-		MeteorEntity objGen = Instantiate(pfbBeetle).GetComponent<MeteorEntity>();
+		AnimalEntity objGen = Instantiate(pfbBeetle).GetComponent<AnimalEntity>();
+		objGen.transform.SetParent(group);
+		objGen.tgt = tgt;
+		objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, group.transform.position.z - 1);
+	}
+
+
+	public void SpawnWhale(Vector2 dePos, Transform group, Transform tgt = null) {
+		StarInfo starInfo = new StarInfo(MainType.Animal, SubType.None, NaviType.None, Affinity.None, dePos);
+		AnimalEntity objGen = Instantiate(pfbWhale).GetComponent<AnimalEntity>();
 		objGen.transform.SetParent(group);
 		objGen.tgt = tgt;
 		objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, group.transform.position.z - 1);

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SYS_Camera : MonoBehaviour
-{
+public class SYS_Camera : MonoBehaviour {
 	public static SYS_Camera Direct;
 	public Transform objFollowed;
 	public Vector2 followOffset;
@@ -32,15 +31,15 @@ public class SYS_Camera : MonoBehaviour
 		//簡易震動區
 		if (shakeStart != 0) {
 			if (shakeStart + shakeTime > Time.timeSinceLevelLoad) {
-				offset = offset + new Vector2(Random.Range(-shakeValue, shakeValue), Random.Range(-shakeValue, shakeValue)) * shakeCurve.Evaluate((Time.timeSinceLevelLoad - shakeStart)/shakeTime);
-							
+				offset = offset + new Vector2(Random.Range(-shakeValue, shakeValue), Random.Range(-shakeValue, shakeValue)) * shakeCurve.Evaluate((Time.timeSinceLevelLoad - shakeStart) / shakeTime);
+
 			} else {
 				shakeStart = 0;
 				shakeTime = 0;
 			}
 		}
 
-		transform.position = new Vector3(offset.x , offset.y , offsetZ);
+		transform.position = new Vector3(offset.x, offset.y, offsetZ);
 	}
 
 	public void Shake(float shakeTime) {

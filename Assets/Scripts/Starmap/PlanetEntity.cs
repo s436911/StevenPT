@@ -14,6 +14,13 @@ public class PlanetEntity : SpaceEntity {
 		story = TMP_InteractEvent.GetPlanetEvent(info.name, eventId);
 	}
 
+	public void Regist(StarInfo info, float size, bool haveHalo, int eventId) {
+		Regist(info, size);
+		halo.SetActive(haveHalo);
+		text.text = info.name;
+		story = TMP_InteractEvent.GetPlanetEvent(info.name, eventId);
+	}
+
 	void OnTriggerEnter2D(Collider2D colli) {
 		if (colli.transform.parent.GetComponent<SYS_ShipController>() != null) {
 			if (info.nvType == NaviType.Check) {

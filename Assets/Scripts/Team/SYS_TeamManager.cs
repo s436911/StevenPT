@@ -26,6 +26,8 @@ public class SYS_TeamManager : MonoBehaviour {
 	private Color baseColor;
 	public Color deleteColor;
 
+	public int morale = 3;
+
 	void Awake() {
 		Direct = this;
 		
@@ -96,6 +98,54 @@ public class SYS_TeamManager : MonoBehaviour {
 			deleteMode = false;
 		}
 	}
+
+	public void TriggerEvent(int eventID) {
+		switch (eventID) {
+			case 1://通用傾向
+				break;
+			case 2://攻擊傾向
+				break;
+			case 3://探索傾向
+				break;
+			case 4://交易傾向
+				break;
+			case 5://一般傾向
+				break;
+			case 6://放棄傾向
+				break;
+
+			case 11://失控
+				break;
+			case 12://移動
+				break;
+			case 13://靜止
+				break;
+
+			case 21://士氣低落
+				break;
+			case 22://失誤
+				break;
+
+			case 31://補滿油
+				break;
+			case 32://出發
+				break;
+			case 33://重複登陸
+				break;
+
+			case 41://受擊
+				break;
+			case 42://受擊低落
+				break;
+			case 43://雲霧
+				break;
+		}
+		SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "看不見RRRRR!");
+	}
+
+	public void ModifyMorale(int value) {
+		morale = Mathf.Clamp( morale + value , 1 , 5);
+	}
 }
 
 [System.Serializable]
@@ -143,9 +193,17 @@ public class Member {
 }
 
 public enum NatureType {
-	Careful,//慎重
-	Rash,//馬虎
+	None,
+
+	Careful,//細心
+	Rash,//粗心
 
 	Brave,//勇敢
 	Timid,//膽小
+
+	Optimistic,//樂觀
+	Pessimistic,//悲觀
+
+	Hasty,//性急
+	Relaxed//悠閒
 }

@@ -71,13 +71,10 @@ MonoBehaviour:
   ridgid: {fileID: 0}
   meshRenderer: {fileID: 0}
   explored: 0
-  boss: 0
   ice: 0
-  cloud: 0
-  beetle: 0
-  nonRespawn: 0
-  atkDis: 5
   enemy: 0
+  nonRespawn: 0
+  cloud: 1
   tgt: {fileID: 0}
 --- !u!60 &4228347164762701637
 PolygonCollider2D:

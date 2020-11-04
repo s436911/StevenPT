@@ -222,18 +222,9 @@ public class UI_NavigateHint : MonoBehaviour {
 		}
 
 		rect.anchoredPosition = offset;
-		rect.eulerAngles = new Vector3(0, 0, Angle(-offset));//※  將Vector3型別轉換四元數型別
+		rect.eulerAngles = new Vector3(0, 0, Common.Angle(-offset));//※  將Vector3型別轉換四元數型別
 	}
-
-
-	public float Angle(Vector2 p_vector2) {
-		if (p_vector2.x < 0) {
-			return 360 - (Mathf.Atan2(-p_vector2.x, p_vector2.y) * Mathf.Rad2Deg * -1);
-		} else {
-			return Mathf.Atan2(-p_vector2.x, p_vector2.y) * Mathf.Rad2Deg;
-		}
-	}
-
+	
 
 	public void SelfDrive() {
 		if (SYS_SelfDriving.Direct.GetTGT() == null || SYS_SelfDriving.Direct.GetTGT().tgtTrans != entity.transform) {

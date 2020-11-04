@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2983200554627962193
 Transform:
   m_ObjectHideFlags: 0
@@ -148,12 +148,10 @@ MonoBehaviour:
   ridgid: {fileID: 0}
   meshRenderer: {fileID: 2245220859913259176}
   explored: 0
-  boss: 0
   ice: 0
-  beetle: 0
-  nonRespawn: 0
-  atkDis: 5
   enemy: 0
+  nonRespawn: 0
+  cloud: 0
   tgt: {fileID: 0}
 --- !u!58 &7978940974195986950
 CircleCollider2D:

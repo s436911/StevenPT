@@ -33,8 +33,7 @@ public class ResourecesEntity : SpaceEntity {
 						SYS_Camera.Direct.Shake(0.3f);
 
 						if (!ship.reflecter.activeSelf) {
-							ship.Impact(1, ridgid.velocity);
-							ship.Damage(1);
+							ship.ModifySpeed(-4);
 						}
 
 						ridgid.velocity = Random.insideUnitCircle.normalized * 2f;

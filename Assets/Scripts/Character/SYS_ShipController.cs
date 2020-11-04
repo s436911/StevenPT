@@ -57,14 +57,6 @@ public class SYS_ShipController : MonoBehaviour {
 		}
 	}
 
-	void FixedUpdate() {
-		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
-			if (iceValue >= 0) {
-				ModifyIce(-Time.fixedDeltaTime);
-			}
-		}
-	}
-
 	public void ModifyIce(float value) {
 		iceValue = Mathf.Clamp(iceValue + value, 0, 15);
 		iceImage.gameObject.SetActive(iceValue > 0);
@@ -88,36 +80,42 @@ public class SYS_ShipController : MonoBehaviour {
 		iceValue = 0;
 	}
 
-	void Update() {
+	void FixedUpdate() {
 		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
 			if (direction != Vector2.zero) {
 				Quaternion qua = Quaternion.LookRotation(direction, Vector3.forward);//※  將Vector3型別轉換四元數型別
-				transform.rotation = Quaternion.Lerp(transform.rotation, qua, Time.deltaTime * smoothing);
+				transform.rotation = Quaternion.Lerp(transform.rotation, qua, Time.fixedDeltaTime * smoothing);
 			}
 
 			if (handling) {
 				if (speed < GetMaxSpeed()) {
-					ModifySpeed(accelerate + SYS_Save.Direct.GetMembersAttribute(1) * 0.1f);
+					ModifySpeed((accelerate + SYS_Save.Direct.GetMembersAttribute(1) * 0.1f) * Time.fixedDeltaTime);
 				} else {
-					ModifySpeed(decelerate);
+					ModifySpeed(decelerate * Time.fixedDeltaTime);
 				}
 
 				if (Time.timeSinceLevelLoad - fuelTimer > 1) {
 					fuelTimer = Time.timeSinceLevelLoad;
-					SYS_ResourseManager.Direct.ModifyResource(0,-1);
+					SYS_ResourseManager.Direct.ModifyResource(0, -1);
 				}
 			}
-			
+
 			dash.SetActive(speed > 3);
 			if (force != Vector2.zero) {
-				force = force.normalized * Mathf.Clamp(force.magnitude - decelerate * Time.deltaTime, 0, 9999);
+				force = force.normalized * Mathf.Clamp(force.magnitude - decelerate * Time.fixedDeltaTime, 0, 9999);
 			}
 
-			if (!reverse) {
-				ridgid.velocity = this.direction * speed + force;
-			} else {
-				ridgid.velocity = this.direction * -speed + force;
+			//ridgid.velocity = this.direction * speed * (!reverse ? 1 : -1) + force;
+			ridgid.velocity = this.direction * speed * (!reverse ? 1 : -1) + force;
+
+			if (iceValue >= 0) {
+				ModifyIce(-Time.fixedDeltaTime);
 			}
+		}
+	}
+
+	void Update() {
+		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
 
 			if (Time.timeSinceLevelLoad - foodTimer > 10) {
 				foodTimer = Time.timeSinceLevelLoad;
@@ -129,28 +127,13 @@ public class SYS_ShipController : MonoBehaviour {
 		force = force + value;
 	}
 	public void ModifySpeed(float value) {
-		speed = Mathf.Clamp( speed + value * Time.deltaTime , 0 , GetMaxSpeed());
+		speed = Mathf.Clamp( speed + value , 0 , GetMaxSpeed());
 	}
 
 	public float GetMaxSpeed() {
 		return (maxSpeed + SYS_Save.Direct.GetMembersAttribute(0) * 0.05f) * Mathf.Clamp01((15 - iceValue) / 15);
 	}
-
-	private IEnumerator Move() {
-
-		while (true) {
-			if (!reverse) {
-				ridgid.velocity = this.direction * speed + force;
-			} else {
-				ridgid.velocity = this.direction * -speed + force;
-			}
-
-			//Debug.LogError(speed + "/" + force + "/" + ridgid.velocity);
-			yield return null;
-		}
-	}
 		
-
 	public void BeginMove() {
 		SYS_SelfDriving.Direct.Pause();
 		OnBeginMove();
@@ -214,8 +197,9 @@ public class SYS_ShipController : MonoBehaviour {
 		}
 	}
 
-	public void Impact(float mass , Vector2 velocity) {
-		force = (velocity * mass + force) / (mass + 1);
-		speed = speed / (mass + 1);
+	public void Impact(float mass , Vector2 velocity , float reflect) {
+		//	force = (velocity * mass + ridgid.velocity * 1) / (mass + 1) ; 
+		force = ridgid.velocity * -reflect;
+
 	}
 }

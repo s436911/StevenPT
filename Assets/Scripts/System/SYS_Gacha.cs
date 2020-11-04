@@ -74,7 +74,7 @@ public class SYS_Gacha : MonoBehaviour {
 	}
 
 	public void Gacha(int slot) {
-		Member newHero = new Member(Random.Range(0, SYS_TeamManager.Direct.headIcons.Count), Random.Range(0, SYS_TeamManager.Direct.bodyIcons.Count), Random.Range(0, 2), (NatureType)Random.Range(0, 5), Random.Range(slot, slot * 2 + 3));
+		Member newHero = new Member(Random.Range(0, SYS_TeamManager.Direct.headIcons.Count), Random.Range(0, SYS_TeamManager.Direct.bodyIcons.Count), Random.Range(0, 2), (NatureType)Random.Range(0, 9), Random.Range(slot, slot * 2 + 3));
 		SYS_Save.Direct.AddBullpen(newHero);
 
 		RectTransform egg =  Instantiate(pfbEgg).GetComponent<RectTransform>();

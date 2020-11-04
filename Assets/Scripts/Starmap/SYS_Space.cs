@@ -10,10 +10,14 @@ public class SYS_Space : MonoBehaviour {
 	
 	public PlanetEntity tgtPlanet;
 	public GameObject pfbPlanet;
+	public GameObject pfbPlanetTmp;
+
 	public GameObject pfbActivity;
 	public GameObject pfbResourece;
 	public GameObject pfbResoureces;
 	public Transform entityGroup;
+
+
 
 	public int resrcInNum = 4;
 	public int resrcOutNum = 8;
@@ -183,20 +187,21 @@ public class SYS_Space : MonoBehaviour {
 		
 		//gen star
 		foreach (StarInfo starInfo in initList) {
-			PlanetEntity objGen = Instantiate(pfbPlanet).GetComponent<PlanetEntity>();
-			objGen.transform.SetParent(entityGroup);
-			objGen.transform.position = new Vector3(starInfo.sPos.x , starInfo.sPos.y , 0);
-			objGen.name = starInfo.name;
-
+			PlanetEntity objGen;
 			int eventId = Random.Range(0, matActivities.Count);
 
 			if (starInfo.nvType == NaviType.Check) {
+				objGen = Instantiate(pfbPlanet).GetComponent<PlanetEntity>();
 				objGen.Regist(starInfo, matPlanets[Random.Range(0, matPlanets.Count)], Random.Range(1, 1.5f), Random.Range(0, 3) == 2 , eventId);
 			} else {
-				objGen.Regist(starInfo, matPlanets[Random.Range(0, matPlanets.Count)], Random.Range(1.5f, 1.75f), Random.Range(0, 3) == 2 , eventId);
+				objGen = Instantiate(pfbPlanetTmp).GetComponent<PlanetEntity>();
+				objGen.Regist(starInfo, Random.Range(1.25F, 1.5F), Random.Range(0, 3) == 2, eventId);
 				tgtPlanet = objGen;
 			}
 
+			objGen.transform.SetParent(entityGroup);
+			objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, 0);
+			objGen.name = starInfo.name;
 			UI_Navigator.Direct.Regist(objGen);
 			planets.Add(objGen);
 		}
