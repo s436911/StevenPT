@@ -17,8 +17,6 @@ public class SYS_Space : MonoBehaviour {
 	public GameObject pfbResoureces;
 	public Transform entityGroup;
 
-
-
 	public int resrcInNum = 4;
 	public int resrcOutNum = 8;
 	public int resrcNum = 8;
