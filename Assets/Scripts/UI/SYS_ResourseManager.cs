@@ -145,6 +145,8 @@ public class SYS_ResourseManager : MonoBehaviour {
 			} else if (resources[type] >= maxFuel) {
 				resources[type] = maxFuel;
 				full = true;
+				SYS_TeamManager.Direct.TriggerEvent(31);
+				SYS_TeamManager.Direct.TriggerEvent(32);
 			}
 
 			fuelBar.fillAmount = (float)resources[type] / (float)maxFuel * 0.2f;
@@ -270,7 +272,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 			if (!deleteMode) {
 				if (SYS_Save.Direct.GetInventory(slot).typeID == 3) {
 					if (SYS_Save.Direct.GetInventory(slot).effectID == 1) {
-						SYS_Save.Direct.AddBullpen(new Member(Random.Range(0, SYS_TeamManager.Direct.headIcons.Count), Random.Range(0, SYS_TeamManager.Direct.bodyIcons.Count), Random.Range(0, 2), (NatureType)Random.Range(0, 5), Random.Range(1, 2 + SYS_Save.Direct.GetInventory(slot).valueID)));
+						SYS_Save.Direct.AddBullpen(new Member(Random.Range(0, SYS_TeamManager.Direct.headIcons.Count), Random.Range(0, SYS_TeamManager.Direct.bodyIcons.Count), Random.Range(0, 2), (NatureType)Random.Range(1, 9), Random.Range(1, 2 + SYS_Save.Direct.GetInventory(slot).valueID)));
 						SYS_Save.Direct.SetInventory(slot);
 					}
 

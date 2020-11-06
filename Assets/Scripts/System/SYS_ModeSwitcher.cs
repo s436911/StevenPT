@@ -33,10 +33,10 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 	}
 
 	public void Stub() {
-		SYS_Save.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
-		SYS_Save.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
-		SYS_Save.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
-		SYS_Save.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(0, 5), 1));
+		SYS_Save.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(1, 9), 1));
+		SYS_Save.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(1, 9), 1));
+		SYS_Save.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(1, 9), 1));
+		SYS_Save.Direct.AddMembers(new Member(Random.Range(0, 3), Random.Range(0, 4), Random.Range(0, 2), (NatureType)Random.Range(1, 9), 1));
 	}
 
 	// Update is called once per frame
@@ -114,6 +114,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				SYS_Space.Direct.Init();
 				SYS_Weather.Direct.Restart();
 				SYS_ResourseManager.Direct.Restart();
+				SYS_TeamManager.Direct.Restart();
 				UI_Navigator.Direct.Init();
 				SYS_Mission.Direct.Restart();
 				SYS_Starmap.Direct.ResetStars();

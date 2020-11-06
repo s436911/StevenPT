@@ -25,6 +25,7 @@ public class SYS_TeamManager : MonoBehaviour {
 	public bool deleteMode;
 	private Color baseColor;
 	public Color deleteColor;
+	public Text moraleText;
 
 	public int morale = 3;
 
@@ -50,8 +51,8 @@ public class SYS_TeamManager : MonoBehaviour {
 		baseColor = back.color;
 	}
 
-	public void Init() {
-		
+	public void Restart() {
+		SetMorale(3);
 	}
 
 	public void SetdBullpenSlot(int slot, Member member) {
@@ -99,9 +100,16 @@ public class SYS_TeamManager : MonoBehaviour {
 		}
 	}
 
-	public void TriggerEvent(int eventID) {
+	public bool TriggerEvent(int eventID) {
 		switch (eventID) {
 			case 1://通用傾向
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Brave, 5)) {
+						ModifyMorale(1);
+						SYS_PopupManager.Direct.Regist(mem.name, "喔喔衝阿!!");
+						return true;
+					}
+				}
 				break;
 			case 2://攻擊傾向
 				break;
@@ -111,40 +119,207 @@ public class SYS_TeamManager : MonoBehaviour {
 				break;
 			case 5://一般傾向
 				break;
-			case 6://放棄傾向
+			case 6://放棄負面
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Brave, 5)) {
+						ModifyMorale(-1);
+						SYS_PopupManager.Direct.Regist(mem.name, "討厭逃跑..");
+						return true;
+					}
+				}
 				break;
-
+			case 7://放棄正面
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Timid, 5)) {
+						ModifyMorale(1);
+						SYS_PopupManager.Direct.Regist(mem.name, "安全第一!!");
+						return true;
+					}
+				}
+				break;
 			case 11://失控
 				break;
-			case 12://移動
+			case 12://移動正面
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Hasty, 5)) {
+						ModifyMorale(1);
+						SYS_PopupManager.Direct.Regist(mem.name, "Go!Go!");
+						return true;
+					}
+				}
 				break;
-			case 13://靜止
+			case 13://移動負面
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Relaxed, 5)) {
+						ModifyMorale(-1);
+						SYS_PopupManager.Direct.Regist(mem.name, "好累...");
+						return true;
+					}
+				}
+				break;
+			case 14://靜止正面
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Relaxed, 5)) {
+						ModifyMorale(1);
+						SYS_PopupManager.Direct.Regist(mem.name, "好悶喔...");
+						return true;
+					}
+				}
+				break;
+			case 15://靜止負面
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Hasty, 5)) {
+						ModifyMorale(-1);
+						SYS_PopupManager.Direct.Regist(mem.name, "zzZ~");
+						return true;
+					}
+				}
 				break;
 
-			case 21://士氣低落
+			case 21://士氣無視
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Optimistic, 5)) {
+						SYS_PopupManager.Direct.Regist(mem.name, "下一次會更好!");
+						return true;
+					}
+				}
 				break;
-			case 22://失誤
+			case 22://士氣低落
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Pessimistic, 5)) {
+						SYS_PopupManager.Direct.Regist(mem.name, "嗚嗚嗚...");
+						return true;
+					}
+				}
+				break;
+			case 23://失誤
 				break;
 
-			case 31://補滿油
+			case 31://補滿油正面
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Timid, 5)) {
+						ModifyMorale(1);
+						SYS_PopupManager.Direct.Regist(mem.name, "萬全準備!!");
+						return true;
+					}
+				}
 				break;
-			case 32://出發
+			case 32://補滿油負面
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Relaxed, 5)) {
+						ModifyMorale(-1);
+						SYS_PopupManager.Direct.Regist(mem.name, "再讓我睡一下拉...");
+						return true;
+					}
+				}
 				break;
 			case 33://重複登陸
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Hasty, 5)) {
+						SYS_PopupManager.Direct.Regist(mem.name, "我們還要待多久??");
+						ModifyMorale(-1);
+						return true;
+					}
+				}
+				break;
+			case 34://出發
 				break;
 
-			case 41://受擊
+			case 41://撞擊隕石迴避
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Careful, 5)) {
+						SYS_PopupManager.Direct.Regist(mem.name, "沒事~我閃掉了!");
+						return true;
+					}
+				}
 				break;
-			case 42://受擊低落
+
+			case 42://撞擊隕石命中
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Rash, 10)) {
+						SYS_PopupManager.Direct.Regist(mem.name, "阿!");
+						return true;
+					}
+				}
 				break;
 			case 43://雲霧
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Timid, 5)) {
+						ModifyMorale(-1);
+						SYS_PopupManager.Direct.Regist(mem.name, "看不見RRRRR!");
+						return true;
+					}
+					
+					if (Trigger(mem, NatureType.Pessimistic, 5)) {
+						ModifyMorale(-1);
+						SYS_PopupManager.Direct.Regist(mem.name, "會不會撞到東西啊!");
+						return true;
+					}
+				}
+				break;
+			case 44://受擊低落
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Careful, 10)) {
+						SYS_PopupManager.Direct.Regist(mem.name, "明明很小心了...");
+						return true;
+					}
+
+					if (Trigger(mem, NatureType.Timid, 5)) {
+						SYS_PopupManager.Direct.Regist(mem.name, "RRRRRR");
+						return true;
+					}
+				}
+				break;
+			case 45://受擊無視
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (Trigger(mem, NatureType.Rash, 5)) {
+						SYS_PopupManager.Direct.Regist(mem.name, "怎麼了!!??");
+						return true;
+					}
+				}
 				break;
 		}
-		SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "看不見RRRRR!");
+
+		return false;
+
+		/*
+		Careful,//細心
+		Rash,//粗心
+
+		Brave,//勇敢
+		Timid,//膽小
+
+		Optimistic,//樂觀
+		Pessimistic,//悲觀
+
+		Hasty,//性急
+		Relaxed//悠閒
+		*/
+	}
+
+	public bool Trigger(Member mem, NatureType nature, float rate) {
+		if (mem.nature == nature && Random.Range(0, 100) < rate) {
+			return true;
+		}
+		return false;
 	}
 
 	public void ModifyMorale(int value) {
-		morale = Mathf.Clamp( morale + value , 1 , 5);
+		if (value < 0 ) {
+			if (TriggerEvent(21)) {
+				SetMorale(value + 1);
+
+			} else if (TriggerEvent(22)) {
+				SetMorale(value - 1);
+			}
+		}
+
+		SetMorale(morale + value);
+	}
+
+	public void SetMorale(int value) {
+		morale = Mathf.Clamp(value, 1, 5);
+		moraleText.text = morale.ToString();
 	}
 }
 
@@ -189,6 +364,38 @@ public class Member {
 	public void AddAttribute() {
 		int tmp = Random.Range(0, 4);
 		attribute[tmp] += 1;
+	}
+
+	public string GetNatureName() {
+		switch (nature) {
+			case NatureType.Careful:
+				return "細心";
+				break;
+			case NatureType.Rash:
+				return "粗心";
+				break;
+			case NatureType.Brave:
+				return "勇敢";
+				break;
+			case NatureType.Timid:
+				return "膽小";
+				break;
+			case NatureType.Optimistic:
+				return "樂觀";
+				break;
+			case NatureType.Pessimistic:
+				return "悲觀";
+				break;
+			case NatureType.Hasty:
+				return "性急";
+				break;
+			case NatureType.Relaxed:
+				return "悠閒";
+				break;
+		}
+
+
+		return "無";
 	}
 }
 

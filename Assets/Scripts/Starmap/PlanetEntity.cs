@@ -42,6 +42,7 @@ public class PlanetEntity : SpaceEntity {
 		UI_Navigator.Direct.Arrive(this);
 		if (!explored) {
 			explored = true;
+			SYS_TeamManager.Direct.ModifyMorale(1);
 			int randomResource = Random.Range(0, 4);
 
 			if (randomResource == 0) {
@@ -60,6 +61,8 @@ public class PlanetEntity : SpaceEntity {
 				SYS_ResourseManager.Direct.ModifyResource(3, 1);
 				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "我好餓RRRRR!");
 			}
+		} else if (SYS_TeamManager.Direct.TriggerEvent(33)) {
+
 		}
 	}
 }

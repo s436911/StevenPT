@@ -196,6 +196,7 @@ public class InteractOption {
 
 	public void Interact() {
 		if (InteractAble()) {
+
 			SYS_ResourseManager.Direct.ModifyResource(costType, -costNum);
 
 			if (Random.Range(0, 100) < successRate + SYS_Save.Direct.GetMembersAttribute(2)) {
@@ -206,6 +207,8 @@ public class InteractOption {
 					SYS_ResourseManager.Direct.AddCargo(getItem);
 				}
 			}
+			
+			SYS_TeamManager.Direct.TriggerEvent(costNum > 0 ? 1 : 6);
 		}
 	}
 }

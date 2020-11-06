@@ -12,7 +12,7 @@ public class SYS_ShipController : MonoBehaviour {
 	public float maxSpeed = 2;
 	public float accelerate = 0.5f;
 	public float decelerate = 1;
-	public float smoothing = 0.5f;
+	public float lerp = 0.5f;
 
 	public GameObject character;
 	public GameObject characterJet;
@@ -32,6 +32,7 @@ public class SYS_ShipController : MonoBehaviour {
 	public GameObject icePanel;
 	public Image iceImage;
 	public Image iceMask;
+	private float nowAngle = 0;
 	private float iceValue;
 
 	private Coroutine cououtine;
@@ -39,6 +40,7 @@ public class SYS_ShipController : MonoBehaviour {
 	private float foodTimer;
 	private float damageTimer;
 	private float shieldTimer;
+	private float moveCounter = 0;
 
 	void Awake() {
 		Direct = this;
@@ -52,9 +54,6 @@ public class SYS_ShipController : MonoBehaviour {
 	public void Restart() {
 		character.SetActive(true);
 		characterJet.SetActive(true);
-		if (SYS_Mission.Direct.nowMission.missionType == MissionType.Collect) {
-			reflecter.SetActive(true);
-		}
 	}
 
 	public void ModifyIce(float value) {
@@ -83,8 +82,12 @@ public class SYS_ShipController : MonoBehaviour {
 	void FixedUpdate() {
 		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
 			if (direction != Vector2.zero) {
-				Quaternion qua = Quaternion.LookRotation(direction, Vector3.forward);//※  將Vector3型別轉換四元數型別
-				transform.rotation = Quaternion.Lerp(transform.rotation, qua, Time.fixedDeltaTime * smoothing);
+				nowAngle = Mathf.LerpAngle(nowAngle, Common.GetEulerAngle(direction), lerp * Time.fixedDeltaTime);
+				transform.eulerAngles = new Vector3(0, 0, nowAngle);
+
+				ModifyMoveCounter(Time.fixedDeltaTime);
+			} else {
+				ModifyMoveCounter(-Time.fixedDeltaTime);
 			}
 
 			if (handling) {
@@ -112,6 +115,23 @@ public class SYS_ShipController : MonoBehaviour {
 				ModifyIce(-Time.fixedDeltaTime);
 			}
 		}
+	}
+
+	public void ModifyMoveCounter(float value) {
+		if ((value > 0 && moveCounter < 0) || (value < 0 && moveCounter > 0)) {
+			moveCounter = 0;
+		}
+
+		if (moveCounter > 0) {
+			if (moveCounter < 10 && moveCounter + value >= 10) {
+				SYS_TeamManager.Direct.TriggerEvent(12);
+			} 
+		} else if(moveCounter < 0) {
+			if (moveCounter > -10 && moveCounter + value <= -10) {
+				SYS_TeamManager.Direct.TriggerEvent(13);
+			} 
+		}
+		moveCounter = moveCounter + value;
 	}
 
 	void Update() {
@@ -189,17 +209,24 @@ public class SYS_ShipController : MonoBehaviour {
 	public void Damage(int damage) {
 		damageTimer = Time.timeSinceLevelLoad;
 		SYS_ResourseManager.Direct.ModifyResource(1, -damage);
-
-		if (Random.Range(0, 100) < 50) {
-			SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "好痛!");
-		} else {
-			SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "不能好好開船嗎!");
-		}
+		SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "不能好好開船嗎!");
 	}
 
 	public void Impact(float mass , Vector2 velocity , float reflect) {
 		//	force = (velocity * mass + ridgid.velocity * 1) / (mass + 1) ; 
 		force = ridgid.velocity * -reflect;
+	}
 
+	public void Shock(float value) {
+		if (Random.Range(0, 100) < 50) {
+			if (!SYS_TeamManager.Direct.TriggerEvent(45)) {
+				SYS_TeamManager.Direct.ModifyMorale(-1);
+				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "嗚嗚頭好暈...");
+			}
+
+		} else if(SYS_TeamManager.Direct.TriggerEvent(44)) {
+			SYS_TeamManager.Direct.ModifyMorale(-1);
+		}
+		ModifySpeed(-value);
 	}
 }

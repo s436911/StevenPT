@@ -12,8 +12,8 @@ public class AnimalEntity : SpaceEntity {
 	public bool whale = false;
 	public float reflect = 1;
 	public float lerp;
+	private float nowAngle = 0;
 	private float actTimer;
-	private float nowAngle;
 
 	public void Regist(StarInfo info, float size) {
 		this.info = info;
@@ -25,15 +25,20 @@ public class AnimalEntity : SpaceEntity {
 			if (beetle) {
 				float distance = ((Vector2)transform.position - (Vector2)SYS_ShipController.Direct.transform.position).magnitude;
 				transform.position = new Vector3(tgt.transform.position.x, tgt.transform.position.y, transform.position.z);
-				UpdateAngle(SYS_ShipController.Direct.transform.position);
+
+				nowAngle = Mathf.Lerp(nowAngle, Common.GetEulerAngle((Vector2)(SYS_ShipController.Direct.transform.position - transform.position)), lerp * Time.fixedDeltaTime);
+				transform.eulerAngles = new Vector3(0, 0, nowAngle);
 
 				if (distance <= atkDis) {
 					beetle = false;
 					ridgid.velocity = ((Vector2)SYS_ShipController.Direct.transform.position + Random.insideUnitCircle * 3 - (Vector2)transform.position).normalized * 8;
 					return;
 				}
+
 			} else if (whale) {
-				UpdateAngle(movePos);
+				nowAngle = Mathf.Lerp(nowAngle, Common.GetEulerAngle(((Vector2)transform.position) - movePos), lerp * Time.fixedDeltaTime);
+				transform.eulerAngles = new Vector3(0, 0, nowAngle);
+
 				Vector2 offset = (movePos - (Vector2)transform.position);
 				if (offset.magnitude > 3) {
 					ridgid.velocity = offset.normalized * 0.5f;
@@ -51,30 +56,20 @@ public class AnimalEntity : SpaceEntity {
 		}
 	}
 
-	private void UpdateAngle(Vector2 pos) {
-		Vector2 offset = ((Vector2)transform.position - pos);
-		offset = ((Vector2)transform.position - pos);
-		offset *= 360;
-
-		nowAngle = Mathf.Lerp(nowAngle, Common.Angle(-offset), lerp * Time.fixedDeltaTime);
-
-		transform.eulerAngles = new Vector3(0, 0, nowAngle);//※  將Vector3型別轉換四元數型別
-	}
 
 	void OnCollisionEnter2D(Collision2D colli) {
 		SYS_ShipController ship = colli.transform.GetComponent<SYS_ShipController>();
 
-		if (ship != null && ship.IsDamageAble()) {
-			if (enemy) {
+		if (ship != null) {
+			if (enemy && ship.IsDamageAble()) {
 				if (boss) {
 					SYS_Camera.Direct.Shake(0.45f);
-					ship.ModifySpeed(-4);
+					ship.Shock(4);
 					ship.ModifyForce((SYS_ShipController.Direct.transform.position - transform.position).normalized * 4);
 
 				} else if (beetle) {
 					SYS_Camera.Direct.Shake(0.3f);
-					ship.ModifySpeed(-4);
-					//ship.ModifyForce((SYS_ShipController.Direct.transform.position - transform.position).normalized);
+					ship.Shock(4);
 				} 
 
 				ship.Damage(1);

@@ -28,37 +28,40 @@ public class ResourecesEntity : SpaceEntity {
 
 		if (ship != null ) {
 			if (stack > 0) {
-				if (ship.IsDamageAble() && ship.IsHighspeed()) {
-					if (Random.Range(0, 100) > SYS_Save.Direct.GetMembersAttribute(3)) {
-						SYS_Camera.Direct.Shake(0.3f);
+				if (!ship.reflecter.activeSelf) {
+					SYS_Camera.Direct.Shake(0.3f);
+					if (!SYS_TeamManager.Direct.TriggerEvent(41)) {
+						if (Random.Range(0, 100) > SYS_Save.Direct.GetMembersAttribute(3)) {
+							ship.Shock(4);
 
-						if (!ship.reflecter.activeSelf) {
-							ship.ModifySpeed(-4);
-						}
-
-						ridgid.velocity = Random.insideUnitCircle.normalized * 2f;
-					} else {
-						SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "呼~好險!");
-					}
-
-					if (stack > 2) {
-						if (Random.Range(0, 3) == 0) {
-							SYS_Space.Direct.SplitResourece(transform.position, meshRenderer.material , resrcId);
-							stack = Mathf.Clamp(stack - 1, 2, 10);
+						} else if (SYS_TeamManager.Direct.TriggerEvent(42)) {
+							ship.Shock(4);
 
 						} else {
-							SYS_Space.Direct.SplitResourece(transform.position, meshRenderer.material, resrcId);
-							SYS_Space.Direct.SplitResourece(transform.position, meshRenderer.material, resrcId);
-							stack = Mathf.Clamp(stack - 2, 2, 10);
+							SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "呼~好險!");
 						}
+					}
+				}
 
-						transform.localScale = new Vector3(0.6f + stack * 0.15f, 0.6f + stack * 0.15f, 0.6f + stack * 0.15f);
+				ridgid.velocity = Random.insideUnitCircle.normalized * 2f;
+
+				if (stack > 2) {
+					if (Random.Range(0, 3) == 0) {
+						SYS_Space.Direct.SplitResourece(transform.position, meshRenderer.material, resrcId);
+						stack = Mathf.Clamp(stack - 1, 2, 10);
+
 					} else {
 						SYS_Space.Direct.SplitResourece(transform.position, meshRenderer.material, resrcId);
 						SYS_Space.Direct.SplitResourece(transform.position, meshRenderer.material, resrcId);
-						SYS_RadarManager.Direct.Remove(transform);
-						Destroy(gameObject);
+						stack = Mathf.Clamp(stack - 2, 2, 10);
 					}
+
+					transform.localScale = new Vector3(0.6f + stack * 0.15f, 0.6f + stack * 0.15f, 0.6f + stack * 0.15f);
+				} else {
+					SYS_Space.Direct.SplitResourece(transform.position, meshRenderer.material, resrcId);
+					SYS_Space.Direct.SplitResourece(transform.position, meshRenderer.material, resrcId);
+					SYS_RadarManager.Direct.Remove(transform);
+					Destroy(gameObject);
 				}
 			} else {
 				if (SYS_Mission.Direct.nowMission.missionType == MissionType.Collect && SYS_Mission.Direct.nowMission.mainResrc == resrcId && !SYS_Mission.Direct.IsComplete()) {

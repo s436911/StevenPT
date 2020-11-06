@@ -14,6 +14,7 @@ public class UI_Member : MonoBehaviour {
 	public Text t_agi;
 	public Text t_int;
 	public Text t_luk;
+	public Text t_nature;
 	public Text skill1;
 
 	private static Color[] rarityColor = { new Color(0, 0, 0), new Color(0.6f, 1, 0.45f), new Color(0.5f, 0.75f, 0), new Color(1, 0.6f, 0.3f), new Color(1, 0.35f, 0.25f) };
@@ -38,6 +39,7 @@ public class UI_Member : MonoBehaviour {
 				t_int.text = "理智 " + member.attribute[2].ToString();
 				t_luk.text = "運氣 " + member.attribute[3].ToString();
 				t_status.text = member.age + "歲 " + (member.sex == 0 ? "女" : "男");
+				t_nature.text = member.GetNatureName();
 				skill1.text = "";
 			}
 		} else {
@@ -54,6 +56,7 @@ public class UI_Member : MonoBehaviour {
 				t_int.text = "理智 --";
 				t_luk.text = "運氣 --";
 				t_status.text = "";
+				t_nature.text = "";
 				skill1.text = "";
 			}
 		}

@@ -17,27 +17,38 @@ public class MeteorEntity : SpaceEntity {
 	void OnCollisionEnter2D(Collision2D colli) {
 		SYS_ShipController ship = colli.transform.GetComponent<SYS_ShipController>();
 
-		if (ship != null && ship.IsDamageAble()) {
+		if (ship != null) {
 			if (ice) {
 				ship.ModifyIce(5);
 			}
 
-			if (Random.Range(0, 100) > SYS_Save.Direct.GetMembersAttribute(3)) {
+			if (!ship.reflecter.activeSelf) {
 				SYS_Camera.Direct.Shake(0.3f);
+				if (!SYS_TeamManager.Direct.TriggerEvent(41)) {
+					if (Random.Range(0, 100) > SYS_Save.Direct.GetMembersAttribute(3)) {
+						ship.Shock(4);
 
-				if (!ship.reflecter.activeSelf) {
-					ship.ModifySpeed(-4);
+						if (enemy && ship.IsDamageAble()) {
+							ship.Damage(1);
+						}
+					} else if (SYS_TeamManager.Direct.TriggerEvent(42)) {
+						ship.Shock(4);
+
+						if (enemy && ship.IsDamageAble()) {
+							ship.Damage(1);
+						}
+					} else {
+						SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "呼~好險!");
+					}
 				}
-
-				ridgid.velocity = Random.insideUnitCircle.normalized * 2f;
-			} else {
-				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "呼~好險!");
 			}
+
+			ridgid.velocity = Random.insideUnitCircle.normalized * 2f;
 		}
 	}
 
 	void OnTriggerEnter2D(Collider2D colli) {
-		SYS_ShipController ship = colli.transform.parent.GetComponent<SYS_ShipController>();
+		SYS_ShipController ship = colli.transform.GetComponent<SYS_ShipController>();
 
 		if (ship != null) {
 			if (enemy) {
@@ -46,9 +57,7 @@ public class MeteorEntity : SpaceEntity {
 			}
 
 			if (cloud) {
-				if (Random.Range(0,100) < 5) {
-					//SYS_TeamManager.Direct.TriggerEvent(13);
-				}
+				SYS_TeamManager.Direct.TriggerEvent(43);
 			}
 		}
 	}
