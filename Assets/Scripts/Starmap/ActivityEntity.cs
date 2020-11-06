@@ -18,7 +18,7 @@ public class ActivityEntity : SpaceEntity {
 	}
 
 	void OnTriggerEnter2D(Collider2D colli) {
-		if (colli.transform.parent.GetComponent<SYS_ShipController>() != null) {
+		if (colli.transform.GetComponent<SYS_ShipController>() != null) {
 			if (info.nvType == NaviType.Activity) {
 				//SYS_Interactive.Direct.Regist(iEvent);
 				SYS_Interactive.Direct.RegistTalker(this, story);
