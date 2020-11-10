@@ -23,6 +23,7 @@ public class PlanetEntity : SpaceEntity {
 
 	void OnTriggerEnter2D(Collider2D colli) {
 		if (colli.transform.GetComponent<SYS_ShipController>() != null) {
+			SYS_SelfDriving.Direct.Reset();
 			if (info.nvType == NaviType.Check) {
 				EnterPlanet();
 

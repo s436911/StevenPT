@@ -17,7 +17,8 @@ public class UI_ScoreManager : MonoBehaviour
 	public int[] getRate = new int[4];
 
 	public Text fomulaText;
-	public Text ScoreText;
+	public Text scoreText;
+	public Text titleText;
 
 	public float[] bonusEnd = new float[4];
 
@@ -40,15 +41,61 @@ public class UI_ScoreManager : MonoBehaviour
 		SYS_Gacha.Direct.CheckDate();
 	}
 
-	public void Lose() {
+	public void Giveup() {
 		EndGame();
 		SYS_ModeSwitcher.Direct.SetMode(1);
+	}
+
+	public void Lose() {
+		SYS_GameEngine.Direct.SetPause(true);
+		uiPanel.SetActive(true);
+		titleText.text = "-failed-";
+		fomulaText.text = "-----";
+		scoreText.text = "X";
+
+		leftText[0].text = "---";
+		leftText[1].text = "---";
+		leftText[2].text = "---";
+		leftText[3].text = "---";
+
+		rateText[0].text = "x---";
+		rateText[1].text = "x---";
+		rateText[2].text = "x---";
+		rateText[3].text = "x---";
+
+		diffText[0].text = "x---";
+		diffText[1].text = "x---";
+		diffText[2].text = "x---";
+		diffText[3].text = "x---";
+
+		getText[0].text = "+0";
+		getText[1].text = "+0";
+		getText[2].text = "+0";
+		getText[3].text = "+0";
+
+		//顯示結算
+		cargo[0].SetItem(SYS_ResourseManager.Direct.cargos[0]);
+		cargo[1].SetItem(SYS_ResourseManager.Direct.cargos[1]);
+
+		//加進道具攔
+		SYS_Save.Direct.AddInventory(SYS_ResourseManager.Direct.cargos[0]);
+		SYS_Save.Direct.AddInventory(SYS_ResourseManager.Direct.cargos[1]);
+
+		//年齡增加
+		for (int ct = 0; ct < SYS_Save.Direct.GetMembers().Length; ct++) {
+			Member tp = SYS_Save.Direct.GetMember(ct);
+			if (!tp.isNull) {
+				SYS_Save.Direct.ModifyMemberAge(ct, 0.5F);
+			}
+		}
+		EndGame();
 	}
 
 	public void Victory() {
 		int difficult = SYS_Mission.Direct.nowMission.difficult;
 		SYS_GameEngine.Direct.SetPause(true);
 		uiPanel.SetActive(true);
+		titleText.text = "-complete-";
 
 		fomulaText.text = Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(0) * getRate[0] * (1 + (0.2f * difficult))) + "+" +
 			Mathf.RoundToInt(SYS_ResourseManager.Direct.GetResource(2) * getRate[1] * (1 + (0.2f * difficult))) + "+" +
@@ -65,19 +112,19 @@ public class UI_ScoreManager : MonoBehaviour
 		int getCoin = 1;
 
 		if (score > maxScore * 0.6f) {
-			ScoreText.text = "s";
+			scoreText.text = "s";
 			getCoin = 4;
 
 		} else if (score > maxScore * 0.4f) {
-			ScoreText.text = "a";
+			scoreText.text = "a";
 			getCoin = 3;
 
 		} else if (score > maxScore * 0.2f) {
-			ScoreText.text = "b";
+			scoreText.text = "b";
 			getCoin = 2;
 
 		} else {
-			ScoreText.text = "c";
+			scoreText.text = "c";
 		}
 
 		leftText[0].text = SYS_ResourseManager.Direct.GetResource(0).ToString();
@@ -113,10 +160,11 @@ public class UI_ScoreManager : MonoBehaviour
 		SYS_Save.Direct.AddInventory(SYS_ResourseManager.Direct.cargos[0]);
 		SYS_Save.Direct.AddInventory(SYS_ResourseManager.Direct.cargos[1]);
 
+		//年齡增加
 		for (int ct = 0; ct < SYS_Save.Direct.GetMembers().Length; ct++) {
 			Member tp = SYS_Save.Direct.GetMember(ct);
 			if (!tp.isNull) {
-				SYS_Save.Direct.ModifyMemberAge(ct , 1);
+				SYS_Save.Direct.ModifyMemberAge(ct , 0.5F);
 			}
 		}
 

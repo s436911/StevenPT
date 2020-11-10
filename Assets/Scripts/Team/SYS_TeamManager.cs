@@ -25,6 +25,7 @@ public class SYS_TeamManager : MonoBehaviour {
 	public bool deleteMode;
 	private Color baseColor;
 	public Color deleteColor;
+	public Color oldColor;
 	public Text moraleText;
 
 	public int morale = 3;
@@ -332,7 +333,7 @@ public class Member {
 	public int headID;
 	public int bodyID;
 	public int sex;
-	public int age;
+	public float age;
 	public NatureType nature;	
 
 	public int[] attribute = {1,1,1,1};

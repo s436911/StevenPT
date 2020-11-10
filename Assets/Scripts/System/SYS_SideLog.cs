@@ -28,6 +28,7 @@ public class SYS_SideLog : MonoBehaviour {
 			UI_SideLog objGen = Instantiate(logObj).GetComponent<UI_SideLog>();
 			RectTransform objRect = objGen.GetComponent<RectTransform>();
 			objGen.transform.SetParent(uiPanel);
+			objGen.transform.localScale = Vector2.one;
 			objRect.anchoredPosition = objRect.anchoredPosition + new Vector2(0, 0);
 			objGen.Regist(uiPanel.childCount * -20 ,resourceIcon[typeId], text);
 		}

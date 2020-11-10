@@ -68,10 +68,10 @@ public class SYS_Interactive : MonoBehaviour {
 				texts[id].text = nowEvent.answers[id].text;
 
 				if (nowEvent.answers[id].costNum != 0 && nowEvent.answers[id].getNum != 0) {
-					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : (nowEvent.answers[id].successRate + SYS_Save.Direct.GetMembersAttribute(2)).ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
+					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : (nowEvent.answers[id].successRate + SYS_Save.Direct.GetMembersAttribute(3)).ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
 
 				} else if (nowEvent.answers[id].costNum != 0) {
-					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : (nowEvent.answers[id].successRate + SYS_Save.Direct.GetMembersAttribute(2)).ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum;
+					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : (nowEvent.answers[id].successRate + SYS_Save.Direct.GetMembersAttribute(3)).ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum;
 
 				} else {
 					textmsgs[id].text = "---";
@@ -199,7 +199,7 @@ public class InteractOption {
 
 			SYS_ResourseManager.Direct.ModifyResource(costType, -costNum);
 
-			if (Random.Range(0, 100) < successRate + SYS_Save.Direct.GetMembersAttribute(2)) {
+			if (Random.Range(0, 100) < successRate + SYS_Save.Direct.GetMembersAttribute(3)) {
 				if (getItem.isNull) {
 					SYS_ResourseManager.Direct.ModifyResource(getType, getNum);
 

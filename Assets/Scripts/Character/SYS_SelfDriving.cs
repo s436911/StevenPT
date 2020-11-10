@@ -21,9 +21,11 @@ public class SYS_SelfDriving : MonoBehaviour {
 			}
 
 			SYS_ShipController.Direct.OnUpdateDirection((tgt.GetPos() - (Vector2)SYS_ShipController.Direct.transform.position));
+
+			/*
 			if (Vector2.Distance(tgt.GetPos(),SYS_ShipController.Direct.transform.position) < stopDis) {
 				Reset();
-			}
+			}*/
 		}
 	}
 

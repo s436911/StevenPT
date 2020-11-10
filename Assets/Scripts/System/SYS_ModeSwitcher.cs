@@ -16,6 +16,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 	public float animTime = 3;
 
 	public GameMode gameMode;
+	public GameObject mask;
 
 	void Awake() {
 		Direct = this;
@@ -27,6 +28,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 		SYS_Save.Direct.Init();
 		SYS_Mission.Direct.Init();
 		SYS_Gacha.Direct.Init();
+		mask.SetActive(true);
 
 		SetMode(GameMode.Home);
 		//Stub();

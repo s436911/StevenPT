@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class SYS_Save : MonoBehaviour {
 	public static SYS_Save Direct;
+	[SerializeField]
 	private PlayerData gameData;
 
 	public int[] researchNeed = new int[4];
@@ -387,7 +388,7 @@ public class SYS_Save : MonoBehaviour {
 		}
 	}
 
-	public void ModifyMemberAge(int slot, int value , bool save = true) {
+	public void ModifyMemberAge(int slot, float value , bool save = true) {
 		if (gameData.members[slot].isNull) {
 			return;
 		}
@@ -404,12 +405,12 @@ public class SYS_Save : MonoBehaviour {
 		return !gameData.members[0].isNull && !gameData.members[1].isNull && !gameData.members[2].isNull && !gameData.members[3].isNull;
 	}
 
-
+	/* 0駕駛、1談判、2理智、3運氣*/
 	public int GetMembersAttribute(int type) {
 		int rt = 0;
 		foreach (Member member in gameData.members) {
 			if (!member.isNull) {
-				rt = rt + member.attribute[type];
+				rt = rt + member.age < 100 ? member.attribute[type] : (int)Mathf.Ceil(member.attribute[type] * 0.5f) ;
 			}
 		}
 		return rt;

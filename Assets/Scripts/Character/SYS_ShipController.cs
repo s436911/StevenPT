@@ -92,7 +92,7 @@ public class SYS_ShipController : MonoBehaviour {
 
 			if (handling) {
 				if (speed < GetMaxSpeed()) {
-					ModifySpeed((accelerate + SYS_Save.Direct.GetMembersAttribute(1) * 0.1f) * Time.fixedDeltaTime);
+					ModifySpeed((accelerate + SYS_Save.Direct.GetMembersAttribute(0) * 0.1f) * Time.fixedDeltaTime);
 				} else {
 					ModifySpeed(decelerate * Time.fixedDeltaTime);
 				}
@@ -151,7 +151,7 @@ public class SYS_ShipController : MonoBehaviour {
 	}
 
 	public float GetMaxSpeed() {
-		return (maxSpeed + SYS_Save.Direct.GetMembersAttribute(0) * 0.05f) * Mathf.Clamp01((15 - iceValue) / 15);
+		return maxSpeed * Mathf.Clamp01((15 - iceValue) / 15);
 	}
 		
 	public void BeginMove() {
@@ -195,10 +195,6 @@ public class SYS_ShipController : MonoBehaviour {
 
 	public void UpdateDirection(Vector3 direction) {
 		OnUpdateDirection(direction);
-	}
-
-	public bool IsHighspeed() {
-		return ridgid.velocity.magnitude >= 3;
 	}
 
 	public bool IsDamageAble() {
