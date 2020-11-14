@@ -38,6 +38,7 @@ public class SYS_ShipController : MonoBehaviour {
 	private Coroutine cououtine;
 	private float fuelTimer;
 	private float foodTimer;
+	private float triggerTimer;
 	private float damageTimer;
 	private float shieldTimer;
 	private float moveCounter = 0;
@@ -205,7 +206,11 @@ public class SYS_ShipController : MonoBehaviour {
 	public void Damage(int damage) {
 		damageTimer = Time.timeSinceLevelLoad;
 		SYS_ResourseManager.Direct.ModifyResource(1, -damage);
-		SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "不能好好開船嗎!");
+		if (Random.Range(0, 100) < 50) {
+			SYS_TeamManager.Direct.Talk(3, "不能好好開船嗎!");
+		} else {
+			SYS_TeamManager.Direct.Talk(3, "好痛!");
+		}
 	}
 
 	public void Impact(float mass , Vector2 velocity , float reflect) {
@@ -217,12 +222,25 @@ public class SYS_ShipController : MonoBehaviour {
 		if (Random.Range(0, 100) < 50) {
 			if (!SYS_TeamManager.Direct.TriggerEvent(45)) {
 				SYS_TeamManager.Direct.ModifyMorale(-1);
-				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "嗚嗚頭好暈...");
+
+				if (Random.Range(0, 100) < 50) {
+					SYS_TeamManager.Direct.Talk(3, "嗚嗚頭好暈...");
+				} else {
+					SYS_TeamManager.Direct.Talk(3, "哇!");
+				}
 			}
 
 		} else if(SYS_TeamManager.Direct.TriggerEvent(44)) {
 			SYS_TeamManager.Direct.ModifyMorale(-1);
 		}
 		ModifySpeed(-value);
+	}
+
+	public bool TriggerAble() {
+		return Time.timeSinceLevelLoad - triggerTimer > 3;
+	}
+
+	public void Trigger() {
+		triggerTimer = Time.timeSinceLevelLoad;
 	}
 }

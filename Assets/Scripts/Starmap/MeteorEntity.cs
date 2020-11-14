@@ -38,7 +38,7 @@ public class MeteorEntity : SpaceEntity {
 							ship.Damage(1);
 						}
 					} else {
-						SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "呼~好險!");
+						SYS_TeamManager.Direct.Talk(2, "呼~好險!");
 					}
 				}
 			}

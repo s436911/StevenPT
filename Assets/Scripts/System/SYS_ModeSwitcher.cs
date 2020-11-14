@@ -121,7 +121,7 @@ public class SYS_ModeSwitcher : MonoBehaviour {
 				SYS_Mission.Direct.Restart();
 				SYS_Starmap.Direct.ResetStars();
 
-				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "相信會是一場愉快的冒險");
+				SYS_TeamManager.Direct.Talk(2, "相信會是一場愉快的冒險");
 			}
 		}
 	}

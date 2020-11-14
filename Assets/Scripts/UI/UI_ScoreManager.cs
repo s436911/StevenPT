@@ -28,8 +28,6 @@ public class UI_ScoreManager : MonoBehaviour
 	}
 
 	private void EndGame() {
-		SYS_SelfDriving.Direct.Reset();
-
 		//清除副本道具
 		SYS_ResourseManager.Direct.SetCargo(0);
 		SYS_ResourseManager.Direct.SetCargo(1);

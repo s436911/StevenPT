@@ -371,6 +371,19 @@ public class SYS_Save : MonoBehaviour {
 		return gameData.members[Random.Range(0,4)];
 	}
 
+	public int GetMemberNum() {
+		return Random.Range(0, 4);
+	}
+
+	public int GetMemberNum(Member member) {
+		for(int i = 0;i < gameData.members.Length; i++) {
+			if (member == gameData.members[i]) {
+				return i;
+			}
+		}
+		return 0;
+	}
+
 	public Member GetMember(int slot) {
 		return gameData.members[slot];
 	}

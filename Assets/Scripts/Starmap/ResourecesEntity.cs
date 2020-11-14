@@ -38,7 +38,7 @@ public class ResourecesEntity : SpaceEntity {
 							ship.Shock(4);
 
 						} else {
-							SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "呼~好險!");
+							SYS_TeamManager.Direct.Talk(4, "呼~好險!");
 						}
 					}
 				}

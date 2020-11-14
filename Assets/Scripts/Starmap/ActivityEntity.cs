@@ -17,9 +17,12 @@ public class ActivityEntity : SpaceEntity {
 		story = TMP_InteractEvent.GetActivityEvent(info.name, eventId);
 	}
 
-	void OnTriggerEnter2D(Collider2D colli) {SYS_SelfDriving.Direct.Reset();
+	void OnTriggerEnter2D(Collider2D colli) {
 		if (colli.transform.GetComponent<SYS_ShipController>() != null) {
-			SYS_SelfDriving.Direct.Reset();
+			if (SYS_ShipController.Direct.TriggerAble()) {
+				SYS_SelfDriving.Direct.Reset();
+				SYS_ShipController.Direct.Trigger();
+			}
 			if (info.nvType == NaviType.Activity) {
 				//SYS_Interactive.Direct.Regist(iEvent);
 				SYS_Interactive.Direct.RegistTalker(this, story);

@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class SYS_ResourseManager : MonoBehaviour {
-	public static SYS_ResourseManager Direct;	
+	public static SYS_ResourseManager Direct;
+	public Image[] resourceImage = new Image[5];
 	public Text[] resourceText = new Text[5];
 	public Text[] resourceText_Home = new Text[5];
 
@@ -127,7 +128,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 
 	public void ModifyResource(int type, int value) {
 		if (value > 0) {
-			SYS_SideLog.Direct.Regist(type, value.ToString());
+			SYS_SideLog.Direct.Regist(type, value);
 		}
 
 		SetResource(type, resources[type] + value);
@@ -188,8 +189,10 @@ public class SYS_ResourseManager : MonoBehaviour {
 		resourceText[type].text = resources[type].ToString();
 
 		if (!full) {
+			resourceImage[type].color = new Color(0.9f, 0.9f, 0.9f);
 			resourceText[type].color = new Color(0.9f, 0.9f, 0.9f);
 		} else {
+			resourceImage[type].color = new Color(0.9f, 0.7f, 0);
 			resourceText[type].color = new Color(0.9f, 0.7f, 0);
 		}
 	}
@@ -201,32 +204,32 @@ public class SYS_ResourseManager : MonoBehaviour {
 			if (cargos[slot].effectID == 2) {//加倍油料
 				UI_ScoreManager.Direct.bonusEnd[0] += 1;
 				used = true;
-				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "95加滿!");
+				SYS_TeamManager.Direct.Talk(2, "95加滿!");
 
 			} else if (cargos[slot].effectID == 3) {//加倍食物
 				UI_ScoreManager.Direct.bonusEnd[1] += 1;
 				used = true;
-				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "看起來好好吃!");				
+				SYS_TeamManager.Direct.Talk(2, "看起來好好吃!");
 
 			} else if (cargos[slot].effectID == 4) {//加倍礦石
 				UI_ScoreManager.Direct.bonusEnd[2] += 1;
 				used = true;
-				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "大顆鑽石!");
+				SYS_TeamManager.Direct.Talk(2, "大顆鑽石!");
 
 			} else if (cargos[slot].effectID == 5) {//加倍硬幣
 				UI_ScoreManager.Direct.bonusEnd[3] += 1;
 				used = true;
-				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "請給我黃金!");
+				SYS_TeamManager.Direct.Talk(2, "請給我黃金!");
 
 			} else if (cargos[slot].effectID == 6) {//偵測雷達
 				SYS_ShipController.Direct.detector.SetActive(true);
 				used = true;
-				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "喔喔到處都是隕石呢!");
+				SYS_TeamManager.Direct.Talk(2, "喔喔到處都是隕石呢!");
 
 			} else if (cargos[slot].effectID == 7) {//反射裝甲
 				SYS_ShipController.Direct.reflecter.SetActive(true);
 				used = true;
-				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "我要撞飛所有壞隕石!");
+				SYS_TeamManager.Direct.Talk(2, "我要撞飛所有壞隕石!");
 			}
 		}
 

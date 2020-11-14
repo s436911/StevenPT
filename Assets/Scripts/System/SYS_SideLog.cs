@@ -13,6 +13,10 @@ public class SYS_SideLog : MonoBehaviour {
 	public float duration = 3;
 	public int maxPopNum = 5;
 
+	public Color colorPosi;
+	public Color colorNorm;
+	public Color colorNega;
+
 	void Awake() {
 		Direct = this;
 	}
@@ -23,14 +27,39 @@ public class SYS_SideLog : MonoBehaviour {
 		}
 	}
 
-	public void Regist(int typeId, string text) {
+	public void Regist(int typeId, int num, sbyte type = 10) {
+		Regist(resourceIcon[typeId], num, type);
+	}
+
+	public void Regist(Texture2D texture, int num, sbyte type = 10) {
 		if (uiPanel.childCount < maxPopNum) {
+			if (type == 10) {
+				if (num == 0) {
+					type = 0;
+
+				} else if (num == 1) {
+					type = 1;
+
+				} else if (num == -1) {
+					type = -1;
+				}
+			}
+
 			UI_SideLog objGen = Instantiate(logObj).GetComponent<UI_SideLog>();
 			RectTransform objRect = objGen.GetComponent<RectTransform>();
 			objGen.transform.SetParent(uiPanel);
 			objGen.transform.localScale = Vector2.one;
 			objRect.anchoredPosition = objRect.anchoredPosition + new Vector2(0, 0);
-			objGen.Regist(uiPanel.childCount * -20 ,resourceIcon[typeId], text);
+
+			if (type == 0) {
+				objGen.Regist(uiPanel.childCount * -60, texture, num.ToString(), colorNorm);
+
+			} else if (type == 1) {
+				objGen.Regist(uiPanel.childCount * -60, texture, num.ToString(), colorPosi);
+
+			} else if (type == -1) {
+				objGen.Regist(uiPanel.childCount * -60, texture, num.ToString(), colorNega);
+			}
 		}
 	}
 }

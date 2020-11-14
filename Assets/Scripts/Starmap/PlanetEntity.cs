@@ -23,7 +23,11 @@ public class PlanetEntity : SpaceEntity {
 
 	void OnTriggerEnter2D(Collider2D colli) {
 		if (colli.transform.GetComponent<SYS_ShipController>() != null) {
-			SYS_SelfDriving.Direct.Reset();
+			if (SYS_ShipController.Direct.TriggerAble()) {
+				SYS_SelfDriving.Direct.Reset();
+				SYS_ShipController.Direct.Trigger();
+			}
+			
 			if (info.nvType == NaviType.Check) {
 				EnterPlanet();
 
@@ -48,19 +52,19 @@ public class PlanetEntity : SpaceEntity {
 
 			if (randomResource == 0) {
 				SYS_ResourseManager.Direct.ModifyResource(0, 5);
-				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "好多好多的燃料!");
+				SYS_TeamManager.Direct.Talk(2, "好多好多的燃料!");
 
 			} else if (randomResource == 1) {
 				SYS_ResourseManager.Direct.ModifyResource(1, 1);
-				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "裝甲升級!");
+				SYS_TeamManager.Direct.Talk(2, "裝甲升級!");
 
 			} else if (randomResource == 2) {
 				SYS_ResourseManager.Direct.ModifyResource(2, 1);
-				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "BUFFET!");
+				SYS_TeamManager.Direct.Talk(2, "BUFFET!");
 
 			} else if (randomResource == 3) {
 				SYS_ResourseManager.Direct.ModifyResource(3, 1);
-				SYS_PopupManager.Direct.Regist(SYS_Save.Direct.GetMember().name, "我好餓RRRRR!");
+				SYS_TeamManager.Direct.Talk(2, "我好餓RRRRR!");
 			}
 		} else if (SYS_TeamManager.Direct.TriggerEvent(33)) {
 
