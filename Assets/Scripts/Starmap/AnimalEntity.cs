@@ -65,7 +65,7 @@ public class AnimalEntity : SpaceEntity {
 				if (boss) {
 					SYS_Camera.Direct.Shake(0.45f);
 					ship.Shock(4);
-					ship.ModifyForce((SYS_ShipController.Direct.transform.position - transform.position).normalized * 4);
+					ship.ModifyForce((SYS_ShipController.Direct.transform.position - transform.position).normalized * 8);
 
 				} else if (beetle) {
 					SYS_Camera.Direct.Shake(0.3f);

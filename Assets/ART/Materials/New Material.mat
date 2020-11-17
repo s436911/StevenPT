@@ -113,7 +113,7 @@ Material:
     - Color_E8B40DCC: {r: 14.754423, g: 14.754423, b: 14.754423, a: 1}
     - Color_F6076DE5: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - Vector4_36CDFBAF: {r: 0.21, g: 0, b: 0.83, a: 0.5}
-    - Vector4_7707394: {r: 1, g: 1, b: 0, a: 0}
+    - Vector4_7707394: {r: 1, g: 1, b: 0, a: 106.04}
     - Vector4_D5DCB4CC: {r: 1, g: 1, b: 0, a: 0}
     - Vector4_FFAAE564: {r: 1, g: 1, b: 1.2, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}

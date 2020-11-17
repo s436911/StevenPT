@@ -3,15 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MeteorEntity : SpaceEntity {
+	public Vector2 sizeRange = new Vector2(1,1.5f);
 	public bool ice = false;
 	public bool enemy = false;
 	public bool nonRespawn = true;
 	public bool cloud = false;
+	public bool magnet = false;
 	public Transform tgt;
+	public GameObject spot;
 
-	public void Regist(StarInfo info, float size) {
+	public void Regist(StarInfo info) {
 		this.info = info;
-		transform.localScale = new Vector3(size, size, size);
+		this.size = Random.Range(sizeRange.x , sizeRange.y);
+		transform.localScale = Vector3.one * size;
+	}
+
+	void FixedUpdate() {
+		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
+			if (magnet) {
+				Vector2 dis = (SYS_ShipController.Direct.transform.position - transform.position);
+				ridgid.velocity = dis.normalized * 0.5f * Common.Direct.magnetCurve.Evaluate(dis.magnitude);
+
+			} else if (ice) {
+				if (SYS_Weather.Direct.GetWeather() == 0) {
+					spot.gameObject.SetActive(false);
+					enemy = false;
+					transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one * size, 0.25f * Time.fixedDeltaTime);
+
+				} else {
+					spot.gameObject.SetActive(true);
+					enemy = true;
+					transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one * size * 2.5f, 0.25f * Time.fixedDeltaTime);
+				}
+			}
+		}
 	}
 
 	void OnCollisionEnter2D(Collision2D colli) {

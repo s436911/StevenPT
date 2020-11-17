@@ -7,6 +7,7 @@ public class SpaceEntity : MonoBehaviour {
 	public MeshRenderer meshRenderer;
 	public StarInfo info ;
 	public bool explored = false;
+	public float size;
 
 	public virtual void Awake() {
 		ridgid = GetComponent<Rigidbody2D>();
@@ -14,12 +15,14 @@ public class SpaceEntity : MonoBehaviour {
 
 	public virtual void Regist(StarInfo info, Material mat, float size) {
 		this.info = info;
+		this.size = size;
 		meshRenderer.material = mat;
-		transform.localScale = new Vector3(size, size, size);
+		transform.localScale = Vector3.one * size;
 	}
 
 	public virtual void Regist(StarInfo info, float size) {
 		this.info = info;
-		transform.localScale = new Vector3(size, size, size);
+		this.size = size;
+		transform.localScale = Vector3.one * size;
 	}
 }

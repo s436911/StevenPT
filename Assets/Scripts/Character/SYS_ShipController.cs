@@ -106,7 +106,7 @@ public class SYS_ShipController : MonoBehaviour {
 
 			dash.SetActive(speed > 3);
 			if (force != Vector2.zero) {
-				force = force.normalized * Mathf.Clamp(force.magnitude - decelerate * Time.fixedDeltaTime, 0, 9999);
+				force = force.normalized * Mathf.Clamp(force.magnitude - (decelerate + speed) * Time.fixedDeltaTime, 0, 9999);
 			}
 
 			//ridgid.velocity = this.direction * speed * (!reverse ? 1 : -1) + force;

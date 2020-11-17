@@ -155,7 +155,7 @@ public class SYS_Starmap : MonoBehaviour {
 		}
 
 		//亂數星球生成
-		planetNum = otherStarNum - planetNum + (Random.Range(0, 100) < (SYS_Save.Direct.GetResearch(3) * 10) ? 1 : 0);//
+		planetNum = otherStarNum - planetNum + (Random.Range(0, 100) < 25 ? 1 : 0);//
 
 		for (int ct = 0; ct < planetNum; ct++) {
 			stars.Add(new StarInfo(MainType.Planet, ct == 0 ? SubType.Base : SubType.None, NaviType.Check, (Affinity)Random.Range(0, 4), GenRandPlanetPos()));

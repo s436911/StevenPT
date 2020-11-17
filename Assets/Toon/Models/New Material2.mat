@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: New Material
+  m_Name: New Material2
   m_Shader: {fileID: 4800000, guid: a2f2e7d5e0d234b0c93c6a37612acaee, type: 3}
   m_ShaderKeywords: _ _EMISSIVE_SIMPLE _IS_ANGELRING_OFF _IS_CLIPPING_OFF _IS_OUTLINE_CLIPPING_NO
     _OUTLINE_NML
@@ -36,11 +36,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _1st_ShadeMap:
-        m_Texture: {fileID: 2800000, guid: 051333647d6464d82928836be9132f31, type: 3}
+        m_Texture: {fileID: 2800000, guid: 44fe8c4b43f2d4d80b82a54aa4dc2cef, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _2nd_ShadeMap:
-        m_Texture: {fileID: 2800000, guid: 051333647d6464d82928836be9132f31, type: 3}
+        m_Texture: {fileID: 2800000, guid: 44fe8c4b43f2d4d80b82a54aa4dc2cef, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _AngelRing_Sampler:
@@ -76,7 +76,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 051333647d6464d82928836be9132f31, type: 3}
+        m_Texture: {fileID: 2800000, guid: 44fe8c4b43f2d4d80b82a54aa4dc2cef, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MatCap_Sampler:

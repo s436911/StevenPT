@@ -222,7 +222,7 @@ public class UI_NavigateHint : MonoBehaviour {
 		}
 
 		rect.anchoredPosition = offset;
-		rect.eulerAngles = new Vector3(0, 0, Common.GetEulerAngle(-offset));//※  將Vector3型別轉換四元數型別
+		rect.eulerAngles = new Vector3(0, 0, Common.GetEulerAngle(-(entity.transform.position - SYS_ShipController.Direct.transform.position)));//※  將Vector3型別轉換四元數型別
 	}
 
 	public void SelfDrive() {

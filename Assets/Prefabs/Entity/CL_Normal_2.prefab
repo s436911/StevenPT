@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4228347164762701637}
   - component: {fileID: -7767963210919092551}
   m_Layer: 0
-  m_Name: Cloud2
+  m_Name: CL_Normal_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,11 +71,15 @@ MonoBehaviour:
   ridgid: {fileID: 0}
   meshRenderer: {fileID: 0}
   explored: 0
+  size: 0
+  sizeRange: {x: 1, y: 1.5}
   ice: 0
   enemy: 0
   nonRespawn: 0
   cloud: 1
+  magnet: 0
   tgt: {fileID: 0}
+  spot: {fileID: 0}
 --- !u!60 &4228347164762701637
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -89,7 +93,7 @@ PolygonCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 1, y: 1.5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}

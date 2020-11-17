@@ -10,7 +10,6 @@ public class SYS_Weather : MonoBehaviour {
 
 	public List<GameObject> pfbMeteor;
 	public List<GameObject> pfbCloud;
-	public List<GameObject> pfbMeteorIce;
 
 	public GameObject pfbBeetle;
 	public GameObject pfbWhale;
@@ -28,12 +27,11 @@ public class SYS_Weather : MonoBehaviour {
 	public float meteorRadiusT;
 	private float timer1;
 	private float timer60;
-	private WeatherType weather;
-
-	public enum WeatherType {
-		None,
-		IceMeteors,
-	}
+	private int weather;
+	/*
+	0晴天
+	1雪天
+	*/
 
 	void Awake() {
 		Direct = this;
@@ -42,6 +40,7 @@ public class SYS_Weather : MonoBehaviour {
 	public void Restart() {
 		timer60 = Time.timeSinceLevelLoad;
 		timer1 = Time.timeSinceLevelLoad;
+		SetWeather(SYS_Mission.Direct.GetGalaxy().GetWeather());
 
 		for (int ct = 0; ct < backMeteorNum; ct++) {
 			SpawnBack((Vector2)SYS_ShipController.Direct.transform.position + Random.insideUnitCircle.normalized * Random.Range(0.5f, meteorRadiusT) * 4);
@@ -55,12 +54,7 @@ public class SYS_Weather : MonoBehaviour {
 	void FixedUpdate() {
 		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
 			if (Time.timeSinceLevelLoad - timer60 > 60) {
-				if (weather == WeatherType.None && Random.Range(0,4) == 0) {
-					SetWeather(WeatherType.IceMeteors);
-				} else {
-					SetWeather(WeatherType.None);
-				}
-
+				SetWeather(SYS_Mission.Direct.GetGalaxy().GetWeather());
 				timer60 = Time.timeSinceLevelLoad;
 			}
 
@@ -102,7 +96,7 @@ public class SYS_Weather : MonoBehaviour {
 					}
 				}
 
-				if (weather != WeatherType.None) {
+				if (weather != 0) {
 					foreach (Vector2 reVextor in reVextors) {
 						SpawnFront(reVextor, weatherGroup);
 					}
@@ -113,13 +107,17 @@ public class SYS_Weather : MonoBehaviour {
 		}
 	}
 
-	public void SetWeather(WeatherType value) {
+	public int GetWeather() {
+		return weather;
+	}
+
+	public void SetWeather(int value) {
 		weather = value;
 		if (SYS_Logger.Direct.logging) {
 			Debug.LogWarning(weather.ToString());
 		}
 
-		if (weather == WeatherType.IceMeteors) {
+		if (weather == 1) {
 			ptcIce.Play();
 
 			for (int ct = 0; ct < meteorNumWeather; ct++) {
@@ -143,37 +141,24 @@ public class SYS_Weather : MonoBehaviour {
 
 	public void SpawnFront(Vector2 dePos , Transform group) {
 		StarInfo starInfo = new StarInfo(MainType.Drift, SubType.Meteor, NaviType.None, Affinity.None, dePos);
-		
-		if (weather == WeatherType.None) {
-			//隕石生成
-			if (Random.Range(0, 7) != 0) {//7
-				MeteorEntity objGen = Instantiate(pfbMeteor[Random.Range(0, pfbMeteor.Count)]).GetComponent<MeteorEntity>();
-				objGen.transform.SetParent(group);
-				objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, group.transform.position.z);
-				objGen.Regist(starInfo, Random.Range(1f, 1.5F));
+		int id = 0;
 
-				if (Random.Range(0, 21) == 0) {
-					SpawnBeetle(dePos, group, objGen.transform);
-				}
-			} else {
-				//雲生成
-				int randID = Random.Range(0, pfbCloud.Count);
-
-				MeteorEntity objGen = Instantiate(pfbCloud[randID]).GetComponent<MeteorEntity>();
-				objGen.transform.SetParent(group);
-				objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, group.transform.position.z);
-				objGen.Regist(starInfo, Random.Range(1f, 1.5F));
-
-				if (randID == 2 && Random.Range(0, 3) == 0) {
-					SpawnWhale(dePos, group, objGen.transform);
-				}
-			}
-
+		if (weather == 1 && Random.Range(0, 100) < 33) {
+			id = 2;
 		} else {
-			MeteorEntity objGen = Instantiate(pfbMeteorIce[Random.Range(0, pfbMeteorIce.Count)]).GetComponent<MeteorEntity>();
-			objGen.transform.SetParent(group);
-			objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, group.transform.position.z);
-			objGen.Regist(starInfo , Random.Range(1f, 1.5F));
+			id = SYS_Mission.Direct.GetGalaxy().GetMeteor();
+		}
+
+		MeteorEntity objGen = Instantiate(pfbMeteor[id]).GetComponent<MeteorEntity>();
+		objGen.transform.SetParent(group);
+		objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, group.transform.position.z);
+		objGen.Regist(starInfo);
+
+		if (id == 0 && Random.Range(0, 21) == 0) {
+			SpawnBeetle(dePos, group, objGen.transform);
+
+		} else if (id == 5 && Random.Range(0, 3) == 0) {
+			SpawnWhale(dePos, group, objGen.transform);
 		}
 	}
 
@@ -203,6 +188,6 @@ public class SYS_Weather : MonoBehaviour {
 			Destroy(child.gameObject);
 		}
 
-		SetWeather(WeatherType.None);
+		SetWeather(0);
 	}
 }

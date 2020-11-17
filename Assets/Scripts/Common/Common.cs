@@ -2,7 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class Common {
+public class Common : MonoBehaviour {
+	public static Common Direct;
+	public AnimationCurve magnetCurve;
+
+	void Awake() {
+		Direct = this;
+	}
+
 	public static float GetEulerAngle(Vector2 direction) {
 		if (direction.x < 0) {
 			return 360 - (Mathf.Atan2(-direction.x, direction.y) * Mathf.Rad2Deg * -1);

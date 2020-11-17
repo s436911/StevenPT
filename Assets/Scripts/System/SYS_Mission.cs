@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class SYS_Mission : MonoBehaviour {
 	public static SYS_Mission Direct;
+
 	public MissionSet nowMission;
 
 	public List<UI_ButtonBase> areas = new List<UI_ButtonBase>();
@@ -34,17 +35,21 @@ public class SYS_Mission : MonoBehaviour {
 	public int scopeLeftMax;
 
 
-	private int nowAreaId = 0; 
+	private int nowGalaxyId = 0; 
 	private int scopeLv;
 	private int scopeLeft;
 	private float msTimeLeft;
 
-	private AreaSet[] areaSets = new AreaSet[3];
+	private GalaxySet[] galaxySets = new GalaxySet[3];
 	private MissionSet[] searchedSets = new MissionSet[5];
 	private List<int> resrcSet = new List<int>();
 
 	private MissionType missionType;
 	private int difficult = 0;
+
+	public GalaxySet GetGalaxy() {
+		return galaxySets[nowGalaxyId];
+	}
 
 	void Awake() {
 		Direct = this;
@@ -65,9 +70,50 @@ public class SYS_Mission : MonoBehaviour {
 	public void Init() {
 		UpdateScopeUI();
 
-		areaSets[0] = new AreaSet("新手星系", 4);
-		areaSets[1] = new AreaSet("花椰菜星系", 5);
-		areaSets[2] = new AreaSet("磁鐵星系", 4);
+		galaxySets[0] = new GalaxySet("新手星系", 4 , 0);
+		galaxySets[0].meteors.Add(0);
+		galaxySets[0].meteorsRate.Add(88);
+		galaxySets[0].meteors.Add(3);
+		galaxySets[0].meteorsRate.Add(6);
+		galaxySets[0].meteors.Add(4);
+		galaxySets[0].meteorsRate.Add(6);
+		galaxySets[0].weathers.Add(0);
+		galaxySets[0].weathersRate.Add(88);
+		galaxySets[0].weathers.Add(1);
+		galaxySets[0].weathersRate.Add(12);
+
+		galaxySets[1] = new GalaxySet("磁鐵星系", 4 , 5);
+		galaxySets[1].meteors.Add(0);
+		galaxySets[1].meteorsRate.Add(50);
+		galaxySets[1].meteors.Add(1);
+		galaxySets[1].meteorsRate.Add(36);
+		galaxySets[1].meteors.Add(3);
+		galaxySets[1].meteorsRate.Add(4);
+		galaxySets[1].meteors.Add(4);
+		galaxySets[1].meteorsRate.Add(4);
+		galaxySets[1].meteors.Add(5);
+		galaxySets[1].meteorsRate.Add(6);
+		galaxySets[1].weathers.Add(0);
+		galaxySets[1].weathersRate.Add(88);
+		galaxySets[1].weathers.Add(1);
+		galaxySets[1].weathersRate.Add(12);
+
+		galaxySets[2] = new GalaxySet("冰霜星系", 4 , 10);
+		galaxySets[2].meteors.Add(0);
+		galaxySets[2].meteorsRate.Add(36);
+		galaxySets[2].meteors.Add(2);
+		galaxySets[2].meteorsRate.Add(54);
+		galaxySets[2].meteors.Add(3);
+		galaxySets[2].meteorsRate.Add(6);
+		galaxySets[2].meteors.Add(4);
+		galaxySets[2].meteorsRate.Add(6);
+
+		galaxySets[2].weathers.Add(0);
+		galaxySets[2].weathersRate.Add(50);
+		galaxySets[2].weathers.Add(1);
+		galaxySets[2].weathersRate.Add(50);
+
+		//galaxySets[1] = new GalaxySet("花椰菜星系", 5);
 
 		resrcSet.Add(0);
 
@@ -97,9 +143,10 @@ public class SYS_Mission : MonoBehaviour {
 			SetCountDown(300);
 			msStarEater.transform.position = new Vector2(0,-20);
 			msStarEater.gameObject.SetActive(true);
-			UI_Navigator.Direct.Regist(msStarEater.gameObject.GetComponent<MeteorEntity>() , NaviMode.Alert, msStarEaterTexture);
+			UI_Navigator.Direct.Regist(msStarEater.gameObject.GetComponent<AnimalEntity>() , NaviMode.Alert, msStarEaterTexture);
 		}
 	}
+
 	public void ResetCountDown() {
 		msTimeLeft = 0;
 		msCountDown.SetActive(false);
@@ -163,14 +210,14 @@ public class SYS_Mission : MonoBehaviour {
 	}
 
 	public void UseArea(int slotID) {
-		nowAreaId = slotID;
+		nowGalaxyId = slotID;
 		SelectUI(slotID, areas);
 		DeSelectUI(searchs);
 
 		for (int ct = 0; ct < searchs.Count; ct++) {
 			if (SYS_Save.Direct.GetResearch(2) > ct) {
 				searchs[ct].gameObject.SetActive(true);
-				searchs[ct].Regist((ct * 2).ToString() + "~" + (ct * 2 + 4).ToString(), (ct / 2 + 1).ToString());
+				searchs[ct].Regist((GetGalaxy().difBase + ct * 2).ToString() + "~" + (GetGalaxy().difBase + ct * 2 + 4).ToString(), (ct / 2 + 1).ToString());
 
 			} else {
 				searchs[ct].gameObject.SetActive(false);
@@ -184,18 +231,18 @@ public class SYS_Mission : MonoBehaviour {
 
 		for (int ct = 0; ct < searchedSets.Length; ct++) {
 			int rand = Random.Range(0, 3);
-			int difficult = slotID * 2 + Random.Range(0, 5);
+			int difficult = GetGalaxy().difBase + slotID * 2 + Random.Range(0, 5);
 			int mainRsrc = resrcSet[Random.Range(1, resrcSet.Count)];
 			int subRsrc = resrcSet[Random.Range(0, resrcSet.Count)];
 
 			if (rand == 0) {
-				searchedSets[ct] = new MissionSet(MissionType.Trip, areaSets[nowAreaId].mainStarNum, difficult, 1, mainRsrc, subRsrc);
+				searchedSets[ct] = new MissionSet(MissionType.Trip, galaxySets[nowGalaxyId].mainStarNum, difficult, 1, mainRsrc, subRsrc);
 
 			} else if (rand == 1) {
-				searchedSets[ct] = new MissionSet(MissionType.Collect, areaSets[nowAreaId].mainStarNum - 1, difficult, 1.2f, mainRsrc, subRsrc);
+				searchedSets[ct] = new MissionSet(MissionType.Collect, galaxySets[nowGalaxyId].mainStarNum - 1, difficult, 1.2f, mainRsrc, subRsrc);
 
 			} else if (rand == 2) {
-				searchedSets[ct] = new MissionSet(MissionType.Escape, areaSets[nowAreaId].mainStarNum + 1, difficult, 1, mainRsrc, subRsrc);
+				searchedSets[ct] = new MissionSet(MissionType.Escape, galaxySets[nowGalaxyId].mainStarNum + 1, difficult, 1, mainRsrc, subRsrc);
 			}
 
 			missions[ct].gameObject.SetActive(true);
@@ -257,7 +304,9 @@ public class SYS_Mission : MonoBehaviour {
 		//missionPanel
 		misTitle.text = "------";
 		for (int ct = 0; ct < areas.Count; ct++) {
-			areas[ct].Regist(areaSets[ct].areaName);
+			if (SYS_Save.Direct.GetResearch(3) > ct) {
+				areas[ct].Regist(galaxySets[ct].areaName);
+			}
 		}
 		for (int ct = 0; ct < searchs.Count; ct++) {
 			searchs[ct].gameObject.SetActive(false);
@@ -328,13 +377,87 @@ public class SYS_Mission : MonoBehaviour {
 	}
 }
 
-public class AreaSet {
+public class GalaxySet {
 	public string areaName;
+	public int difBase = 0;
 	public int mainStarNum = 4;
 
-	public AreaSet(string areaName , int mainStarNum) {
+	public List<int> meteors = new List<int>();
+	public List<int> meteorsRate = new List<int>();
+
+	public List<int> animals = new List<int>();
+	public List<int> animalsRate = new List<int>();
+
+	public List<int> weathers = new List<int>();
+	public List<int> weathersRate = new List<int>();
+
+	public GalaxySet(string areaName , int mainStarNum , int difBase) {
+		this.difBase = difBase;
 		this.areaName = areaName;
 		this.mainStarNum = mainStarNum;
+	}
+
+	public int GetMeteor() {
+		int tempNum = 0;//max //return 
+		int rand = 0;
+		int counter = 0;
+
+		foreach (int rate in meteorsRate) {
+			tempNum += rate;
+		}
+
+		rand = Random.Range(0, tempNum);
+
+		for (int i = 0; i < meteorsRate.Count; i++) {
+			counter = counter + meteorsRate[i];
+			if (rand < counter) {
+				tempNum = meteors[i];
+				break;
+			}
+		}
+		return tempNum;
+	}
+
+	public int GetWeather() {
+		int tempNum = 0;//max //return 
+		int rand = 0;
+		int counter = 0;
+
+		foreach (int rate in weathersRate) {
+			tempNum += rate;
+		}
+
+		rand = Random.Range(0, tempNum);
+
+		for (int i = 0; i < weathersRate.Count; i++) {
+			counter = counter + weathersRate[i];
+			if (rand < counter) {
+				tempNum = weathers[i];
+				break;
+			}
+		}
+		return tempNum;
+	}
+
+	public int GetAnimal() {
+		int tempNum = 0;//max //return 
+		int rand = 0;
+		int counter = 0;
+
+		foreach (int rate in animalsRate) {
+			tempNum += rate;
+		}
+
+		rand = Random.Range(0, tempNum);
+
+		for (int i = 0; i < animalsRate.Count; i++) {
+			counter = counter + animalsRate[i];
+			if (rand < counter) {
+				tempNum = animals[i];
+				break;
+			}
+		}
+		return tempNum;
 	}
 }
 
