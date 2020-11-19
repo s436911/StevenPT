@@ -94,9 +94,9 @@ public class SYS_Mission : MonoBehaviour {
 		galaxySets[1].meteors.Add(5);
 		galaxySets[1].meteorsRate.Add(6);
 		galaxySets[1].weathers.Add(0);
-		galaxySets[1].weathersRate.Add(88);
-		galaxySets[1].weathers.Add(1);
-		galaxySets[1].weathersRate.Add(12);
+		galaxySets[1].weathersRate.Add(75);
+		galaxySets[1].weathers.Add(2);
+		galaxySets[1].weathersRate.Add(25);
 
 		galaxySets[2] = new GalaxySet("冰霜星系", 4 , 10);
 		galaxySets[2].meteors.Add(0);

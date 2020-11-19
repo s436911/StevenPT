@@ -14,7 +14,12 @@ public class SYS_Weather : MonoBehaviour {
 	public GameObject pfbBeetle;
 	public GameObject pfbWhale;
 
+	public CanvasGroup uiCanvas;
+
 	public ParticleSystem ptcIce;
+
+	public Transform solarTrans;
+	public float solarValue = 0;
 
 	public Transform backGroup;
 	public Transform frontGroup;
@@ -28,6 +33,7 @@ public class SYS_Weather : MonoBehaviour {
 	private float timer1;
 	private float timer60;
 	private int weather;
+
 	/*
 	0晴天
 	1雪天
@@ -104,6 +110,16 @@ public class SYS_Weather : MonoBehaviour {
 
 				timer1 = Time.timeSinceLevelLoad;
 			}
+
+			if (weather == 2) {
+				solarValue = Mathf.Lerp(solarValue, 1, 0.25f * Time.fixedDeltaTime);
+				solarTrans.localPosition = Vector3.Lerp(solarTrans.localPosition, Vector3.zero, 0.25f * Time.fixedDeltaTime);
+				uiCanvas.alpha = 1 - Random.Range(Mathf.Sin(Time.time) * 0.75f, 1F) * solarValue;
+
+			} else {
+				solarValue = Mathf.Lerp(solarValue, 0, 0.25f * Time.fixedDeltaTime);
+				solarTrans.localPosition = Vector3.Lerp(solarTrans.localPosition, new Vector3(0, -20, 0), 0.5f * Time.fixedDeltaTime);
+			}
 		}
 	}
 
@@ -117,6 +133,9 @@ public class SYS_Weather : MonoBehaviour {
 			Debug.LogWarning(weather.ToString());
 		}
 
+		ptcIce.Pause();
+		uiCanvas.alpha = 1;
+
 		if (weather == 1) {
 			ptcIce.Play();
 
@@ -124,9 +143,7 @@ public class SYS_Weather : MonoBehaviour {
 				SpawnFront((Vector2)SYS_ShipController.Direct.transform.position + Random.insideUnitCircle.normalized * Random.Range(3, meteorRadiusT) * 4, weatherGroup);
 			}
 
-		} else {
-			ptcIce.Pause();
-		}
+		} 
 	}
 
 	public void SpawnBack(Vector2 dePos) {

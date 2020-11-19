@@ -22,7 +22,7 @@ public class MeteorEntity : SpaceEntity {
 		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
 			if (magnet) {
 				Vector2 dis = (SYS_ShipController.Direct.transform.position - transform.position);
-				ridgid.velocity = dis.normalized * 0.5f * Common.Direct.magnetCurve.Evaluate(dis.magnitude);
+				ridgid.velocity = dis.normalized * Common.Direct.magnetCurve.Evaluate(dis.magnitude) * (SYS_Weather.Direct.GetWeather() == 2 ? 1.5f : 1);
 
 			} else if (ice) {
 				if (SYS_Weather.Direct.GetWeather() == 0) {
