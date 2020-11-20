@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class DB : MonoBehaviour {
 	private static Dictionary<int, Item> items = new Dictionary<int, Item>();
-	
+	private static Dictionary<int, Skill> skills = new Dictionary<int, Skill>();
+
 	public static void Init() {
+		//資源
 		items.Add(1, new Item(1, 0, 3, true, "石礦"));
 		items.Add(2, new Item(2, 0, 3, true, "銀礦"));
 		items.Add(3, new Item(3, 0, 3, true, "金礦"));
@@ -15,18 +17,34 @@ public class DB : MonoBehaviour {
 		items.Add(7, new Item(7, 0, 3, true, "藍寶石"));
 		items.Add(8, new Item(8, 0, 3, true, "紅寶石"));
 		items.Add(9, new Item(9, 0, 3, true, "遠古水晶"));
-
-
-		items.Add(1001, new Item(1001, 0, 2, true, "花椰菜"));
-		items.Add(1002, new Item(1002, 0, 2, true, "詛咒花椰菜"));
 		
+		items.Add(1001, new Item(1001, 0, 2, true, "花椰菜"));
+		items.Add(1002, new Item(1002, 0, 2, true, "詛咒花椰菜"));		
 
+		//戰利品
 		items.Add(80001, new Item(80001, 1, 6, false, "這東西似乎可以用來強化探測機!"));
 		items.Add(80002, new Item(80002, 1, 3, false, "這似乎可以讓食物變多!"));
 		items.Add(80003, new Item(80003, 1, 7, false, "這東西似乎可以用來彈開什麼??"));
 
 		items.Add(80005, new Item(80005, 1, 4, false, "這似乎可以讓礦石變多!"));
 		items.Add(80006, new Item(80006, 3, 1, false, "膠囊裡面裡面有個人呢.."));
+
+		//技能
+		skills.Add(1, new Skill(1, "小小探險家", "探索路徑外星球士氣+1", 1, 2, 1, 1));
+		skills.Add(2, new Skill(2, "秘境探險家", "探索路徑外星球士氣+1[提升100%探索資源]", 1, 2, 1, 1, 3, 1001, 1000));
+		skills.Add(3, new Skill(2, "銀河冒險家", "連續探索路徑外星球士氣+2", 2, 2, 1, 2));
+		//skills.Add(4, new Skill(1, "和尚", "連續探索路徑外星球士氣+2", 1001, 2, 1001, -200));
+		//skills.Add(5, new Skill(2, "住持", "連續探索路徑外星球士氣+2", 1001, 2, 1001, -100, 2, 1001, -200));
+		//skills.Add(6, new Skill(3, "高僧", "連續探索路徑外星球士氣+2", 1001, 2, 2, 1, 2, 1001, -300));
+	}
+
+	public static Skill GetSkill(int id) {
+		return skills[id];
+	}
+
+	public static int GetRandSkill() {
+		List<int> keys = new List<int>(skills.Keys);
+		return Random.Range(0 , keys.Count);
 	}
 
 	public static Item NewItem(int id, int stackNum = 0, int valueID = 0) {

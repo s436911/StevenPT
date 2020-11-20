@@ -33,6 +33,7 @@ public class SYS_Mission : MonoBehaviour {
 	public float[] scopeCosts = { 0, 1, 2, 4 };
 	public Color[] scopeColors = new Color[4];
 	public int scopeLeftMax;
+	public bool expNotRoute = false;
 
 
 	private int nowGalaxyId = 0; 
@@ -324,6 +325,7 @@ public class SYS_Mission : MonoBehaviour {
 		ResetCountDown();
 		RegistMSbar(tripIcon , new Color(0.9f, 0.7f, 0.15f));
 		msStarEater.gameObject.SetActive(false);
+		expNotRoute = false;
 	}
 
 	public void RegistMSbar(Texture2D texture , Color color, float value = 1) {

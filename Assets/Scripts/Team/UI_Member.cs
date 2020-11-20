@@ -19,6 +19,7 @@ public class UI_Member : MonoBehaviour {
 	public Text t_luk;
 	public Text t_nature;
 	public Text skill1;
+	public Text skill2;
 
 	private float emojiTimer;
 
@@ -77,7 +78,14 @@ public class UI_Member : MonoBehaviour {
 
 				t_status.text = member.age.ToString("F0") + "歲 " + (member.sex == 0 ? "女" : "男");
 				t_nature.text = member.GetNatureName();
-				skill1.text = "";
+
+				if (member.skill1ID > 0) {
+					skill1.text = DB.GetSkill(member.skill1ID).name;
+
+				} else {
+					skill1.text = "n/a";
+				}
+				skill2.text = "n/a";
 			}
 		} else {
 			headIcon.texture = null;
@@ -103,7 +111,8 @@ public class UI_Member : MonoBehaviour {
 
 				t_status.text = "";
 				t_nature.text = "";
-				skill1.text = "";
+				skill1.text = "n/a";
+				skill2.text = "n/a";
 			}
 		}
 	}

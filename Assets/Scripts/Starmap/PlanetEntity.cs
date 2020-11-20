@@ -46,26 +46,73 @@ public class PlanetEntity : SpaceEntity {
 		SYS_Interactive.Direct.RegistTalker(this, story);
 		UI_Navigator.Direct.Arrive(this);
 		if (!explored) {
+			int resRate = 1;
+
 			explored = true;
-			SYS_TeamManager.Direct.ModifyMorale(1);
+			SYS_TeamManager.Direct.ModifyMorale(5);			
+
+			if (!SYS_Starmap.Direct.route.Contains(info)) {
+				foreach (Member mem in SYS_Save.Direct.GetMembers()) {
+					if (mem.skill1ID > 0) {
+						if (mem.skill1ID == 1) {
+							SYS_TeamManager.Direct.ModifyMorale(1);
+
+						} else if (mem.skill1ID == 2) {
+							SYS_TeamManager.Direct.ModifyMorale(1);
+
+							if (SYS_TeamManager.Direct.IsHighMorale()) {
+								resRate = resRate + 1;
+							}
+
+						} else if (mem.skill1ID == 3) {
+							if (SYS_Mission.Direct.expNotRoute) {
+								SYS_TeamManager.Direct.ModifyMorale(3);
+							} else {
+								SYS_Mission.Direct.expNotRoute = true;
+							}
+						}
+					}
+					if (mem.skill2ID > 0) {
+						if (mem.skill2ID == 1) {
+							SYS_TeamManager.Direct.ModifyMorale(1);
+
+						} else if (mem.skill2ID == 2) {
+							SYS_TeamManager.Direct.ModifyMorale(1);
+
+							if (SYS_TeamManager.Direct.IsHighMorale()) {
+								resRate = resRate + 1;
+							}
+
+						} else if (mem.skill2ID == 3) {
+							if (SYS_Mission.Direct.expNotRoute) {
+								SYS_TeamManager.Direct.ModifyMorale(3);
+							} else {
+								SYS_Mission.Direct.expNotRoute = true;
+							}
+						}
+					}
+				}
+			}
+
 			int randomResource = Random.Range(0, 4);
 
 			if (randomResource == 0) {
-				SYS_ResourseManager.Direct.ModifyResource(0, 5);
+				SYS_ResourseManager.Direct.ModifyResource(0, 5 * resRate);
 				SYS_TeamManager.Direct.Talk(2, "好多好多的燃料!");
 
 			} else if (randomResource == 1) {
-				SYS_ResourseManager.Direct.ModifyResource(1, 1);
+				SYS_ResourseManager.Direct.ModifyResource(1, 1 * resRate);
 				SYS_TeamManager.Direct.Talk(2, "裝甲升級!");
 
 			} else if (randomResource == 2) {
-				SYS_ResourseManager.Direct.ModifyResource(2, 1);
+				SYS_ResourseManager.Direct.ModifyResource(2, 1 * resRate);
 				SYS_TeamManager.Direct.Talk(2, "BUFFET!");
 
 			} else if (randomResource == 3) {
-				SYS_ResourseManager.Direct.ModifyResource(3, 1);
+				SYS_ResourseManager.Direct.ModifyResource(3, 1 * resRate);
 				SYS_TeamManager.Direct.Talk(2, "我好餓RRRRR!");
 			}
+
 		} else if (SYS_TeamManager.Direct.TriggerEvent(33)) {
 
 		}

@@ -16,6 +16,8 @@ public class SYS_TeamManager : MonoBehaviour {
 	public float widthItem = 110;
 	public float highItem = 110;
 
+	public float highMeb_home = 150;
+
 	public float widthMeb_game = 110;
 
 	public List<Texture2D> headIcons = new List<Texture2D>();
@@ -66,7 +68,7 @@ public class SYS_TeamManager : MonoBehaviour {
 		for (int x = 0; x < members_home.Length; x++) {
 			UI_Member objTmp = Instantiate(pfbMeb).GetComponent<UI_Member>();
 			objTmp.transform.SetParent(panelMeb);
-			objTmp.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, highItem * -x);
+			objTmp.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, highMeb_home * -x);
 			objTmp.transform.localScale = Vector2.one;
 			objTmp.Init(x);
 			members_home[x] = objTmp;
@@ -432,7 +434,9 @@ public class Member {
 	public int bodyID;
 	public int sex;
 	public float age;
-	public NatureType nature;	
+	public NatureType nature;
+	public int skill1ID;
+	public int skill2ID;
 
 	public int[] attribute = {1,1,1,1};
 
@@ -455,8 +459,19 @@ public class Member {
 		this.age = age == 0 ? Random.Range(15,21) : age;
 		this.lv = lv;
 
-		for (int ct = 0; ct < lv + 1;ct++) {
-			AddAttribute();
+		for (int ct = 0; ct < lv + 1; ct++) {
+			int left = lv + 1 - ct;
+
+			if (left >= 3) {
+				if (Random.Range(0, 100) < 25) {
+					skill1ID = DB.GetRandSkill();
+					ct = ct + 2;
+				} else {
+					AddAttribute();
+				}
+			} else {
+				AddAttribute();
+			}
 		}
 	}
 
@@ -523,4 +538,67 @@ public enum EmojiType {
 	Sad,
 	Doubt,
 	Surprise
+}
+
+public class Skill {
+	public int rare;
+
+	public string name;
+	public string descript;
+
+	public int trigger;
+	/*
+	1~1000觸發式
+	1探索非導航星球
+	2連續探索非導航星球
+	3選擇交戰
+
+	1001~2000被動觸發式
+	1001常駐觸發
+	1002強制購買商品1
+	1003初始裝甲大於4
+
+	*/
+	public int nrmEffect;
+	public int nrmType;
+	public int nrmValue;
+
+	public int highEffect;
+	public int highType;
+	public int highValue;
+	/*
+	1BUFF Type:編號
+	2給數值 Type:屬性 Value:值
+	3寫死純註記 Type:屬性 Value:值
+	*/
+
+	/*
+	1士氣
+	2初始士氣
+	2駕駛
+	3理智
+	4談判
+	5運氣
+
+	1001探索資源量
+	1002速度
+	1003加速
+	1004售價
+	1005冷卻
+	1006食物消耗
+	*/
+	public int flagA;
+
+	public Skill(int rare, string name, string descript, int trigger, int nrmEffect, int nrmType, int nrmValue, int highEffect = 0, int highType = 0, int highValue = 0) {
+		this.rare = rare;
+		this.name = name;
+		this.descript = descript;
+		this.trigger = trigger;
+		this.nrmEffect = nrmEffect;
+		this.nrmType = nrmType;
+		this.nrmValue = nrmValue;
+		this.highEffect = highEffect;
+		this.highType = highType;
+		this.highValue = highValue;
+	}
 }
