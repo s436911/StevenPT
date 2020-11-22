@@ -23,7 +23,7 @@ public class SYS_Gacha : MonoBehaviour {
 	
 	public void Init() {
 
-		
+		/*
 		SYS_Save.Direct.ModifyCargobay(DB.NewItem(randList[Random.Range(0, randList.Count)], 50));
 		SYS_Save.Direct.ModifyCargobay(DB.NewItem(randList[Random.Range(0, randList.Count)], 50));
 		SYS_Save.Direct.ModifyCargobay(DB.NewItem(randList[Random.Range(0, randList.Count)], 50));
@@ -39,7 +39,7 @@ public class SYS_Gacha : MonoBehaviour {
 		SYS_Save.Direct.ModifyCargobay(DB.NewItem(randList[Random.Range(0, randList.Count)], 50));
 		SYS_Save.Direct.ModifyCargobay(DB.NewItem(randList[Random.Range(0, randList.Count)], 50));
 		SYS_Save.Direct.ModifyCargobay(DB.NewItem(randList[Random.Range(0, randList.Count)], 50));
-
+		*/
 
 		CheckDate();
 	}

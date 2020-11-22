@@ -17,4 +17,15 @@ public class Common : MonoBehaviour {
 			return Mathf.Atan2(-direction.x, direction.y) * Mathf.Rad2Deg;
 		}
 	}
+
+	public int RandomNum(int min, int max , List<int> minus) {
+		List<int> tmp = new List<int>();
+		for (int i = min; i < max; i++) {
+			if (!minus.Contains(i)) {
+				tmp.Add(i);
+			}
+		}
+
+		return tmp[Random.Range(0, tmp.Count)];
+	}
 }

@@ -7,7 +7,16 @@ public class SYS_Interactive : MonoBehaviour {
 	public static SYS_Interactive Direct;
 	private InteractEvent nowEvent;
 	public GameObject uiPanelAnswer;
-	public RectTransform uiPanelTalker;
+
+	public GameObject panelShop;
+	public Transform spawnerShop;
+	public GameObject pfbShop;
+	public float highShop;
+	public List<UI_ButtonCarrier> itemShop = new List<UI_ButtonCarrier>();
+
+
+	public List<RectTransform> uiTalkers = new List<RectTransform>();
+
 	public SpaceEntity talker;
 	public InteractEvent story;
 	public float talkerDis = 12;
@@ -17,6 +26,8 @@ public class SYS_Interactive : MonoBehaviour {
 	public Text textFrom;
 	public Text textMsg;
 	public Text textPs;
+
+	public float talkerWidth = 120;
 
 	public RectTransform[] rectBTNs = new RectTransform[3];
 	public RawImage[] rawImages = new RawImage[3];
@@ -92,6 +103,52 @@ public class SYS_Interactive : MonoBehaviour {
 		story = valueEvent;
 	}
 
+	public void ClickShop(UI_ButtonCarrier main , UI_ButtonBase sub) {
+		Debug.LogWarning(main.id + "/" + sub.id);
+		main.gameObject.SetActive(false);
+		SYS_Save.Direct.ModifyCargobay(DB.NewItem(main.id , 100));
+		SYS_Save.Direct.ModifyCargobay(DB.NewItem(sub.id, -120));
+
+		if (!itemShop[0].gameObject.activeSelf && !itemShop[1].gameObject.activeSelf && !itemShop[2].gameObject.activeSelf) {
+			ClearShop();
+		}
+	}
+
+	public void RegistShop() {
+		panelShop.SetActive(true);
+
+		for (int x = 0; x < 3; x++) {
+			List<int> minus = new List<int>();
+			UI_ButtonCarrier objTmp = Instantiate(pfbShop).GetComponent<UI_ButtonCarrier>();
+			objTmp.transform.SetParent(spawnerShop);
+			objTmp.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, highShop * -x);
+			objTmp.transform.localScale = Vector2.one;
+			itemShop.Add(objTmp);
+
+			minus.Add(Random.Range(1, 10));
+			Item get = DB.GetItem(minus[minus.Count - 1]);
+			objTmp.Init(minus[minus.Count - 1]);
+
+			objTmp.buttons[0].Regist(DB.GetItemTexture(get.iconID), get.text, 100.ToString());
+
+			for (int y = 1; y < 4; y++) {
+				minus.Add(Common.Direct.RandomNum(1, 10, minus));
+				get = DB.GetItem(minus[minus.Count -1]);
+				objTmp.buttons[y].Regist(DB.GetItemTexture(get.iconID), 120.ToString());
+				objTmp.buttons[y].Init(minus[minus.Count - 1]);
+			}
+		}
+	}
+
+
+	public void ClearShop() {
+		panelShop.SetActive(false);
+		itemShop = new List<UI_ButtonCarrier>();
+		foreach (Transform log in spawnerShop) {
+			Destroy(log.gameObject);
+		}
+	}
+
 	void FixedUpdate() {
 		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
 			SetTalker(talker);
@@ -116,20 +173,54 @@ public class SYS_Interactive : MonoBehaviour {
 		if (value != null) {
 			Vector2 offset = (value.transform.position - SYS_ShipController.Direct.transform.position);
 
+			//撞到星球
 			if (value.info.mainType == MainType.Planet && offset.magnitude <= talkerDis * value.transform.localScale.x) {
-				uiPanelTalker.gameObject.SetActive(true);
-				uiPanelTalker.anchoredPosition = -offset.normalized * talkerUIOffset;
+				SetTrigger(true, true, true);
 
+			//撞到事件
 			} else if (value.info.mainType == MainType.InterAct && offset.magnitude <= talkerDis * 0.5f * value.transform.localScale.x) {
-				uiPanelTalker.gameObject.SetActive(true);
-				uiPanelTalker.anchoredPosition = -offset.normalized * talkerUIOffset;
+				SetTrigger(true, false, false);
 
 			} else {
 				RegistTalker();
 			}
 
 		} else {
-			uiPanelTalker.gameObject.SetActive(false);
+			SetTalker();
+		}
+	}
+
+	public void SetTrigger(bool talk, bool fuel, bool shop) {
+		List<RectTransform> rects = new List<RectTransform>();
+		sbyte num = 0;
+		if (talk) {
+			rects.Add(uiTalkers[0]);
+			num++;
+		}
+
+		if (fuel) {
+			rects.Add(uiTalkers[1]);
+			num++;
+		}
+
+		if (shop) {
+			rects.Add(uiTalkers[2]);
+			num++;
+		}
+
+		uiTalkers[0].gameObject.SetActive(talk);
+		uiTalkers[1].gameObject.SetActive(fuel);
+		uiTalkers[2].gameObject.SetActive(shop);
+
+		for (int i = 0; i < rects.Count; i++) {
+			rects[i].anchoredPosition = new Vector2(-(rects.Count - 1) * 0.5f * talkerWidth + talkerWidth * i, 0);
+		}
+
+	}
+
+	public void SetTalker() {
+		foreach (RectTransform button in uiTalkers) {
+			button.gameObject.SetActive(false);
 		}
 	}
 
@@ -138,7 +229,7 @@ public class SYS_Interactive : MonoBehaviour {
 			return;
 		}
 		Regist(story);
-		uiPanelTalker.gameObject.SetActive(false);
+		SetTalker();
 	}
 }
 

@@ -80,6 +80,15 @@ public class SYS_ResourseManager : MonoBehaviour {
 		}
 	}
 
+	public void Refuel() {
+		if (resources[2] >= 1) {
+
+			ModifyResource(2, -1);
+			ModifyResource(0, 30);
+		}
+	}
+
+
 	public void Restart() {
 		SetResource(0, startFuel);
 		SetResource(1, startArmor);

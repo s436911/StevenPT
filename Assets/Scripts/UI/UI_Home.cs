@@ -84,4 +84,10 @@ public class UI_Home : MonoBehaviour, IBeginDragHandler , IEndDragHandler {
 	public void OnEndDrag(PointerEventData data) {
 		draging = false;
 	}
+
+	public void ToPage(int page) {
+		contenter.anchoredPosition = new Vector2(0, page * 720);
+		scrollRect.velocity = Vector2.zero;
+		onPos = true;
+	}
 }
