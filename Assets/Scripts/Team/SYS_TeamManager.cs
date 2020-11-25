@@ -90,11 +90,11 @@ public class SYS_TeamManager : MonoBehaviour {
 			if (Time.timeSinceLevelLoad - eventTimer > 10) {
 				eventTimer = Time.timeSinceLevelLoad;
 				if (IsNoneMorale() && Random.Range(0, 100) < 16) {
-					SYS_ShipController.Direct.OnEndMove();
+					SYS_ShipController.Direct.SetSpeed(0);
 					Talk(3, SYS_Save.Direct.GetMember(), "不小心踩到煞車...030");
 
 				} else if (IsLowMorale() && Random.Range(0, 100) < 8) {
-					SYS_ShipController.Direct.OnEndMove();
+					SYS_ShipController.Direct.SetSpeed(0);
 					Talk(3, SYS_Save.Direct.GetMember(), "不小心踩到煞車...030");
 				}
 			}

@@ -306,7 +306,10 @@ public class SYS_Mission : MonoBehaviour {
 		misTitle.text = "------";
 		for (int ct = 0; ct < areas.Count; ct++) {
 			if (SYS_Save.Direct.GetResearch(3) > ct) {
+				areas[ct].gameObject.SetActive(true);
 				areas[ct].Regist(galaxySets[ct].areaName);
+			} else {
+				areas[ct].gameObject.SetActive(false);
 			}
 		}
 		for (int ct = 0; ct < searchs.Count; ct++) {

@@ -20,7 +20,7 @@ public class SYS_SelfDriving : MonoBehaviour {
 				tgt = null;
 			}
 
-			SYS_ShipController.Direct.OnUpdateDirection((tgt.GetPos() - (Vector2)SYS_ShipController.Direct.transform.position));
+			SYS_ShipController.Direct.UpdateDirection(0,(tgt.GetPos() - (Vector2)SYS_ShipController.Direct.transform.position));
 
 			/*
 			if (Vector2.Distance(tgt.GetPos(),SYS_ShipController.Direct.transform.position) < stopDis) {
@@ -35,20 +35,20 @@ public class SYS_SelfDriving : MonoBehaviour {
 
 	public void Regist(Vector2 tgtPos) {
 		tgt = new SelfDriveTGT(tgtPos);
-		SYS_ShipController.Direct.OnBeginMove();
+		SYS_ShipController.Direct.BeginMove(0);
 		uiPanel.SetActive(true);
 	}
 
 	public void Regist(Transform tgtTrans) {
 		tgt = new SelfDriveTGT(tgtTrans);
-		SYS_ShipController.Direct.OnBeginMove();
+		SYS_ShipController.Direct.BeginMove(0);
 		uiPanel.SetActive(true);
 	}
 
 	public void Pause() {
 		if (tgt != null) {
 			pause = true;
-			SYS_ShipController.Direct.OnEndMove(false);
+			SYS_ShipController.Direct.EndMove(0);
 			uiPanel.SetActive(false);
 		}
 	}
@@ -56,14 +56,14 @@ public class SYS_SelfDriving : MonoBehaviour {
 	public void Play() {
 		if (tgt != null) {
 			pause = false;
-			SYS_ShipController.Direct.OnBeginMove();
+			SYS_ShipController.Direct.BeginMove(0);
 			uiPanel.SetActive(true);
 		}
 	}
 
 	public void Reset() {
 		tgt = null;
-		SYS_ShipController.Direct.OnEndMove();
+		SYS_ShipController.Direct.EndMove(0);
 		pause = false;
 		uiPanel.SetActive(false);
 	}

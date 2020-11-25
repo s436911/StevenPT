@@ -24,11 +24,12 @@ public class UI_SideLog : MonoBehaviour {
 		}
 	}
 
-	public void Regist(float startY , Texture2D icon , string text , Color color) {
+	public void Regist(float startY , Texture2D icon , string text , float size , Color color) {
 		this.startY = startY;
 		this.icon.texture = icon;
 		this.text.text = text;
 		this.popTime = Time.unscaledTime;
 		this.back.color = color;
+		this.icon.rectTransform.localScale = Vector3.one * size;
 	}
 }

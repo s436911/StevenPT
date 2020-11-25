@@ -11,7 +11,7 @@ public static class TMP_InteractEvent {
 
 		switch (rand) {
 			case 1:
-				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 1, 0, 30, "加油"));
+				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 2, 1, 0, 30, "加油"));
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
 				tmpMsg = "這個星球有一間很大的加油站可以用呢!!";
 				break;
@@ -24,16 +24,16 @@ public static class TMP_InteractEvent {
 				break;
 
 			case 3:
-				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 1, 0, 30, "加油"));
+				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 2, 1, 0, 30, "加油"));
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
 				tempAnswers.Add(new InteractOption(Affinity.Explore, 50, 2, 1, 0, 60, "探索"));
 				tmpMsg = "加油站旁有座巨大礦坑也許可以找到更多燃料!?";
 				break;
 
 			case 4:
-				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 1, 0, 30, "加油"));
+				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 2, 1, 0, 30, "加油"));
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
-				tempAnswers.Add(new InteractOption(Affinity.Fight, 100, 3, 1, 1, 1, "強化"));
+				tempAnswers.Add(new InteractOption(Affinity.Fight, 100, 2, 1, 1, 1, "強化"));
 				tmpMsg = "這裡的星球武器商可以補給燃料和強化裝甲!!";
 				break;
 
@@ -63,7 +63,7 @@ public static class TMP_InteractEvent {
 				if (Random.Range(0, 2) == 0) {
 					tempAnswers.Add(new InteractOption(Affinity.Explore, 100, 2, 2, 0, 0, "探索", Random.Range(0, 2) == 0 ? DB.GetItem(80001): DB.GetItem(80002)));
 				} else {
-					tempAnswers.Add(new InteractOption(Affinity.Explore, 50, 2, 1, 3, 2, "探索"));
+					tempAnswers.Add(new InteractOption(Affinity.Explore, 50, 2, 1, 0, 30, "探索"));
 				}
 
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
@@ -71,12 +71,12 @@ public static class TMP_InteractEvent {
 				break;
 
 			case 2:
-				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 2, 1, 3, 1, "交易"));
+				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 2, 2, 1, 1, "交易"));
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
 				if (Random.Range(0, 2) == 0) {
-					tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 2, 0, 0, "交易", Random.Range(0, 2) == 0 ? DB.GetItem(80001) : DB.GetItem(80003)));
+					tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 2, 3, 0, 0, "交易", Random.Range(0, 2) == 0 ? DB.GetItem(80001) : DB.GetItem(80003)));
 				} else {
-					tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 3, 1, 0, 30, "交易"));
+					tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 2, 1, 0, 30, "交易"));
 				}
 				tmpMsg = "有艘商船想和我們進行交易，也許可以看看!!";
 				break;
@@ -91,7 +91,7 @@ public static class TMP_InteractEvent {
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
 
 				if (Random.Range(0, 2) == 0) {
-					tempAnswers.Add(new InteractOption(Affinity.Fight, 100, 1, 1, 3, 2, "掠奪"));
+					tempAnswers.Add(new InteractOption(Affinity.Fight, 100, 1, 1, 2, 2, "掠奪"));
 				} else {
 					tempAnswers.Add(new InteractOption(Affinity.Fight, 100, 1, 1, 0, 0, "掠奪", DB.GetItem(80005)));
 				}

@@ -23,7 +23,6 @@ public class SYS_ResourseManager : MonoBehaviour {
 	public int startFuel = 50;
 	public int startArmor = 5;
 	public int startFood = 5;
-	public int startMineral = 5;
 
 	public int[] resources = new int[5];
 
@@ -93,7 +92,6 @@ public class SYS_ResourseManager : MonoBehaviour {
 		SetResource(0, startFuel);
 		SetResource(1, startArmor);
 		SetResource(2, startFood);
-		SetResource(3, startMineral);
 
 		AddCargo(SYS_Save.Direct.GetPrecargo(0));
 		AddCargo(SYS_Save.Direct.GetPrecargo(1));
@@ -184,13 +182,15 @@ public class SYS_ResourseManager : MonoBehaviour {
 			foodBar.fillAmount = (float)resources[type] / (float)maxFood * 0.2f;
 
 		} else if (type == 3) {
+			/*
 			if (resources[type] <= 0) {
 				resources[type] = 0;
 
 			} else if (resources[type] >= maxMineral) {
 				resources[type] = maxMineral;
 				full = true;
-			}
+			}*/
+			Debug.LogError("修改不存在的資源型態");
 		} else {
 			Debug.LogError("修改錯誤的資源型態");
 		}

@@ -24,7 +24,11 @@ public class PlanetEntity : SpaceEntity {
 	void OnTriggerEnter2D(Collider2D colli) {
 		if (colli.transform.GetComponent<SYS_ShipController>() != null) {
 			if (SYS_ShipController.Direct.TriggerAble()) {
-				SYS_SelfDriving.Direct.Reset();
+
+				if (SYS_SelfDriving.Direct.GetTGT() != null && SYS_SelfDriving.Direct.GetTGT().tgtTrans == transform) {
+					SYS_SelfDriving.Direct.Reset();
+				} 
+
 				SYS_ShipController.Direct.Trigger();
 			}
 			
@@ -94,7 +98,7 @@ public class PlanetEntity : SpaceEntity {
 				}
 			}
 
-			int randomResource = Random.Range(0, 4);
+			int randomResource = Random.Range(0, 3);
 
 			if (randomResource == 0) {
 				SYS_ResourseManager.Direct.ModifyResource(0, 5 * resRate);
@@ -108,10 +112,7 @@ public class PlanetEntity : SpaceEntity {
 				SYS_ResourseManager.Direct.ModifyResource(2, 1 * resRate);
 				SYS_TeamManager.Direct.Talk(2, "BUFFET!");
 
-			} else if (randomResource == 3) {
-				SYS_ResourseManager.Direct.ModifyResource(3, 1 * resRate);
-				SYS_TeamManager.Direct.Talk(2, "我好餓RRRRR!");
-			}
+			} 
 
 		} else if (SYS_TeamManager.Direct.TriggerEvent(33)) {
 

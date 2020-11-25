@@ -20,7 +20,9 @@ public class ActivityEntity : SpaceEntity {
 	void OnTriggerEnter2D(Collider2D colli) {
 		if (colli.transform.GetComponent<SYS_ShipController>() != null) {
 			if (SYS_ShipController.Direct.TriggerAble()) {
-				SYS_SelfDriving.Direct.Reset();
+				if (SYS_SelfDriving.Direct.GetTGT() != null && SYS_SelfDriving.Direct.GetTGT().tgtTrans == transform) {
+					SYS_SelfDriving.Direct.Reset();
+				}
 				SYS_ShipController.Direct.Trigger();
 			}
 			if (info.nvType == NaviType.Activity) {

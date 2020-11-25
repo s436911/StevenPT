@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class SYS_ShipController : MonoBehaviour {
 	public static SYS_ShipController Direct;
 	public static bool reverse = false;
+	public RectTransform fakeSticker;
 
-	public bool handling = false;
 	public float speed = 0;
 	public float maxSpeed = 2;
 	public float accelerate = 0.5f;
@@ -17,7 +17,6 @@ public class SYS_ShipController : MonoBehaviour {
 	public GameObject character;
 	public GameObject characterJet;
 	public Rigidbody2D ridgid;
-	public Vector2 direction = Vector2.up;
 	public Vector2 force;
 
 	public GameObject reflecter;
@@ -41,7 +40,11 @@ public class SYS_ShipController : MonoBehaviour {
 	private float triggerTimer;
 	private float damageTimer;
 	private float shieldTimer;
-	private float moveCounter = 0;
+
+	public float moveCounter = 0;
+
+	public bool[] moveOrder = {false , false }; //0自動駕駛、1手動駕駛
+	public Vector2 direction = Vector2.up;
 
 	void Awake() {
 		Direct = this;
@@ -71,7 +74,7 @@ public class SYS_ShipController : MonoBehaviour {
 		transform.localPosition = Vector2.zero;
 		fuelTimer = 0;
 		foodTimer = 0;
-		speed = 0;
+		SetSpeed(0);
 		force = Vector2.zero;
 		character.SetActive(false);
 		characterJet.SetActive(false);
@@ -82,6 +85,8 @@ public class SYS_ShipController : MonoBehaviour {
 
 	void FixedUpdate() {
 		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
+			//fakeSticker.anchoredPosition = direction.normalized * 65;
+
 			if (direction != Vector2.zero) {
 				nowAngle = Mathf.LerpAngle(nowAngle, Common.GetEulerAngle(direction), lerp * Time.fixedDeltaTime);
 				transform.eulerAngles = new Vector3(0, 0, nowAngle);
@@ -91,7 +96,7 @@ public class SYS_ShipController : MonoBehaviour {
 				ModifyMoveCounter(-Time.fixedDeltaTime);
 			}
 
-			if (handling) {
+			if (moveOrder[1] || moveOrder[0]) {
 				if (speed < GetMaxSpeed()) {
 					ModifySpeed((accelerate + SYS_Save.Direct.GetMembersAttribute(0) * 0.1f) * Time.fixedDeltaTime);
 				} else {
@@ -110,7 +115,7 @@ public class SYS_ShipController : MonoBehaviour {
 			}
 
 			//ridgid.velocity = this.direction * speed * (!reverse ? 1 : -1) + force;
-			ridgid.velocity = this.direction * speed * (!reverse ? 1 : -1) + force;
+			ridgid.velocity = direction * speed * (!reverse ? 1 : -1) + force;
 
 			if (iceValue >= 0) {
 				ModifyIce(-Time.fixedDeltaTime);
@@ -148,56 +153,38 @@ public class SYS_ShipController : MonoBehaviour {
 		force = force + value;
 	}
 	public void ModifySpeed(float value) {
-		speed = Mathf.Clamp( speed + value , 0 , GetMaxSpeed());
+		SetSpeed(speed + value);
 	}
 
+	public void SetSpeed(float value) {
+		speed = Mathf.Clamp(value, 0, GetMaxSpeed());
+	}
+	
 	public float GetMaxSpeed() {
 		return maxSpeed * Mathf.Clamp01((15 - iceValue) / 15);
 	}
 		
-	public void BeginMove() {
-		SYS_SelfDriving.Direct.Pause();
-		OnBeginMove();
+	public void BeginMove(int value) {
+		moveOrder[value] = true;
 	}
 
-	public void OnBeginMove() {
-		//this.cououtine = StartCoroutine(this.Move());
-		handling = true;
-	}
+	public void EndMove(int value) {
+		moveOrder[value] = false;
 
-	public void EndMove() {
-		OnEndMove();
-		SYS_SelfDriving.Direct.Play();
-	}
-
-	public void OnEndMove(bool stop = true) {
-		ridgid.velocity = Vector2.zero;
-		try{
-			StopCoroutine(this.cououtine);
-		} catch {
-			Debug.LogWarning("有空再修");
-		}
-
-		if (stop && SYS_SelfDriving.Direct.tgt == null) {
-			speed = 0;
+		if (!moveOrder[0] && !moveOrder[1]) {
+			ridgid.velocity = Vector2.zero; //速度不變
+			direction = Vector2.zero;
+			SetSpeed(0);
 			dash.SetActive(false);
 		}
-		
-		handling = false;
 	}
-
-	public void OnUpdateDirection(Vector2 direction) {
-		this.direction = direction.normalized;
+	
+	public void UpdateDirection(int value , Vector2 direction) {
+		if (direction != Vector2.zero) {
+			this.direction = direction.normalized;
+		}
 	}
-
-	public void UpdateDirection(Vector2 direction) {
-		OnUpdateDirection(direction);
-	}
-
-	public void UpdateDirection(Vector3 direction) {
-		OnUpdateDirection(direction);
-	}
-
+	
 	public bool IsDamageAble() {
 		return (Time.timeSinceLevelLoad - damageTimer) > 0.5f;
 	}

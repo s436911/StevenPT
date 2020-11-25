@@ -27,11 +27,11 @@ public class SYS_SideLog : MonoBehaviour {
 		}
 	}
 
-	public void Regist(int typeId, int num, sbyte type = 10) {
-		Regist(resourceIcon[typeId], num, type);
+	public void Regist(int typeId, int num, float size = 1, sbyte type = 10) {
+		Regist(resourceIcon[typeId], num , size, type);
 	}
 
-	public void Regist(Texture2D texture, int num, sbyte type = 10) {
+	public void Regist(Texture2D texture, int num , float size = 1, sbyte type = 10) {
 		if (uiPanel.childCount < maxPopNum) {
 			if (type == 10) {
 				if (num == 0) {
@@ -52,13 +52,13 @@ public class SYS_SideLog : MonoBehaviour {
 			objRect.anchoredPosition = objRect.anchoredPosition + new Vector2(0, 0);
 
 			if (type == 0) {
-				objGen.Regist(uiPanel.childCount * -60, texture, num.ToString(), colorNorm);
+				objGen.Regist(uiPanel.childCount * -60, texture, num.ToString() , size, colorNorm);
 
 			} else if (type == 1) {
-				objGen.Regist(uiPanel.childCount * -60, texture, num.ToString(), colorPosi);
+				objGen.Regist(uiPanel.childCount * -60, texture, num.ToString(), size, colorPosi);
 
 			} else if (type == -1) {
-				objGen.Regist(uiPanel.childCount * -60, texture, num.ToString(), colorNega);
+				objGen.Regist(uiPanel.childCount * -60, texture, num.ToString(), size, colorNega);
 			}
 		}
 	}

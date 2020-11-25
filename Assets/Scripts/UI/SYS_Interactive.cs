@@ -115,6 +115,7 @@ public class SYS_Interactive : MonoBehaviour {
 	}
 
 	public void RegistShop() {
+		SYS_GameEngine.Direct.SetPause(true);
 		panelShop.SetActive(true);
 
 		for (int x = 0; x < 3; x++) {
@@ -143,6 +144,7 @@ public class SYS_Interactive : MonoBehaviour {
 
 	public void ClearShop() {
 		panelShop.SetActive(false);
+		SYS_GameEngine.Direct.SetPause(false);
 		itemShop = new List<UI_ButtonCarrier>();
 		foreach (Transform log in spawnerShop) {
 			Destroy(log.gameObject);

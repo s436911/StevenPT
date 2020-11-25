@@ -112,6 +112,7 @@ public class SYS_Save : MonoBehaviour {
 
 					SYS_ResourseManager.Direct.UpdateCargobayUI();
 					SYS_Gacha.Direct.UpdateGachaUI();
+					SYS_SideLog.Direct.Regist(DB.GetItemTexture(item.iconID), item.stackNum , 1.4F);
 					SaveBTN();
 					return;
 				}
@@ -120,6 +121,7 @@ public class SYS_Save : MonoBehaviour {
 			gameData.cargobay.Add(item);
 			SYS_ResourseManager.Direct.UpdateCargobayUI();
 			SYS_Gacha.Direct.UpdateGachaUI();
+			SYS_SideLog.Direct.Regist(DB.GetItemTexture(item.iconID), item.stackNum, 1.4F);
 			SaveBTN();
 		}
 	}

@@ -5,6 +5,7 @@ using UnityEngine;
 public class SYS_GameEngine : MonoBehaviour
 {
 	public static SYS_GameEngine Direct;
+	public GameObject backOff;
 
 	void Awake() {
 		Direct = this;
@@ -12,6 +13,12 @@ public class SYS_GameEngine : MonoBehaviour
 
 
 	public void SetPause(bool value = true) {
-		Time.timeScale = value ? 0 : 1;
+		if (value) {
+			Time.timeScale = 0;
+			backOff.SetActive(true);
+		} else {
+			Time.timeScale = 1;
+			backOff.SetActive(false);
+		}
 	}
 }
