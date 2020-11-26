@@ -96,16 +96,18 @@ public class SYS_ShipController : MonoBehaviour {
 				ModifyMoveCounter(-Time.fixedDeltaTime);
 			}
 
-			if (moveOrder[1] || moveOrder[0]) {
-				if (speed < GetMaxSpeed()) {
-					ModifySpeed((accelerate + SYS_Save.Direct.GetMembersAttribute(0) * 0.1f) * Time.fixedDeltaTime);
-				} else {
-					ModifySpeed(decelerate * Time.fixedDeltaTime);
-				}
+			if (SYS_Interactive.Direct.fuelTimer == 0) {
+				if (moveOrder[1] || moveOrder[0]) {
+					if (speed < GetMaxSpeed()) {
+						ModifySpeed((accelerate * (1 + SYS_Save.Direct.GetMembersAttribute(0) * 0.01f)) * Time.fixedDeltaTime);
+					} else {
+						ModifySpeed(decelerate * Time.fixedDeltaTime);
+					}
 
-				if (Time.timeSinceLevelLoad - fuelTimer > 1) {
-					fuelTimer = Time.timeSinceLevelLoad;
-					SYS_ResourseManager.Direct.ModifyResource(0, -1);
+					if (Time.timeSinceLevelLoad - fuelTimer > 1) {
+						fuelTimer = Time.timeSinceLevelLoad;
+						SYS_ResourseManager.Direct.ModifyResource(0, -1, false);
+					}
 				}
 			}
 
@@ -145,7 +147,7 @@ public class SYS_ShipController : MonoBehaviour {
 
 			if (Time.timeSinceLevelLoad - foodTimer > 10) {
 				foodTimer = Time.timeSinceLevelLoad;
-				SYS_ResourseManager.Direct.ModifyResource(2,-1);
+				SYS_ResourseManager.Direct.ModifyResource(2, -1 , false);
 			}
 		}
 	}
@@ -159,11 +161,11 @@ public class SYS_ShipController : MonoBehaviour {
 	public void SetSpeed(float value) {
 		speed = Mathf.Clamp(value, 0, GetMaxSpeed());
 	}
-	
+
 	public float GetMaxSpeed() {
-		return maxSpeed * Mathf.Clamp01((15 - iceValue) / 15);
+		return maxSpeed * (1 + SYS_Save.Direct.GetMembersAttribute(0) * 0.01f) * Mathf.Clamp01((15 - iceValue) / 15);
 	}
-		
+
 	public void BeginMove(int value) {
 		moveOrder[value] = true;
 	}
@@ -224,7 +226,8 @@ public class SYS_ShipController : MonoBehaviour {
 	}
 
 	public bool TriggerAble() {
-		return Time.timeSinceLevelLoad - triggerTimer > 3;
+		return true;
+		//return Time.timeSinceLevelLoad - triggerTimer > 3;
 	}
 
 	public void Trigger() {

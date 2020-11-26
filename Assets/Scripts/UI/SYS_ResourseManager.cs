@@ -24,7 +24,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 	public int startArmor = 5;
 	public int startFood = 5;
 
-	public int[] resources = new int[5];
+	public float[] resources = new float[5];
 
 	public Item[] cargos = { new Item(), new Item() };
 	public UI_ItemSlot[] cargo = new UI_ItemSlot[2];
@@ -79,22 +79,13 @@ public class SYS_ResourseManager : MonoBehaviour {
 		}
 	}
 
-	public void Refuel() {
-		if (resources[2] >= 1) {
-
-			ModifyResource(2, -1);
-			ModifyResource(0, 30);
-		}
-	}
-
-
 	public void Restart() {
 		SetResource(0, startFuel);
 		SetResource(1, startArmor);
 		SetResource(2, startFood);
 
-		AddCargo(SYS_Save.Direct.GetPrecargo(0));
-		AddCargo(SYS_Save.Direct.GetPrecargo(1));
+		AddCargo(SYS_Save.Direct.GetPrecargo(0), false);
+		AddCargo(SYS_Save.Direct.GetPrecargo(1), false);
 	}
 
 	public void UpdateCargobayUI() {
@@ -108,9 +99,12 @@ public class SYS_ResourseManager : MonoBehaviour {
 		}
 	}
 
-	public void AddCargo(Item item) {
+	public void AddCargo(Item item , bool hint = true) {
 		for (int ct = 0; ct < cargos.Length; ct++) {
 			if (cargos[ct].isNull) {
+				if (hint) {
+					SYS_SideLog.Direct.Regist(DB.GetItemTexture(item.iconID), 1);
+				}
 				SetCargo(ct, item);
 				return;
 			}
@@ -129,19 +123,18 @@ public class SYS_ResourseManager : MonoBehaviour {
 		cargo[slot].SetItem(item);
 	}
 
-	public int GetResource(int type) {
+	public float GetResource(int type) {
 		return resources[type];
 	}
 
-	public void ModifyResource(int type, int value) {
-		if (value > 0) {
-			SYS_SideLog.Direct.Regist(type, value);
+	public void ModifyResource(int type, float value , bool hint = true) {
+		if (hint) {
+			SYS_SideLog.Direct.Regist(type, (int)value);
 		}
-
 		SetResource(type, resources[type] + value);
 	}
 
-	public void SetResource(int type, int value) {
+	public void SetResource(int type, float value) {
 		bool full = false;
 		resources[type] = value;
 
@@ -195,7 +188,7 @@ public class SYS_ResourseManager : MonoBehaviour {
 			Debug.LogError("修改錯誤的資源型態");
 		}
 
-		resourceText[type].text = resources[type].ToString();
+		resourceText[type].text = ((int)resources[type]).ToString();
 
 		if (!full) {
 			resourceImage[type].color = new Color(0.9f, 0.9f, 0.9f);
@@ -205,7 +198,33 @@ public class SYS_ResourseManager : MonoBehaviour {
 			resourceText[type].color = new Color(0.9f, 0.7f, 0);
 		}
 	}
-			
+
+	public bool IsFull(int type) {
+		bool full = false;
+
+		if (type == 0) {
+			if (resources[type] >= maxFuel) {
+				full = true;
+			}
+		} else if (type == 1) {
+			if (resources[type] >= maxArmor) {
+				full = true;
+			}
+
+		} else if (type == 2) {
+			if (resources[type] >= maxFood) {
+				full = true;
+			}
+
+		} else if (type == 3) {
+			Debug.LogError("修改不存在的資源型態");
+		} else {
+			Debug.LogError("修改錯誤的資源型態");
+		}
+
+		return full;
+	}
+
 	public void UseCargo(int slot) {
 		bool used = false;
 

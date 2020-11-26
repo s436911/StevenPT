@@ -56,9 +56,9 @@ public class UI_Member : MonoBehaviour {
 			if (t_str) {
 				if (member.age < 100) {
 					t_str.text = "駕駛 " + member.attribute[0].ToString();
-					t_agi.text = "談判 " + member.attribute[1].ToString();
-					t_int.text = "理智 " + member.attribute[2].ToString();
-					t_luk.text = "運氣 " + member.attribute[3].ToString();
+					t_agi.text = "貿易 " + member.attribute[1].ToString();
+					t_int.text = "戰鬥 " + member.attribute[2].ToString();
+					t_luk.text = "探索 " + member.attribute[3].ToString();
 
 					t_str.color = Color.white;
 					t_agi.color = Color.white;
@@ -66,9 +66,9 @@ public class UI_Member : MonoBehaviour {
 					t_luk.color = Color.white;
 				} else {
 					t_str.text = "駕駛 " + Mathf.Ceil(member.attribute[0] * 0.5f).ToString("f0");
-					t_agi.text = "談判 " + Mathf.Ceil(member.attribute[1] * 0.5f).ToString("f0");
-					t_int.text = "理智 " + Mathf.Ceil(member.attribute[2] * 0.5f).ToString("f0");
-					t_luk.text = "運氣 " + Mathf.Ceil(member.attribute[3] * 0.5f).ToString("f0");
+					t_agi.text = "貿易 " + Mathf.Ceil(member.attribute[1] * 0.5f).ToString("f0");
+					t_int.text = "戰鬥 " + Mathf.Ceil(member.attribute[2] * 0.5f).ToString("f0");
+					t_luk.text = "探索 " + Mathf.Ceil(member.attribute[3] * 0.5f).ToString("f0");
 
 					t_str.color = SYS_TeamManager.Direct.oldColor;
 					t_agi.color = SYS_TeamManager.Direct.oldColor;

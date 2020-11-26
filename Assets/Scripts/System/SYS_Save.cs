@@ -428,7 +428,7 @@ public class SYS_Save : MonoBehaviour {
 				rt = rt + member.age < 100 ? member.attribute[type] : (int)Mathf.Ceil(member.attribute[type] * 0.5f) ;
 			}
 		}
-		return rt;
+		return (int)(rt * 0.25F);
 	}
 
 	private bool IsSlotFull(Member[] slots) {

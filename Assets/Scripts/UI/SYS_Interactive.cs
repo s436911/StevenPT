@@ -35,6 +35,10 @@ public class SYS_Interactive : MonoBehaviour {
 	public Text[] texts = new Text[3];
 	public Text[] textmsgs = new Text[3];
 
+	public Button fuelbtn;
+	public Image fuelbar;
+	public float fuelTimer = 0;
+
 	public Texture2D[] affinityIcon = new Texture2D[4];
 
 	private float intaTimer;
@@ -78,10 +82,10 @@ public class SYS_Interactive : MonoBehaviour {
 				texts[id].text = nowEvent.answers[id].text;
 
 				if (nowEvent.answers[id].costNum != 0 && nowEvent.answers[id].getNum != 0) {
-					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : (nowEvent.answers[id].successRate + SYS_Save.Direct.GetMembersAttribute(3)).ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
+					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : (nowEvent.answers[id].successRate * (1 + SYS_Save.Direct.GetMembersAttribute(3) * 0.01f)).ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum + ">" + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].getType) + nowEvent.answers[id].getNum;
 
 				} else if (nowEvent.answers[id].costNum != 0) {
-					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : (nowEvent.answers[id].successRate + SYS_Save.Direct.GetMembersAttribute(3)).ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum;
+					textmsgs[id].text = (nowEvent.answers[id].successRate >= 100 ? "" : (nowEvent.answers[id].successRate + (1 + SYS_Save.Direct.GetMembersAttribute(3) * 0.01f)).ToString("f0") + "%機率") + SYS_ResourseManager.Direct.ToString(nowEvent.answers[id].costType) + nowEvent.answers[id].costNum;
 
 				} else {
 					textmsgs[id].text = "---";
@@ -106,8 +110,8 @@ public class SYS_Interactive : MonoBehaviour {
 	public void ClickShop(UI_ButtonCarrier main , UI_ButtonBase sub) {
 		Debug.LogWarning(main.id + "/" + sub.id);
 		main.gameObject.SetActive(false);
-		SYS_Save.Direct.ModifyCargobay(DB.NewItem(main.id , 100));
-		SYS_Save.Direct.ModifyCargobay(DB.NewItem(sub.id, -120));
+		SYS_Save.Direct.ModifyCargobay(DB.NewItem(main.id, 100));
+		SYS_Save.Direct.ModifyCargobay(DB.NewItem(sub.id, (int)(-120 * (1 - SYS_Save.Direct.GetMembersAttribute(1) * 0.005f))));
 
 		if (!itemShop[0].gameObject.activeSelf && !itemShop[1].gameObject.activeSelf && !itemShop[2].gameObject.activeSelf) {
 			ClearShop();
@@ -174,13 +178,13 @@ public class SYS_Interactive : MonoBehaviour {
 	public void SetTalker(SpaceEntity value) {
 		if (value != null) {
 			Vector2 offset = (value.transform.position - SYS_ShipController.Direct.transform.position);
-
+			
 			//撞到星球
 			if (value.info.mainType == MainType.Planet && offset.magnitude <= talkerDis * value.transform.localScale.x) {
 				SetTrigger(true, true, true);
 
 			//撞到事件
-			} else if (value.info.mainType == MainType.InterAct && offset.magnitude <= talkerDis * 0.5f * value.transform.localScale.x) {
+			} else if (value.info.mainType == MainType.InterAct && offset.magnitude <= talkerDis * 0.65f * value.transform.localScale.x) {
 				SetTrigger(true, false, false);
 
 			} else {
@@ -201,6 +205,27 @@ public class SYS_Interactive : MonoBehaviour {
 		}
 
 		if (fuel) {
+			//加油中
+			if (fuelTimer != 0) {
+				float fuelTime = Time.timeSinceLevelLoad - fuelTimer;
+				if (fuelTime <= 5 && !SYS_ResourseManager.Direct.IsFull(0)) {
+					fuelbar.gameObject.SetActive(true);
+					fuelbar.fillAmount = fuelTime / 5;
+					SYS_ResourseManager.Direct.ModifyResource(0, 30 / 5 * Time.fixedDeltaTime, false);
+
+				} else if (fuelbar.gameObject.activeSelf) {
+					fuelTimer = 0;
+					SYS_SideLog.Direct.Regist(0, 30);
+					fuelbar.gameObject.SetActive(false);
+				}
+			}
+
+			if (SYS_ResourseManager.Direct.IsFull(0) || fuelbar.gameObject.activeSelf) {
+				fuelbtn.interactable = false;
+			} else {
+				fuelbtn.interactable = true;
+			}
+			
 			rects.Add(uiTalkers[1]);
 			num++;
 		}
@@ -217,7 +242,6 @@ public class SYS_Interactive : MonoBehaviour {
 		for (int i = 0; i < rects.Count; i++) {
 			rects[i].anchoredPosition = new Vector2(-(rects.Count - 1) * 0.5f * talkerWidth + talkerWidth * i, 0);
 		}
-
 	}
 
 	public void SetTalker() {
@@ -227,11 +251,19 @@ public class SYS_Interactive : MonoBehaviour {
 	}
 
 	public void TalkQuest() {
+		/*
 		if (Time.timeSinceLevelLoad - intaTimer < 3) {
 			return;
-		}
+		}*/
 		Regist(story);
 		SetTalker();
+	}
+
+	public void Refuel() {
+		if (SYS_ResourseManager.Direct.GetResource(2) >= 1) {
+			fuelTimer = Time.timeSinceLevelLoad;
+			SYS_ResourseManager.Direct.ModifyResource(2, -1);
+		}
 	}
 }
 

@@ -50,13 +50,7 @@ public class MeteorEntity : SpaceEntity {
 			if (!ship.reflecter.activeSelf) {
 				SYS_Camera.Direct.Shake(0.3f);
 				if (!SYS_TeamManager.Direct.TriggerEvent(41)) {
-					if (Random.Range(0, 100) > SYS_Save.Direct.GetMembersAttribute(3)) {
-						ship.Shock(4);
-
-						if (enemy && ship.IsDamageAble()) {
-							ship.Damage(1);
-						}
-					} else if (SYS_TeamManager.Direct.TriggerEvent(42)) {
+					if (SYS_TeamManager.Direct.TriggerEvent(42)) {
 						ship.Shock(4);
 
 						if (enemy && ship.IsDamageAble()) {

@@ -74,7 +74,7 @@ public static class TMP_InteractEvent {
 				tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 2, 2, 1, 1, "交易"));
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
 				if (Random.Range(0, 2) == 0) {
-					tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 2, 3, 0, 0, "交易", Random.Range(0, 2) == 0 ? DB.GetItem(80001) : DB.GetItem(80003)));
+					tempAnswers.Add(new InteractOption(Affinity.Trade, 75, 2, 3, 0, 0, "交易", Random.Range(0, 2) == 0 ? DB.GetItem(80001) : DB.GetItem(80003)));
 				} else {
 					tempAnswers.Add(new InteractOption(Affinity.Trade, 100, 2, 1, 0, 30, "交易"));
 				}
@@ -82,7 +82,7 @@ public static class TMP_InteractEvent {
 				break;
 
 			case 3:
-				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
+				tempAnswers.Add(new InteractOption(Affinity.None, 75, 0, 0, 0, 0, "離開"));
 				tempAnswers.Add(new InteractOption(Affinity.Explore, 50, 2, 2, 0, 0, "探索", DB.NewItem(80006, 0, (int)(SYS_Mission.Direct.nowMission.difficult * 0.5f))));
 				tmpMsg = "是一個太空膠囊，等等裡面好像有個人影!?";
 				break;
@@ -91,12 +91,17 @@ public static class TMP_InteractEvent {
 				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
 
 				if (Random.Range(0, 2) == 0) {
-					tempAnswers.Add(new InteractOption(Affinity.Fight, 100, 1, 1, 2, 2, "掠奪"));
+					tempAnswers.Add(new InteractOption(Affinity.Fight, 75, 1, 1, 2, 2, "掠奪"));
 				} else {
 					tempAnswers.Add(new InteractOption(Affinity.Fight, 100, 1, 1, 0, 0, "掠奪", DB.GetItem(80005)));
 				}
 
 				tmpMsg = "是一架採集機器人，背後背著大量的礦物!!";
+				break;
+			case 101:
+				tempAnswers.Add(new InteractOption(Affinity.None, 100, 0, 0, 0, 0, "離開"));
+				tempAnswers.Add(new InteractOption(Affinity.Explore, 100, 2, 3, 0, 0, "救援", DB.NewItem(80006, 0, (int)(SYS_Mission.Direct.nowMission.difficult * 0.5f))));
+				tmpMsg = "救救我啊!不要留我一個人在這!";
 				break;
 		}
 

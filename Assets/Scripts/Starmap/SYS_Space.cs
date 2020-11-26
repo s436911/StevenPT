@@ -168,7 +168,7 @@ public class SYS_Space : MonoBehaviour {
 				objGen.transform.position = new Vector3(starInfo.sPos.x, starInfo.sPos.y, 0);
 				objGen.name = starInfo.name;
 
-				objGen.Regist(starInfo, matActivities[2], Random.Range(0.8f, 1.2f), 3);
+				objGen.Regist(starInfo, matActivities[2], Random.Range(0.8f, 1.2f), 101 , true);
 
 				UI_Navigator.Direct.Regist(objGen);
 			}
