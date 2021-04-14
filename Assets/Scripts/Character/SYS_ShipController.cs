@@ -14,6 +14,7 @@ public class SYS_ShipController : MonoBehaviour {
 	public float decelerate = 1;
 	public float lerp = 0.5f;
 
+	public Transform charactership;
 	public GameObject character;
 	public GameObject characterJet;
 	public Rigidbody2D ridgid;
@@ -83,17 +84,26 @@ public class SYS_ShipController : MonoBehaviour {
 		iceValue = 0;
 	}
 
+	public float whirl;
+	public float whirlLerp;
+
 	void FixedUpdate() {
 		if (SYS_ModeSwitcher.Direct.gameMode == GameMode.Space) {
-			//fakeSticker.anchoredPosition = direction.normalized * 65;
 
 			if (direction != Vector2.zero) {
+				float a = nowAngle;
 				nowAngle = Mathf.LerpAngle(nowAngle, Common.GetEulerAngle(direction), lerp * Time.fixedDeltaTime);
-				transform.eulerAngles = new Vector3(0, 0, nowAngle);
+				float b = nowAngle;
+
+				transform.eulerAngles = new Vector3(0 , 0, nowAngle);
+				charactership.localEulerAngles = new Vector3(charactership.localEulerAngles.x, Mathf.LerpAngle(charactership.localEulerAngles.y, (b - a) * whirl, whirlLerp * Time.fixedDeltaTime), charactership.localEulerAngles.z);
+
 
 				ModifyMoveCounter(Time.fixedDeltaTime);
 			} else {
+
 				ModifyMoveCounter(-Time.fixedDeltaTime);
+				charactership.localEulerAngles = new Vector3(charactership.localEulerAngles.x, Mathf.LerpAngle(charactership.localEulerAngles.y, 0, whirlLerp * Time.fixedDeltaTime), charactership.localEulerAngles.z);
 			}
 
 			if (SYS_Interactive.Direct.fuelTimer == 0) {
